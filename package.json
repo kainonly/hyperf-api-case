@@ -1,8 +1,11 @@
 {
-  "name": "van-cms-server",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "name": "van-server",
+  "version": "1.0.0",
+  "description": "Van component microservice architecture",
+  "author": {
+    "name": "kain",
+    "email": "zhangtqx@vip.qq.com"
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
