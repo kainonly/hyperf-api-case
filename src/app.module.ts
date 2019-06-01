@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { User } from './entity/user';
-
 import { IndexController } from './controller/index.controller';
-import { UserService } from './service/user.service';
 import { MainController } from './controller/main.controller';
+import { ConfigService } from './service/config.service';
+import { RedisService } from './service/redis.service';
 
 @Module({
   imports: [
@@ -19,7 +19,8 @@ import { MainController } from './controller/main.controller';
     MainController,
   ],
   providers: [
-    UserService,
+    ConfigService,
+    RedisService,
   ],
 })
 export class AppModule {

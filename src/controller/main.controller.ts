@@ -1,15 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
-import { UserService } from '../service/user.service';
+import { ConfigService } from '../service/config.service';
 
 @Controller('main')
 export class MainController {
   constructor(
-    private userService: UserService,
+    private configService: ConfigService,
   ) {
   }
 
   @Get()
   index(): any {
-    return this.userService.all();
+    return this.configService.get('redis_db');
   }
 }
