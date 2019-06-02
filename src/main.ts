@@ -22,5 +22,5 @@ NestFactory.create<NestFastifyApplication>(
   app.use(helmet());
   // app.use(csurf());
   app.use(compression());
-  await app.listen(3000);
+  await app.listen(3000, '0.0.0.0');
 });
