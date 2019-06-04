@@ -1,9 +1,0 @@
-version: '3.7'
-services:
-  start:
-    image: kainonly/swoole-alpine
-    command: 'php /app/think swoole'
-    ports:
-      - 80:80
-    volumes:
-      - ./:/app
