@@ -9,7 +9,7 @@ export class ConfigService {
     this.envConfig = config().parsed;
   }
 
-  get(key: string): string {
+  get(key: string): any {
     return this.envConfig[key];
   }
 }

@@ -20,8 +20,8 @@ NestFactory.create<NestFastifyApplication>(
     },
   },
 ).then(async (app) => {
-  app.use(helmet());
+  // app.use(helmet());
   // app.use(csurf());
-  app.use(compression());
+  // app.use(compression());
   await app.listen(3000, '0.0.0.0');
 });

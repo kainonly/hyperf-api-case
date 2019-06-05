@@ -10,9 +10,9 @@ export class RedisService {
     configService: ConfigService,
   ) {
     this.client = new Redis({
-      host: configService.get('redis_host'),
-      password: configService.get('redis_password'),
-      db: 0,
+      host: configService.get('REDIS_HOST'),
+      password: configService.get('REDIS_PASSWORD'),
+      db: configService.get('REDIS_DB'),
     });
   }
 }

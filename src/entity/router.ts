@@ -3,32 +3,35 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Router {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
-  @Column('int')
-  parent: number;
+  @Column('int8')
+  parent?: number;
 
-  @Column('longtext')
-  name: string;
+  @Column('json')
+  name: {
+    zh_cn: string,
+    en_us?: string
+  };
 
-  @Column('tinyint')
-  nav: number;
+  @Column('bool')
+  nav?: boolean;
 
-  @Column()
-  icon: string;
+  @Column('varchar')
+  icon?: string;
 
-  @Column()
+  @Column('varchar')
   routerlink: string;
 
-  @Column()
-  sort: number;
+  @Column('int2')
+  sort?: number;
 
-  @Column()
-  status: number;
+  @Column('bool')
+  status?: boolean;
 
-  @Column()
-  createTime: number;
+  @Column('timestamptz')
+  create_time: Date;
 
-  @Column()
-  updateTime: number;
+  @Column('timestamptz')
+  update_time: Date;
 }

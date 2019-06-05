@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { IndexController } from './controller/index.controller';
 import { MainController } from './controller/main.controller';
 
 import { ConfigService } from './service/config.service';
@@ -21,7 +20,6 @@ import { RouterService } from './repository/router.service';
     ]),
   ],
   controllers: [
-    IndexController,
     MainController,
   ],
   providers: [
