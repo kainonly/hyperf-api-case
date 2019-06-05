@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Curd } from '../common/curd';
-import { Router } from '../entity/router';
+import { Admin } from '../entity/admin';
 
 @Injectable()
-export class RouterService extends Curd {
+export class AdminService extends Curd {
   constructor(
-    @InjectRepository(Router)
-    public readonly repository: Repository<Router>,
+    @InjectRepository(Admin)
+    public readonly repository: Repository<Admin>,
   ) {
     super(repository);
   }

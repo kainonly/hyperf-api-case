@@ -3,18 +3,29 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MainController } from './controller/main.controller';
 
-import { ConfigService } from './service/config.service';
-import { RedisService } from './service/redis.service';
-
 import { Router } from './entity/router';
+import { Api } from './entity/api';
+import { ApiType } from './entity/api-type';
+import { Role } from './entity/role';
+import { Admin } from './entity/admin';
 
 import { RouterService } from './repository/router.service';
+import { AdminService } from './repository/admin.service';
+import { ApiService } from './repository/api.service';
+import { ApiTypeService } from './repository/api-type.service';
+import { RoleService } from './repository/role.service';
+import { ConfigService } from './service/config.service';
+import { RedisService } from './service/redis.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
     TypeOrmModule.forFeature([
+      Api,
+      ApiType,
       Router,
+      Role,
+      Admin,
     ]),
   ],
   controllers: [
@@ -23,7 +34,11 @@ import { RouterService } from './repository/router.service';
   providers: [
     ConfigService,
     RedisService,
+    ApiService,
+    ApiTypeService,
     RouterService,
+    RoleService,
+    AdminService,
   ],
 })
 export class AppModule {

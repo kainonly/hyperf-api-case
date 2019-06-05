@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { I18n } from '../type';
+import { I18n } from '../common/type';
 
 @Entity()
 export class Router {
