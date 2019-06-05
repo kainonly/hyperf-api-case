@@ -1,5 +1,4 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { I18n } from '../type';
 import { ApiType } from './api-type';
 
 @Entity()
@@ -24,7 +23,7 @@ export class Api {
    * 路由名称
    */
   @Column('varchar', { length: '20' })
-  name: I18n;
+  name: string;
 
   /**
    * 状态

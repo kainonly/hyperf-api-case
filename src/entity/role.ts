@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { I18n } from '../type';
 
 @Entity()
-export class ApiType {
+export class Role {
   /**
    * 主键
    */
@@ -11,8 +12,25 @@ export class ApiType {
   /**
    * 路由名称
    */
-  @Column('varchar', { length: '20' })
-  name: string;
+  @Column('json', {
+    default: {
+      zh_cn: '',
+      en_us: '',
+    },
+  })
+  name: I18n;
+
+  /**
+   * 授权路由集合
+   */
+  @Column('bytea')
+  router: any;
+
+  /**
+   * 授权接口集合
+   */
+  @Column('bytea')
+  api: any;
 
   /**
    * 状态
