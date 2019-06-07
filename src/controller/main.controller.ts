@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { RouterService } from '../repository/router.service';
 
 @Controller('main')
@@ -6,6 +6,13 @@ export class MainController {
   constructor(
     private routerService: RouterService,
   ) {
+  }
+
+  @Post('login')
+  login(): any {
+    return {
+      error: 0,
+    };
   }
 
   @Get('verify')
@@ -17,11 +24,11 @@ export class MainController {
 
   @Get('menu')
   menu(): any {
-    return this.routerService.repository.find().then(data => {
-      return {
+    return this.routerService.repository
+      .find()
+      .then(data => ({
         error: 0,
         data,
-      };
-    });
+      }));
   }
 }
