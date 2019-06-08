@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Req, Request } from '@nestjs/common';
 import { RouterService } from '../repository/router.service';
 import { Payload } from '../common/payload';
 
@@ -12,7 +12,7 @@ export class MainController {
   }
 
   @Post('login')
-  login(): any {
+  login(@Req() req: any): any {
     const payload: Payload = {
       userId: 1,
       roleId: 1,
