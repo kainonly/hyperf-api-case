@@ -25,6 +25,7 @@
   "dependencies": {
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
+    "@nestjs/jwt": "^6.1.1",
     "@nestjs/platform-fastify": "^6.2.4",
     "@nestjs/typeorm": "^6.1.1",
     "compression": "^1.7.4",
@@ -32,6 +33,7 @@
     "dotenv": "^8.0.0",
     "helmet": "^3.18.0",
     "ioredis": "^4.9.5",
+    "passport-jwt": "^4.0.0",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",

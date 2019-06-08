@@ -1,3 +1,4 @@
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -19,6 +20,12 @@ import { RedisService } from './service/redis.service';
 
 @Module({
   imports: [
+    JwtModule.register({
+      secretOrPrivateKey: '88rOozRpg79ts6s5',
+      signOptions: {
+        expiresIn: 3600,
+      },
+    }),
     TypeOrmModule.forRoot(),
     TypeOrmModule.forFeature([
       Api,
