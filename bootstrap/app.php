@@ -21,9 +21,8 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
-
-// $app->withEloquent();
+$app->withFacades();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -57,13 +56,11 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -76,9 +73,8 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -92,9 +88,16 @@ $app->singleton(
 */
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers',
-], function ($router) {
+    'namespace' => 'App\Http\Controllers\Index',
+], function () {
     require __DIR__ . '/../routes/web.php';
+});
+
+$app->router->group([
+    'namespace' => 'App\Http\Controllers\System',
+    'prefix' => 'system'
+], function () {
+    require __DIR__ . '/../routes/system.php';
 });
 
 return $app;

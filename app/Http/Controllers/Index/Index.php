@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Index;
 
-class ExampleController extends Controller
+class Index extends Base
 {
     /**
      * Create a new controller instance.
@@ -14,5 +14,8 @@ class ExampleController extends Controller
         //
     }
 
-    //
+    public function index()
+    {
+        return app()->version();
+    }
 }
