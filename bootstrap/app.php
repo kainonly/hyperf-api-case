@@ -23,6 +23,7 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 $app->withEloquent();
+$app->configure('session');
 $app->configure('hashing');
 $app->configure('cors');
 
@@ -47,6 +48,11 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->bind(
+    Illuminate\Contracts\Cookie\QueueingFactory::class,
+    'cookie'
+);
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -59,10 +65,11 @@ $app->singleton(
 */
 
 $app->middleware([
+    Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class
 ]);
 
 $app->routeMiddleware([
-    'cors' => \Barryvdh\Cors\HandleCors::class,
+    'cors' => Barryvdh\Cors\HandleCors::class,
 ]);
 
 /*
@@ -76,6 +83,7 @@ $app->routeMiddleware([
 |
 */
 
+$app->register(Illuminate\Cookie\CookieServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
