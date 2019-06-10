@@ -5,9 +5,11 @@
   "type": "project",
   "require": {
     "php": ">=7.1.3",
+    "ext-pdo": "*",
     "barryvdh/laravel-cors": "^0.11.3",
     "illuminate/cookie": "^5.8",
-    "laravel/lumen-framework": "5.8.*"
+    "laravel/lumen-framework": "5.8.*",
+    "predis/predis": "^1.1"
   },
   "autoload": {
     "classmap": [

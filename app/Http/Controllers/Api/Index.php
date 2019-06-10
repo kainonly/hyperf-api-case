@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Cookie;
+
 class Index extends Base
 {
     /**
@@ -16,6 +18,7 @@ class Index extends Base
 
     public function index()
     {
+        Cookie::queue('name', 'kain', 60);
         return app()->version();
     }
 }
