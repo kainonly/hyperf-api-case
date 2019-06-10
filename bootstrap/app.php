@@ -88,9 +88,9 @@ $app->register(App\Providers\EventServiceProvider::class);
 */
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers\Index',
+    'namespace' => 'App\Http\Controllers\Api',
 ], function () {
-    require __DIR__ . '/../routes/web.php';
+    require __DIR__ . '/../routes/api.php';
 });
 
 $app->router->group([
