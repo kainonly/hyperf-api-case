@@ -14,5 +14,5 @@ return [
     'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
     'allowedMethods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
     'exposedHeaders' => [],
-    'maxAge' => 0,
+    'maxAge' => 31536000,
 ];

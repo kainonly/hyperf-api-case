@@ -84,6 +84,7 @@ $app->routeMiddleware([
 */
 
 $app->register(Illuminate\Cookie\CookieServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
