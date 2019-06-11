@@ -4,9 +4,6 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
-import * as helmet from 'helmet';
-import * as csurf from 'csurf';
-import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
@@ -21,9 +18,6 @@ NestFactory.create<NestFastifyApplication>(
     },
   },
 ).then(async (app) => {
-  // app.use(helmet());
-  // app.use(csurf());
-  // app.use(compression());
   app.use(cookieParser());
   await app.listen(3000, '0.0.0.0');
 });
