@@ -2,63 +2,71 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Admin {
-  /**
-   * 主键
-   */
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    unsigned: true,
+  })
   id?: number;
 
-  /**
-   * 用户名
-   */
-  @Column('varchar', { length: 20, unique: true })
+  @Column('varchar', {
+    length: 20,
+    unique: true,
+    comment: '用户名',
+  })
   username: string;
 
-  /**
-   * 密码
-   */
-  @Column('text')
+  @Column('text', {
+    comment: '密码',
+  })
   password: string;
 
-  /**
-   * 称呼
-   */
-  @Column('varchar', { length: 10, nullable: true })
+  @Column('varchar', {
+    length: 10,
+    nullable: true,
+    comment: '称呼',
+  })
   call?: string;
 
-  /**
-   * 手机号
-   */
-  @Column('char', { length: 11, nullable: true })
+  @Column('char', {
+    length: 11,
+    nullable: true,
+    comment: '手机号',
+  })
   phone?: string;
 
-  /**
-   * 电子邮件
-   */
-  @Column('varchar', { length: 60, nullable: true })
+  @Column('varchar', {
+    length: 50,
+    nullable: true,
+    comment: '电子邮件',
+  })
   email?: string;
 
-  /**
-   * 头像
-   */
-  @Column('text')
+  @Column('text', {
+    nullable: true,
+    comment: '头像',
+  })
   avatar?: string;
 
-  /**
-   * 状态
-   */
-  @Column('bool', { default: true })
-  status?: boolean;
+  @Column('tinyint', {
+    width: 1,
+    unsigned: true,
+    default: 1,
+    comment: '状态',
+  })
+  status?: number;
 
-  /**
-   * 创建时间
-   */
-  @Column('timestamptz')
-  create_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '创建时间',
+  })
+  create_time: number;
 
-  /**
-   * 更新时间
-   */
-  @Column('timestamptz')
-  update_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '更新时间',
+  })
+  update_time: number;
 }

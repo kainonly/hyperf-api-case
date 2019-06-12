@@ -1,70 +1,74 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { I18n } from '../common/type';
 
 @Entity()
 export class Router {
-  /**
-   * 主键
-   */
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    unsigned: true,
+  })
   id?: number;
 
-  /**
-   * 父级关联
-   */
-  @Column('int4', { default: 0 })
+  @Column('int', {
+    unsigned: true,
+    default: 0,
+    comment: '父级关联',
+  })
   parent?: number;
 
-  /**
-   * 路由名称
-   */
-  @Column('json', {
-    default: {
-      zh_cn: '',
-      en_us: '',
-    },
+  @Column('longtext', {
+    comment: '路由名称',
   })
-  name: I18n;
+  name: string;
 
-  /**
-   * 是否为导航
-   */
-  @Column('bool', { default: false })
-  nav?: boolean;
+  @Column('tinyint', {
+    width: 1,
+    unsigned: true,
+    default: 0,
+    comment: '是否为导航',
+  })
+  nav?: number;
 
-  /**
-   * 字体图标
-   */
-  @Column('varchar', { length: 50, nullable: true })
+  @Column('varchar', {
+    length: 50,
+    nullable: true,
+    comment: '字体图标',
+  })
   icon?: string;
 
-  /**
-   * 路由地址
-   */
-  @Column('varchar', { length: 90 })
+  @Column('varchar', {
+    length: 90,
+    comment: '路由地址',
+  })
   routerlink: string;
 
-  /**
-   * 排序
-   */
-  @Column('int2', { default: 0 })
+  @Column('tinyint', {
+    width: 1,
+    unsigned: true,
+    default: 0,
+    comment: '排序',
+  })
   sort?: number;
 
-  /**
-   * 状态
-   */
-  @Column('bool', { default: true })
-  status?: boolean;
+  @Column('tinyint', {
+    width: 1,
+    unsigned: true,
+    default: 1,
+    comment: '状态',
+  })
+  status?: number;
 
-  /**
-   * 创建时间
-   */
-  @Column('timestamptz')
-  create_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '创建时间',
+  })
+  create_time: number;
 
-  /**
-   * 更新时间
-   */
-  @Column('timestamptz')
-  update_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '更新时间',
+  })
+  update_time: number;
 }

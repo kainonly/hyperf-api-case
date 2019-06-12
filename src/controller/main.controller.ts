@@ -1,9 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 import { RouterService } from '../repository/router.service';
+import { RedisService } from '../service/redis.service';
 
 @Controller('main')
 export class MainController {
   constructor(
+    private redisService: RedisService,
     private routerService: RouterService,
   ) {
   }

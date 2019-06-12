@@ -1,52 +1,48 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { I18n } from '../common/type';
 
 @Entity()
 export class Role {
-  /**
-   * 主键
-   */
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    unsigned: true,
+  })
   id?: number;
 
-  /**
-   * 路由名称
-   */
-  @Column('json', {
-    default: {
-      zh_cn: '',
-      en_us: '',
-    },
+  @Column('longtext', {
+    comment: '路由名称',
   })
-  name: I18n;
+  name: string;
 
-  /**
-   * 授权路由集合
-   */
-  @Column('bytea')
+  @Column('blob', {
+    comment: '授权路由集合',
+  })
   router: any;
 
-  /**
-   * 授权接口集合
-   */
-  @Column('bytea')
+  @Column('blob', {
+    comment: '授权接口集合',
+  })
   api: any;
 
-  /**
-   * 状态
-   */
-  @Column('bool', { default: true })
-  status?: boolean;
+  @Column('tinyint', {
+    width: 1,
+    unsigned: true,
+    default: 1,
+    comment: '状态',
+  })
+  status?: number;
 
-  /**
-   * 创建时间
-   */
-  @Column('timestamptz')
-  create_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '创建时间',
+  })
+  create_time: number;
 
-  /**
-   * 更新时间
-   */
-  @Column('timestamptz')
-  update_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '更新时间',
+  })
+  update_time: number;
 }

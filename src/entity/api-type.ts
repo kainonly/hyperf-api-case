@@ -2,33 +2,38 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ApiType {
-  /**
-   * 主键
-   */
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    unsigned: true,
+  })
   id?: number;
 
-  /**
-   * 路由名称
-   */
-  @Column('varchar', { length: '20' })
+  @Column('varchar', {
+    length: 20,
+    comment: '路由名称',
+  })
   name: string;
 
-  /**
-   * 状态
-   */
-  @Column('bool', { default: true })
-  status?: boolean;
+  @Column('tinyint', {
+    width: 1,
+    unsigned: true,
+    default: 1,
+    comment: '状态',
+  })
+  status?: number;
 
-  /**
-   * 创建时间
-   */
-  @Column('timestamptz')
-  create_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '创建时间',
+  })
+  create_time: number;
 
-  /**
-   * 更新时间
-   */
-  @Column('timestamptz')
-  update_time: Date;
+  @Column('int', {
+    width: 10,
+    unsigned: true,
+    default: 0,
+    comment: '更新时间',
+  })
+  update_time: number;
 }
