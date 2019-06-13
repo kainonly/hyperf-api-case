@@ -17,9 +17,16 @@ import { ApiService } from './repository/api.service';
 import { ApiTypeService } from './repository/api-type.service';
 import { RoleService } from './repository/role.service';
 import { AdminService } from './repository/admin.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    JwtModule.register({
+      secretOrPrivateKey: 'secretKey',
+      signOptions: {
+        expiresIn: 3600,
+      },
+    }),
     TypeOrmModule.forRoot(),
     TypeOrmModule.forFeature([
       Api,

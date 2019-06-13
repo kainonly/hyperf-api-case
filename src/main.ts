@@ -3,8 +3,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-
-import * as cookieParser from 'cookie-parser';
+import * as cookie from 'fastify-cookie';
 
 import { AppModule } from './app.module';
 
@@ -18,6 +17,6 @@ NestFactory.create<NestFastifyApplication>(
     },
   },
 ).then(async (app) => {
-  app.use(cookieParser());
+  app.register(cookie);
   await app.listen(3000, '0.0.0.0');
 });
