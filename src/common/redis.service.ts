@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from './config.service';
 import * as Redis from 'ioredis';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class RedisService {
@@ -10,9 +10,9 @@ export class RedisService {
     configService: ConfigService,
   ) {
     this.client = new Redis({
-      host: configService.get('REDIS_HOST'),
-      password: configService.get('REDIS_PASSWORD'),
-      db: configService.get('REDIS_DB'),
+      host: configService.env.REDIS_HOST,
+      password: configService.env.REDIS_PASSWORD,
+      db: configService.env.REDIS_DB,
     });
   }
 }

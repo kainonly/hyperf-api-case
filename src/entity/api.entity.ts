@@ -1,11 +1,19 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiTypeEntity } from './api-type.entity';
 
-@Entity()
-export class ApiType {
+@Entity('api')
+export class ApiEntity {
   @PrimaryGeneratedColumn({
     unsigned: true,
   })
   id?: number;
+
+  @OneToOne(type => ApiTypeEntity, table => table.id, {
+    onUpdate: 'RESTRICT',
+    onDelete: 'RESTRICT',
+  })
+  @JoinColumn({ name: 'type' })
+  type: number;
 
   @Column('varchar', {
     length: 20,

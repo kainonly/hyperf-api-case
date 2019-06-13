@@ -1,52 +1,26 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class Router {
+@Entity('role')
+export class RoleEntity {
   @PrimaryGeneratedColumn({
     unsigned: true,
   })
   id?: number;
-
-  @Column('int', {
-    unsigned: true,
-    default: 0,
-    comment: '父级关联',
-  })
-  parent?: number;
 
   @Column('longtext', {
     comment: '路由名称',
   })
   name: string;
 
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 0,
-    comment: '是否为导航',
+  @Column('blob', {
+    comment: '授权路由集合',
   })
-  nav?: number;
+  router: any;
 
-  @Column('varchar', {
-    length: 50,
-    nullable: true,
-    comment: '字体图标',
+  @Column('blob', {
+    comment: '授权接口集合',
   })
-  icon?: string;
-
-  @Column('varchar', {
-    length: 90,
-    comment: '路由地址',
-  })
-  routerlink: string;
-
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 0,
-    comment: '排序',
-  })
-  sort?: number;
+  api: any;
 
   @Column('tinyint', {
     width: 1,

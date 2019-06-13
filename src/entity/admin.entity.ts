@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class Admin {
+@Entity('admin')
+export class AdminEntity {
   @PrimaryGeneratedColumn({
     unsigned: true,
   })
