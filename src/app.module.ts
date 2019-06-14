@@ -2,16 +2,15 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { config } from 'dotenv';
 
-const env = config().parsed;
-
-import { AppModelModule } from './app-repository.module';
+import { AppModelModule } from './app-model.module';
 
 import { MainController } from './controller/main.controller';
 
-import { ConfigService } from './common/config.service';
 import { RedisService } from './common/redis.service';
 import { AuthService } from './common/auth.service';
 import { CurdService } from './common/curd.service';
+
+const env: any = config().parsed;
 
 @Module({
   imports: [
@@ -27,12 +26,6 @@ import { CurdService } from './common/curd.service';
     MainController,
   ],
   providers: [
-    {
-      provide: ConfigService,
-      useValue: {
-        env,
-      },
-    },
     RedisService,
     AuthService,
     CurdService,

@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { config } from 'dotenv';
 import * as Redis from 'ioredis';
-import { ConfigService } from './config.service';
+
+const env: any = config().parsed;
 
 @Injectable()
 export class RedisService {
   readonly client: Redis.Redis;
 
-  constructor(
-    configService: ConfigService,
-  ) {
+  constructor() {
     this.client = new Redis({
-      host: configService.env.REDIS_HOST,
-      password: configService.env.REDIS_PASSWORD,
-      db: configService.env.REDIS_DB,
+      host: env.REDIS_HOST,
+      password: env.REDIS_PASSWORD,
+      db: env.REDIS_DB,
     });
   }
 }
