@@ -1,5 +1,5 @@
 {
-  "name": "van-server",
+  "name": "van-api",
   "version": "1.0.0",
   "description": "Van component restful api",
   "author": {
