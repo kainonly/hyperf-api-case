@@ -47,6 +47,7 @@
     "@types/dotenv": "^6.1.1",
     "@types/ioredis": "^4.0.11",
     "@types/jest": "^23.3.13",
+    "@types/joi": "^14.3.3",
     "@types/node": "^10.12.18",
     "@types/supertest": "^2.0.7",
     "concurrently": "^4.1.0",
