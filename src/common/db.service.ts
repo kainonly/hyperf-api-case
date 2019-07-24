@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoleEntity } from '../entity/role.entity';
+import { RouterEntity } from '../database/router.entity';
 
 @Injectable()
-export class RoleRepository {
+export class DbService {
   constructor(
-    @InjectRepository(RoleEntity)
-    public readonly repository: Repository<RoleEntity>,
+    @InjectRepository(RouterEntity)
+    public readonly router: Repository<RouterEntity>,
   ) {
   }
+
 }

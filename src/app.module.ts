@@ -1,34 +1,24 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { config } from 'dotenv';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppModelModule } from './app-model.module';
+import { DbService } from './common/db.service';
+
+import { RouterEntity } from './database/router.entity';
 
 import { MainController } from './controller/main.controller';
 
-import { RedisService } from './common/redis.service';
-import { AuthService } from './common/auth.service';
-import { CurdService } from './common/curd.service';
-
-const env: any = config().parsed;
-
 @Module({
   imports: [
-    AppModelModule,
-    JwtModule.register({
-      secretOrPrivateKey: env.SECRET_KEY,
-      signOptions: {
-        expiresIn: 3600,
-      },
-    }),
+    TypeOrmModule.forRoot(),
+    TypeOrmModule.forFeature([
+      RouterEntity,
+    ]),
   ],
   controllers: [
     MainController,
   ],
   providers: [
-    RedisService,
-    AuthService,
-    CurdService,
+    DbService,
   ],
 })
 export class AppModule {

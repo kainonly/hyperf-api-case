@@ -1,12 +1,16 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { DbService } from '../common/db.service';
 
-@Controller('main')
+@Controller()
 export class MainController {
-  @Post('login')
-  login(): any {
-    return {
-      error: 0,
-    };
+  constructor(
+    private db: DbService,
+  ) {
+  }
+
+  @Get()
+  async index() {
+    return await this.db.router.find();
   }
 
   @Get('menu')
