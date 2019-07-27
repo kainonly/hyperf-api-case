@@ -8,6 +8,7 @@ export class AdminEntity {
   id?: number;
 
   @Column('varchar', {
+    length: 30,
     unique: true,
     comment: '用户名称',
   })
