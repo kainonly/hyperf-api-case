@@ -1,16 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('api_type')
-export class ApiTypeEntity {
+export abstract class CommonEntity {
   @PrimaryGeneratedColumn({
     unsigned: true,
   })
   id?: number;
-
-  @Column('json', {
-    comment: '接口类型名称',
-  })
-  name: string;
 
   @Column('tinyint', {
     width: 1,

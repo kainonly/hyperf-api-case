@@ -1,12 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from '../common.entity';
 
-@Entity('admin')
-export class AdminEntity {
-  @PrimaryGeneratedColumn({
-    unsigned: true,
-  })
-  id?: number;
-
+@Entity()
+export class Admin extends CommonEntity {
   @Column('varchar', {
     length: 30,
     unique: true,
@@ -45,28 +41,4 @@ export class AdminEntity {
     comment: '头像地址',
   })
   avatar?: string;
-
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 1,
-    comment: '状态',
-  })
-  status?: number;
-
-  @Column('int', {
-    width: 10,
-    unsigned: true,
-    default: 0,
-    comment: '创建时间',
-  })
-  create_time?: number;
-
-  @Column('int', {
-    width: 10,
-    unsigned: true,
-    default: 0,
-    comment: '更新时间',
-  })
-  update_time?: number;
 }
