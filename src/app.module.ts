@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DbModule } from './database/db.module';
-import { DbService } from './facade/db.service';
-import { RedisService } from './facade/redis.service';
+
+import { ConfigService } from './common/config.service';
+import { DbService } from './common/db.service';
+import { RedisService } from './common/redis.service';
 
 import { Main } from './api/main';
-import { ConfigService } from './facade/config.service';
+import { AdminCache } from './cache/admin.cache';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { ConfigService } from './facade/config.service';
     ConfigService,
     DbService,
     RedisService,
+    AdminCache,
   ],
 })
 export class AppModule {
