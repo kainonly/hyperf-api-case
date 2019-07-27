@@ -1,44 +1,49 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('router')
-export class RouterEntity {
+@Entity('admin')
+export class AdminEntity {
   @PrimaryGeneratedColumn({
     unsigned: true,
   })
   id?: number;
 
-  @Column('int', {
-    unsigned: true,
-    default: 0,
-    comment: '父级关联',
+  @Column('varchar', {
+    unique: true,
+    comment: '用户名称',
   })
-  parent?: number;
+  username: string;
 
-  @Column('json', {
-    comment: '路由名称',
+  @Column('text', {
+    comment: '用户密码',
   })
-  name: string;
+  password: string;
 
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 0,
-    comment: '是否为导航',
+  @Column('varchar', {
+    length: 20,
+    nullable: true,
+    comment: '称呼',
   })
-  nav?: number;
+  call: string;
+
+  @Column('varchar', {
+    length: 20,
+    nullable: true,
+    comment: '手机号',
+  })
+  phone?: string;
 
   @Column('varchar', {
     length: 50,
     nullable: true,
-    comment: '字体图标',
+    comment: '电子邮件',
   })
-  icon?: string;
+  email?: string;
 
-  @Column('varchar', {
-    length: 90,
-    comment: '路由地址',
+  @Column('text', {
+    nullable: true,
+    comment: '头像地址',
   })
-  routerlink: string;
+  avatar?: string;
 
   @Column('tinyint', {
     width: 1,
