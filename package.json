@@ -6,7 +6,8 @@
     "start": "concurrently --handle-input \"wait-on dist/main.js && nodemon\" \"tsc -w -p tsconfig.build.json\" ",
     "start:prod": "node dist/main.js",
     "build": "tsc -p tsconfig.build.json",
-    "kill": "taskkill /fi \"imagename eq node.exe\" /f"
+    "schema:sync": "typeorm schema:sync",
+    "taskkill": "taskkill /fi \"imagename eq node.exe\" /f"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",

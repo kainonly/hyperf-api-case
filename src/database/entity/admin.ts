@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 import { Base } from '../base';
 
 @Entity()
@@ -10,6 +10,7 @@ export class Admin extends Base {
   })
   username: string;
 
+  @Index()
   @Column('text', {
     comment: '用户密码',
   })
