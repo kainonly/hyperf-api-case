@@ -1,11 +1,10 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
-
-import { CommonEntity } from '../common.entity';
+import { BaseEntity } from '../common/base.entity';
 import { Admin } from './admin';
 import { Role } from './role';
 
 @Entity()
-export class RoleRelations extends CommonEntity {
+export class RoleRelations extends BaseEntity {
   @ManyToOne(type => Admin, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',

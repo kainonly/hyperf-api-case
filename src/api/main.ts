@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { DbService } from '../common/db.service';
 
 @Controller()
-export class MainController {
+export class Main {
   constructor(
     private db: DbService,
   ) {
@@ -10,13 +10,13 @@ export class MainController {
 
   @Get()
   async index() {
-    return await this.db.router.find();
+    return {
+      status: 'ok',
+    };
   }
 
   @Get('menu')
   async menu() {
-    return {
-      error: 0,
-    };
+    return;
   }
 }

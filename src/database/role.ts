@@ -1,8 +1,8 @@
 import { Column, Entity } from 'typeorm';
-import { CommonEntity } from '../common.entity';
+import { BaseEntity } from '../common/base.entity';
 
 @Entity()
-export class Role extends CommonEntity {
+export class Role extends BaseEntity {
   @Column('json', {
     comment: '权限组名称',
   })

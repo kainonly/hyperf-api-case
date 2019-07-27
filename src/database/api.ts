@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { ApiType } from './api-type';
-import { CommonEntity } from '../common.entity';
+import { BaseEntity } from '../common/base.entity';
 
 @Entity()
-export class Api extends CommonEntity {
+export class Api extends BaseEntity {
   @ManyToOne(type => ApiType, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',

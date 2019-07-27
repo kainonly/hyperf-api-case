@@ -1,19 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { DbModule } from './db.module';
 import { DbService } from './common/db.service';
-import { Router } from './database/entity/router.entity';
-import { MainController } from './controller/main.controller';
+import { Main } from './api/main';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([
-      Router,
-    ]),
-  ],
   controllers: [
-    MainController,
+    Main,
+  ],
+  imports: [
+    DbModule,
   ],
   providers: [
     DbService,
