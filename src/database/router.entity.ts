@@ -1,12 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from './common-entity';
 
 @Entity('router')
-export class RouterEntity {
-  @PrimaryGeneratedColumn({
-    unsigned: true,
-  })
-  id?: number;
-
+export class RouterEntity extends CommonEntity {
   @Column('int', {
     unsigned: true,
     default: 0,
@@ -14,7 +10,7 @@ export class RouterEntity {
   })
   parent?: number;
 
-  @Column('longtext', {
+  @Column('json', {
     comment: '路由名称',
   })
   name: string;
@@ -39,36 +35,4 @@ export class RouterEntity {
     comment: '路由地址',
   })
   routerlink: string;
-
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 0,
-    comment: '排序',
-  })
-  sort?: number;
-
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 1,
-    comment: '状态',
-  })
-  status?: number;
-
-  @Column('int', {
-    width: 10,
-    unsigned: true,
-    default: 0,
-    comment: '创建时间',
-  })
-  create_time: number;
-
-  @Column('int', {
-    width: 10,
-    unsigned: true,
-    default: 0,
-    comment: '更新时间',
-  })
-  update_time: number;
 }
