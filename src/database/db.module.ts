@@ -9,11 +9,7 @@ import { Admin } from './entity/admin';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      cli: {
-        migrationsDir: 'src/database/migration',
-      },
-    }),
+    TypeOrmModule.forRoot(),
     TypeOrmModule.forFeature([
       Api,
       ApiType,

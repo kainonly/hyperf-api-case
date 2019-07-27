@@ -1,9 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { DbService } from '../common/db.service';
 import { AdminCache } from '../cache/admin.cache';
+import { DbService } from '../common/db.service';
 
 @Controller()
 export class Main {
+
   constructor(
     private db: DbService,
     private adminCache: AdminCache,
@@ -12,7 +13,6 @@ export class Main {
 
   @Get()
   async index() {
-    this.adminCache.refresh();
     return {
       status: 'ok',
     };

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { RedisService } from '../common/redis.service';
+import { FacadeService } from '../common/facade.service';
 
 @Injectable()
 export class AdminCache {
   constructor(
-    private readonly redis: RedisService,
+    private readonly facade: FacadeService,
   ) {
   }
 
   refresh() {
-    this.redis.client.set('foo', 'bar');
+    this.facade.redis.set('foo', 'bar');
   }
 }
