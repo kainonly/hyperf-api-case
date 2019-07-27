@@ -1,8 +1,8 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../common/base.entity';
+import { Base } from '../base';
 
 @Entity()
-export class ApiType extends BaseEntity {
+export class ApiType extends Base {
   @Column('json', {
     comment: '接口类型名称',
   })

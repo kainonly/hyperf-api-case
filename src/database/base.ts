@@ -1,6 +1,6 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export abstract class BaseEntity {
+export abstract class Base {
   @PrimaryGeneratedColumn({
     unsigned: true,
   })

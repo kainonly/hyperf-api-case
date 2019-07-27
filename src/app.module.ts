@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { DbModule } from './db.module';
-import { DbService } from './common/db.service';
+import { DbModule } from './database/db.module';
+import { DbService } from './facade/db.service';
 import { Main } from './api/main';
 
 @Module({

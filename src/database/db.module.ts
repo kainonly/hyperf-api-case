@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Api } from './database/api';
-import { ApiType } from './database/api-type';
-import { Router } from './database/router';
-import { Role } from './database/role';
-import { RoleRelations } from './database/role-relations';
-import { Admin } from './database/admin';
+import { Api } from './entity/api';
+import { ApiType } from './entity/api-type';
+import { Router } from './entity/router';
+import { Role } from './entity/role';
+import { RoleRelations } from './entity/role-relations';
+import { Admin } from './entity/admin';
 
 @Module({
   imports: [

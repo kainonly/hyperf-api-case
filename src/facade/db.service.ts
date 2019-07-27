@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Router } from '../database/router';
-import { Api } from '../database/api';
-import { ApiType } from '../database/api-type';
-import { Role } from '../database/role';
-import { RoleRelations } from '../database/role-relations';
-import { Admin } from '../database/admin';
+import { Router } from '../database/entity/router';
+import { Api } from '../database/entity/api';
+import { ApiType } from '../database/entity/api-type';
+import { Role } from '../database/entity/role';
+import { RoleRelations } from '../database/entity/role-relations';
+import { Admin } from '../database/entity/admin';
 
 @Injectable()
 export class DbService {

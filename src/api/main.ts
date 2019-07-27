@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { DbService } from '../common/db.service';
+import { DbService } from '../facade/db.service';
 
 @Controller()
 export class Main {

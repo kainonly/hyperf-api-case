@@ -1,8 +1,8 @@
 import { Column, Entity } from 'typeorm';
-import { BaseEntity } from '../common/base.entity';
+import { Base } from '../base';
 
 @Entity()
-export class Router extends BaseEntity {
+export class Router extends Base {
   @Column('int', {
     unsigned: true,
     default: 0,
