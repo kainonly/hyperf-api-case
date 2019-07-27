@@ -1,31 +1,21 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class Base {
-  @PrimaryGeneratedColumn({
-    unsigned: true,
-  })
+  @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 1,
+  @Column('bool', {
+    default: true,
     comment: '状态',
   })
-  status?: number;
+  status?: boolean;
 
-  @Column('int', {
-    width: 10,
-    unsigned: true,
-    default: 0,
+  @CreateDateColumn({
     comment: '创建时间',
   })
-  create_time?: number;
+  create_time?: Date;
 
-  @Column('int', {
-    width: 10,
-    unsigned: true,
-    default: 0,
+  @UpdateDateColumn({
     comment: '更新时间',
   })
   update_time?: number;

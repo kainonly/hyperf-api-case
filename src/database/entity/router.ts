@@ -3,8 +3,7 @@ import { Base } from '../base';
 
 @Entity()
 export class Router extends Base {
-  @Column('int', {
-    unsigned: true,
+  @Column('int8', {
     default: 0,
     comment: '父级关联',
   })
@@ -13,15 +12,13 @@ export class Router extends Base {
   @Column('json', {
     comment: '路由名称',
   })
-  name: string;
+  name: any;
 
-  @Column('tinyint', {
-    width: 1,
-    unsigned: true,
-    default: 0,
+  @Column('bool', {
+    default: false,
     comment: '是否为导航',
   })
-  nav?: number;
+  nav?: boolean;
 
   @Column('varchar', {
     length: 50,

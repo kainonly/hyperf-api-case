@@ -6,5 +6,5 @@ export class ApiType extends Base {
   @Column('json', {
     comment: '接口类型名称',
   })
-  name: string;
+  name: any;
 }

@@ -17,7 +17,7 @@ export class Api extends Base {
   @Column('json', {
     comment: '接口名称',
   })
-  name: string;
+  name: any;
 
   @Column('varchar', {
     length: 90,

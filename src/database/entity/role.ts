@@ -8,22 +8,15 @@ export class Role extends Base {
   })
   name: string;
 
-  @Column('int', {
-    unsigned: true,
-    default: 0,
-    comment: '权限组父级',
-  })
-  parent?: number;
-
   @Column('json', {
     comment: '授权路由',
   })
-  access_router: string;
+  access_router: any;
 
   @Column('json', {
     comment: '授权接口',
   })
-  access_api: string;
+  access_api: any;
 
   @Column('text', {
     nullable: true,
