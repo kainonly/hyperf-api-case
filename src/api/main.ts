@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, Request, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Next, Post, Response, UsePipes } from '@nestjs/common';
 import { AdminCache } from '../cache/admin.cache';
 import { DbService } from '../common/db.service';
-import { validate } from '../helper';
+import { Cookie, validate } from '../helper';
 
 @Controller()
 export class Main {
@@ -12,22 +12,11 @@ export class Main {
   }
 
   @Get()
-  async index() {
-    return {
-      status: 'ok',
-    };
+  async index(@Next() next: any) {
   }
 
-  @Post('menu')
-  @UsePipes(validate({
-    required: ['name'],
-    properties: {
-      name: {
-        type: 'string',
-      },
-    },
-  }))
-  menu(@Body() body: any, @Request() request: Request) {
+  @Get('menu')
+  menu(@Body() body: any) {
     return {};
   }
 }

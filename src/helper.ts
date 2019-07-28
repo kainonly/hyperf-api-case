@@ -1,5 +1,10 @@
 import { ValidatePipe } from './common/validate.pipe';
+import { createParamDecorator } from '@nestjs/common';
 
 const validate = (schema: any) => new ValidatePipe(schema);
 
-export { validate };
+const Cookie = createParamDecorator((data, req) => {
+  return req.cookie;
+});
+
+export { validate, Cookie };
