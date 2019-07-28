@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UsePipes } from '@nestjs/common';
 import { AdminCache } from '../cache/admin.cache';
 import { DbService } from '../common/db.service';
 import { validate } from '../helper';
@@ -27,7 +27,7 @@ export class Main {
       },
     },
   }))
-  menu(@Body() body: any) {
+  menu(@Body() body: any, @Request() request: Request) {
     return {};
   }
 }
