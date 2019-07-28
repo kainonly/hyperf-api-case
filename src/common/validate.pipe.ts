@@ -13,7 +13,6 @@ export class ValidatePipe implements PipeTransform {
   }
 
   transform(value: any, metadata: ArgumentMetadata) {
-    console.log(value);
     const valid = this.ajv.validate(this.schema, value);
     if (!valid) {
       throw new BadRequestException({
