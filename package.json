@@ -14,6 +14,7 @@
     "@nestjs/core": "^6.0.0",
     "@nestjs/platform-fastify": "^6.2.4",
     "@nestjs/typeorm": "^6.1.1",
+    "ajv": "^6.10.2",
     "amqplib": "^0.5.3",
     "dotenv": "^8.0.0",
     "ioredis": "^4.9.5",
