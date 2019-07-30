@@ -13,7 +13,7 @@ export class Main {
 
   @Get()
   index() {
-    return {};
+    return [];
   }
 
   @Get('setCookie')
