@@ -19,7 +19,7 @@ use lumen\curd\lifecycle\DeleteBeforeHooks;
 use lumen\curd\lifecycle\EditAfterHooks;
 use lumen\curd\lifecycle\EditBeforeHooks;
 use lumen\curd\lifecycle\GetCustom;
-use lumen\extra\common\Ext;
+use lumen\extra\Ext;
 
 class Role extends Base implements GetCustom, AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {

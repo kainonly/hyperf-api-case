@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Erp;
 
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use lumen\extra\common\JwtAuth;
+use lumen\extra\JwtAuth;
 
 class Center extends Base
 {
