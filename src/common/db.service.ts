@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Router } from '../database/entity/router';
 import { Api } from '../database/entity/api';
 import { ApiType } from '../database/entity/api-type';
@@ -11,6 +11,8 @@ import { Admin } from '../database/entity/admin';
 @Injectable()
 export class DbService {
   constructor(
+    @InjectConnection()
+    public readonly connection: Connection,
     @InjectRepository(Router)
     public readonly router: Repository<Router>,
     @InjectRepository(Api)
