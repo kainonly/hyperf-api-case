@@ -6,20 +6,20 @@ use App\RedisModel\ErpRoleApi;
 use App\RedisModel\ErpRoleRouter;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
-use lumen\bit\curd\AddModel;
-use lumen\bit\curd\DeleteModel;
-use lumen\bit\curd\EditModel;
-use lumen\bit\curd\GetModel;
-use lumen\bit\curd\ListsModel;
-use lumen\bit\curd\OriginListsModel;
-use lumen\bit\common\Ext;
-use lumen\bit\lifecycle\AddAfterHooks;
-use lumen\bit\lifecycle\AddBeforeHooks;
-use lumen\bit\lifecycle\DeleteAfterHooks;
-use lumen\bit\lifecycle\DeleteBeforeHooks;
-use lumen\bit\lifecycle\EditAfterHooks;
-use lumen\bit\lifecycle\EditBeforeHooks;
-use lumen\bit\lifecycle\GetCustom;
+use lumen\curd\common\AddModel;
+use lumen\curd\common\DeleteModel;
+use lumen\curd\common\EditModel;
+use lumen\curd\common\GetModel;
+use lumen\curd\common\ListsModel;
+use lumen\curd\common\OriginListsModel;
+use lumen\curd\lifecycle\AddAfterHooks;
+use lumen\curd\lifecycle\AddBeforeHooks;
+use lumen\curd\lifecycle\DeleteAfterHooks;
+use lumen\curd\lifecycle\DeleteBeforeHooks;
+use lumen\curd\lifecycle\EditAfterHooks;
+use lumen\curd\lifecycle\EditBeforeHooks;
+use lumen\curd\lifecycle\GetCustom;
+use lumen\extra\common\Ext;
 
 class Role extends Base implements GetCustom, AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {

@@ -4,7 +4,7 @@ namespace App\RedisModel;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
-use lumen\bit\common\Ext;
+use lumen\extra\common\Ext;
 
 class ErpRouter
 {

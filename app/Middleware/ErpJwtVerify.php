@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use lumen\bit\common\JwtAuth;
+use lumen\extra\common\JwtAuth;
 
 class ErpJwtVerify
 {
