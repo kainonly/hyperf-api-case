@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  init:
+    image: kainonly/composer-alpine
+    command: 'composer install --optimize-autoloader --no-dev --ignore-platform-reqs --no-scripts'
+    volumes:
+      - ./:/app
+  update:
+    image: kainonly/composer-alpine
+    command: 'composer update --optimize-autoloader --no-dev --ignore-platform-reqs --no-scripts'
+    volumes:
+      - ./:/app
