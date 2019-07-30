@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { join } from 'path';
 import { DbModule } from './database/db.module';
 
 import { Main } from './api/main';
@@ -8,7 +9,9 @@ import { FacadeService } from './common/facade.service';
 import { AdminCache } from './cache/admin.cache';
 
 @Module({
-  imports: [DbModule],
+  imports: [
+    DbModule,
+  ],
   controllers: [
     Main,
   ],
