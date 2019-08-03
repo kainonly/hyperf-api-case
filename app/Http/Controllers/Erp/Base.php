@@ -7,6 +7,8 @@ use lumen\curd\CurdController;
 
 class Base extends CurdController
 {
+    protected $middleware = ['cors'];
+
     public function __construct(Request $request)
     {
         parent::__construct($request);
