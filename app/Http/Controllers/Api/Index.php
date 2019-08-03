@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-
 class Index extends Base
 {
     /**
@@ -16,8 +14,10 @@ class Index extends Base
         //
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        return [];
+        return [
+            'status' => 'ok'
+        ];
     }
 }
