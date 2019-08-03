@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\RedisModel\ErpApi;
-use App\RedisModel\ErpRoleApi;
+use App\Redis\ErpApi;
+use App\Redis\ErpRoleApi;
 use Closure;
 
 class ErpRbacVerify

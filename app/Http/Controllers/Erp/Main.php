@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Erp;
 
-use App\RedisModel\ErpRoleRouter;
-use App\RedisModel\ErpRouter;
+use App\Redis\ErpRoleRouter;
+use App\Redis\ErpRouter;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ use lumen\extra\JwtAuth;
 class Main extends Base
 {
     /**
-     * 登录接口
+     * 用户登录
      * @return array
      */
     public function login()
@@ -29,7 +30,7 @@ class Main extends Base
             'msg' => $validator->errors()
         ];
 
-        $data = DB::table('admin')
+        $data = DB::table('staff')
             ->where('username', '=', $this->post['username'])
             ->where('status', '=', 1)
             ->first();
@@ -54,10 +55,22 @@ class Main extends Base
     }
 
     /**
-     * 验证Token有效性
-     * @return mixed
+     * 用户登出
+     * @return array
      */
-    public function check()
+    public function logout()
+    {
+        JwtAuth::tokenClear('erp');
+        return [
+            'error' => 0
+        ];
+    }
+
+    /**
+     * 验证有效性
+     * @return array
+     */
+    public function verify()
     {
         return JwtAuth::tokenVerify('erp') ? [
             'error' => 0,
@@ -112,5 +125,76 @@ class Main extends Base
                 'hash_name' => $file->hashName()
             ]
         ];
+    }
+
+    /**
+     * 获取个人信息
+     * @param Request $request
+     * @return array
+     */
+    public function information(Request $request)
+    {
+        $data = DB::table('staff')
+            ->where('id', '=', $request->user)
+            ->where('status', '=', 1)
+            ->first();
+
+        return [
+            'error' => 0,
+            'data' => $data
+        ];
+    }
+
+    /**
+     * 更新个人信息
+     * @param Request $request
+     * @return array
+     */
+    public function update(Request $request)
+    {
+        $validator = Validator::make($this->post, [
+            'old_password' => 'sometimes|between:8,18',
+            'new_password' => 'required_with:old_password|between:8,18'
+        ]);
+
+        if (!$validator->failed()) return [
+            'error' => 1,
+            'msg' => $validator->errors()
+        ];
+
+        $data = DB::table('staff')
+            ->where('id', '=', $request->user)
+            ->where('status', '=', 1)
+            ->first();
+
+        if (!empty($this->post['old_password'])) {
+            if (!Hash::check($this->post['old_password'], $data['password'])) return [
+                'error' => 1,
+                'msg' => 'error:password'
+            ];
+
+            $this->post['password'] = Hash::make($this->post['new_password']);
+        }
+
+        unset(
+            $this->post['old_password'],
+            $this->post['new_password']
+        );
+
+        try {
+            DB::table('staff')
+                ->where('id', '=', $request->user)
+                ->update($this->post);
+
+            return [
+                'error' => 0,
+                'msg' => 'ok'
+            ];
+        } catch (QueryException $e) {
+            return [
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ];
+        }
     }
 }

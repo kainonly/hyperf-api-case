@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Erp;
 
-use App\RedisModel\ErpRoleApi;
-use App\RedisModel\ErpRoleRouter;
+use App\Redis\ErpRoleApi;
+use App\Redis\ErpRoleRouter;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use lumen\curd\common\AddModel;

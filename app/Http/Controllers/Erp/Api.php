@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Erp;
 
-use App\RedisModel\ErpApi;
+use App\Redis\ErpApi;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -21,15 +21,11 @@ class Api extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
     use GetModel, OriginListsModel, ListsModel, AddModel, EditModel, DeleteModel;
     protected $model = 'api';
     protected $add_validate = [
-        'type' => 'required|integer',
         'name' => 'required|string',
-        'api' => 'required|string',
         'status' => 'required'
     ];
     protected $edit_validate = [
-        'type' => 'sometimes|integer',
         'name' => 'sometimes|string',
-        'api' => 'sometimes|string',
         'status' => 'required'
     ];
 

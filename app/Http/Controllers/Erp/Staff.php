@@ -17,22 +17,20 @@ use lumen\curd\lifecycle\DeleteBeforeHooks;
 use lumen\curd\lifecycle\EditBeforeHooks;
 use lumen\curd\lifecycle\GetCustom;
 
-class Admin extends Base implements GetCustom, AddBeforeHooks, EditBeforeHooks, DeleteBeforeHooks
+class Staff extends Base implements GetCustom, AddBeforeHooks, EditBeforeHooks, DeleteBeforeHooks
 {
     use GetModel, OriginListsModel, ListsModel, AddModel, EditModel, DeleteModel;
-    protected $model = 'admin';
-    protected $get_columns = ['id', 'role', 'username', 'email', 'phone', 'call', 'status'];
-    protected $origin_lists_columns = ['id', 'role', 'username', 'email', 'phone', 'call', 'status'];
-    protected $lists_columns = ['id', 'role', 'username', 'email', 'phone', 'call', 'status'];
+    protected $model = 'staff';
+    protected $get_columns = ['id', 'username', 'status'];
+    protected $origin_lists_columns = ['id', 'username', 'status'];
+    protected $lists_columns = ['id', 'role', 'username', 'status'];
     protected $add_validate = [
         'username' => 'required|string|between:4,20',
         'password' => 'required|string|between:8,18',
-        'role' => 'required|integer',
         'status' => 'required'
     ];
     protected $edit_validate = [
         'password' => 'sometimes|string|between:8,18',
-        'role' => 'required|integer',
         'status' => 'required'
     ];
 

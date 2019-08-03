@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Erp;
 
-use App\RedisModel\ErpRouter;
+use App\Redis\ErpRouter;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
