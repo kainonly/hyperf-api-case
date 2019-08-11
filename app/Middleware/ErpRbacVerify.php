@@ -34,20 +34,25 @@ class ErpRbacVerify
         }
 
         $apiId = ErpApi::get($request->getRequestUri());
-        if (!$apiId) return response()->json([
-            'error' => 1,
-            'msg' => 'error:not_allowed'
-        ]);
-
+        if (!$apiId) {
+            return response()->json([
+                'error' => 1,
+                'msg' => 'error:not_allowed'
+            ]);
+        }
         $roleApi = collect(ErpRoleApi::get($request->role));
-        if (!$roleApi) return response()->json([
-            'error' => 1,
-            'msg' => 'error:not_allowed'
-        ]);
+        if (!$roleApi) {
+            return response()->json([
+                'error' => 1,
+                'msg' => 'error:not_allowed'
+            ]);
+        }
 
-        return $roleApi->contains($apiId) ? $next($request) : response()->json([
-            'error' => 1,
-            'msg' => 'error:not_allowed'
-        ]);
+        return $roleApi->contains($apiId) ?
+            $next($request) :
+            response()->json([
+                'error' => 1,
+                'msg' => 'error:not_allowed'
+            ]);
     }
 }
