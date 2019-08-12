@@ -108,10 +108,10 @@ $app->router->group([
 });
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers\Erp',
-    'prefix' => 'erp'
+    'namespace' => 'App\Http\Controllers\System',
+    'prefix' => 'system'
 ], function () {
-    require __DIR__ . '/../routes/erp.php';
+    require __DIR__ . '/../routes/system.php';
 });
 
 return $app;

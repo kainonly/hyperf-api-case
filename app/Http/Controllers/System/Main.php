@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Erp;
+namespace App\Http\Controllers\System;
 
-use App\Redis\ErpRoleRouter;
-use App\Redis\ErpRouter;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -14,10 +12,6 @@ use lumen\extra\JwtAuth;
 
 class Main extends Base
 {
-    /**
-     * 用户登录
-     * @return array
-     */
     public function login()
     {
         $validator = Validator::make($this->post, [
@@ -45,7 +39,7 @@ class Main extends Base
             'msg' => 'error:incorrect'
         ];
 
-        return JwtAuth::setToken('erp', $data->id, $data->role) ? [
+        return JwtAuth::setToken('system', $data->id, $data->role) ? [
             'error' => 0,
             'msg' => 'ok'
         ] : [
@@ -54,13 +48,9 @@ class Main extends Base
         ];
     }
 
-    /**
-     * 用户登出
-     * @return array
-     */
     public function logout()
     {
-        JwtAuth::tokenClear('erp');
+        JwtAuth::tokenClear('system');
         return [
             'error' => 0
         ];
@@ -72,7 +62,7 @@ class Main extends Base
      */
     public function verify()
     {
-        return JwtAuth::tokenVerify('erp') ? [
+        return JwtAuth::tokenVerify('system') ? [
             'error' => 0,
             'msg' => 'ok'
         ] : [
@@ -81,27 +71,14 @@ class Main extends Base
         ];
     }
 
-    /**
-     * 获取导航数据
-     * @return array
-     */
     public function menu(Request $request)
     {
-        $router = collect(ErpRouter::get());
-        $self = collect(ErpRoleRouter::get($request->role));
-        $lists = $router->filter(function ($item) use ($self) {
-            return $self->contains($item->id);
-        });
         return [
             'error' => 0,
-            'data' => $lists->values()
+            'data' => []
         ];
     }
 
-    /**
-     * 图片上传
-     * @return array
-     */
     public function uploads(Request $request)
     {
         $file = $request->file('image');
@@ -127,11 +104,6 @@ class Main extends Base
         ];
     }
 
-    /**
-     * 获取个人信息
-     * @param Request $request
-     * @return array
-     */
     public function information(Request $request)
     {
         $data = DB::table('staff')
@@ -145,11 +117,6 @@ class Main extends Base
         ];
     }
 
-    /**
-     * 更新个人信息
-     * @param Request $request
-     * @return array
-     */
     public function update(Request $request)
     {
         $validator = Validator::make($this->post, [

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Erp;
+namespace App\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 use lumen\curd\CurdController;
