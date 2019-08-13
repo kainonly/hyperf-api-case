@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Cookie;
+use lumen\extra\jwt\JwtAuth;
+
 class Index extends Base
 {
     /**
@@ -19,5 +22,11 @@ class Index extends Base
         return [
             'status' => 'ok'
         ];
+    }
+
+    public function test()
+    {
+        $data = JwtAuth::setToken('default', []);
+        Cookie::queue('nnaa', $data['token']);
     }
 }

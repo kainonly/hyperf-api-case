@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 $app->withEloquent();
+$app->configure('app');
 $app->configure('session');
 $app->configure('hashing');
-$app->configure('cors');
 $app->configure('jwt');
 
 /*
@@ -89,6 +89,7 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
+$app->register(lumen\extra\jwt\JwtServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

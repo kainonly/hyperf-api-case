@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use lumen\extra\JwtAuth;
+use lumen\extra\JwtCookieAuth;
 
 class Main extends Base
 {
@@ -39,7 +39,7 @@ class Main extends Base
             'msg' => 'error:incorrect'
         ];
 
-        return JwtAuth::setToken('system', $data->id, $data->role) ? [
+        return JwtCookieAuth::setToken('system', $data->id, $data->role) ? [
             'error' => 0,
             'msg' => 'ok'
         ] : [
@@ -50,7 +50,7 @@ class Main extends Base
 
     public function logout()
     {
-        JwtAuth::tokenClear('system');
+        JwtCookieAuth::tokenClear('system');
         return [
             'error' => 0
         ];
@@ -62,7 +62,7 @@ class Main extends Base
      */
     public function verify()
     {
-        return JwtAuth::tokenVerify('system') ? [
+        return JwtCookieAuth::tokenVerify('system') ? [
             'error' => 0,
             'msg' => 'ok'
         ] : [

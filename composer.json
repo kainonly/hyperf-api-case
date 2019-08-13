@@ -18,7 +18,9 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "lumen\\curd\\": "library/lumen-curd/src/",
+            "lumen\\extra\\": "library/lumen-extra/src/"
         }
     },
     "scripts": {
