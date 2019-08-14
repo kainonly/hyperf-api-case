@@ -1,8 +1,9 @@
 <?php
 return [
-    'expires' => 3600,
     'default' => [
         'issuer' => 'system',
-        'audience' => 'xxx'
+        'audience' => 'xxx',
+        'expires' => 3600,
+        'auto_refresh' => 604800
     ]
 ];

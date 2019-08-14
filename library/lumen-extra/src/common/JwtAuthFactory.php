@@ -7,7 +7,7 @@ use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
-use lumen\extra\Redis\RefreshToken;
+use lumen\extra\redis\RefreshToken;
 
 final class JwtAuthFactory
 {
@@ -46,12 +46,10 @@ final class JwtAuthFactory
      * Set Token
      * @param string $scene Token scene
      * @param array $symbol Symbol Tag
-     * @param int $auto_refresh Auto Refresh Expires
      * @return string|null
      */
     public function setToken(string $scene,
-                             array $symbol = [],
-                             int $auto_refresh = 604800)
+                             array $symbol = [])
     {
         $jti = Str::uuid()->toString();
         $ack = Str::random();
@@ -61,15 +59,15 @@ final class JwtAuthFactory
             ->identifiedBy($jti, true)
             ->withClaim('ack', $ack)
             ->withClaim('symbol', $symbol)
-            ->expiresAt(time() + $this->config['expires'])
+            ->expiresAt(time() + $this->config[$scene]['expires'])
             ->getToken($this->signer, new Key($this->secret));
 
-        if (!empty($auto_refresh)) {
+        if (!empty($this->config[$scene]['auto_refresh'])) {
             $result = (new RefreshToken)
-                ->factory($jti, $ack, $auto_refresh);
+                ->factory($jti, $ack, $this->config[$scene]['auto_refresh']);
 
-            if ($result === false) {
-                return null;
+            if ($result == false) {
+                return false;
             }
         }
 
@@ -111,7 +109,7 @@ final class JwtAuthFactory
                 ->identifiedBy($token->getClaim('jti'), true)
                 ->withClaim('ack', $token->getClaim('ack'))
                 ->withClaim('symbol', $token->getClaim('symbol'))
-                ->expiresAt(time() + $this->config['expires'])
+                ->expiresAt(time() + $this->config[$scene]['expires'])
                 ->getToken($this->signer, new Key($this->secret));
 
             $token = $newToken;
