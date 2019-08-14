@@ -1,10 +1,9 @@
 <?php
 
-namespace lumen\extra\redis;
+namespace lumen\extra\common;
 
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Redis\RedisManager;
-use Predis\Client;
 use Predis\Transaction\MultiExec;
 
 abstract class RedisModel

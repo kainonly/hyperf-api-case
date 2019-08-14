@@ -1,9 +1,10 @@
 <?php
 
-namespace lumen\extra\jwt;
+namespace lumen\extra\providers;
 
-use Illuminate\Support\ServiceProvider;
 use Laravel\Lumen\Application;
+use Illuminate\Support\ServiceProvider;
+use lumen\extra\common\JwtAuthFactory;
 
 class JwtServiceProvider extends ServiceProvider
 {
@@ -15,8 +16,11 @@ class JwtServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('jwt', function (Application $app) {
-            $secret = $app->make('config')->get('app.key');
-            $config = $app->make('config')->get('jwt');
+            $secret = $app->make('config')
+                ->get('app.key');
+            $config = $app->make('config')
+                ->get('jwt');
+
             return new JwtAuthFactory($secret, $config);
         });
     }

@@ -1,13 +1,13 @@
 <?php
 
-namespace lumen\extra\jwt;
+namespace lumen\extra\common;
 
 use Illuminate\Support\Str;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
-use lumen\extra\redis\RefreshToken;
+use lumen\extra\Redis\RefreshToken;
 
 final class JwtAuthFactory
 {
@@ -29,7 +29,13 @@ final class JwtAuthFactory
      */
     private $signer;
 
-    public function __construct(string $secret, array $config)
+    /**
+     * JwtAuthFactory constructor.
+     * @param string $secret App Key
+     * @param array $config Jwt Config
+     */
+    public function __construct(string $secret,
+                                array $config)
     {
         $this->secret = $secret;
         $this->config = $config;
@@ -40,11 +46,14 @@ final class JwtAuthFactory
      * Set Token
      * @param string $scene Token scene
      * @param array $symbol Symbol Tag
-     * @return array
+     * @param int $auto_refresh Auto Refresh Expires
+     * @return string|null
      */
-    public function setToken(string $scene, array $symbol = [])
+    public function setToken(string $scene,
+                             array $symbol = [],
+                             int $auto_refresh = 604800)
     {
-        $jti = (string)Str::uuid();
+        $jti = Str::uuid()->toString();
         $ack = Str::random();
         $token = (new Builder())
             ->issuedBy($this->config[$scene]['issuer'])
@@ -55,20 +64,26 @@ final class JwtAuthFactory
             ->expiresAt(time() + $this->config['expires'])
             ->getToken($this->signer, new Key($this->secret));
 
-        $result = (new RefreshToken)->factory($jti, $ack, $this->secret);
-        return [
-            'auto_refresh' => $result,
-            'token' => (string)$token
-        ];
+        if (!empty($auto_refresh)) {
+            $result = (new RefreshToken)
+                ->factory($jti, $ack, $auto_refresh);
+
+            if ($result === false) {
+                return null;
+            }
+        }
+
+        return (string)$token;
     }
 
     /**
      * Token Verify
      * @param string $scene Token scene
-     * @param string $token Token
+     * @param string $token String Token
      * @return boolean|string
      */
-    public function tokenVerify(string $scene, string $token)
+    public function tokenVerify(string $scene,
+                                string $token)
     {
         $token = (new Parser())->parse($token);
         if (!$token->verify($this->signer, $this->secret)) {

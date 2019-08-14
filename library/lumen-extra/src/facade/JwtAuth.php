@@ -1,12 +1,12 @@
 <?php
 
-namespace lumen\extra\jwt;
+namespace lumen\extra\facade;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * Class JwtAuth
- * @method setToken(string $scene, array $symbol = [])
+ * @method static array setToken(string $scene, array $symbol = [])
  * @method tokenVerify(string $scene, string $token)
  * @package lumen\extra\jwt
  */
