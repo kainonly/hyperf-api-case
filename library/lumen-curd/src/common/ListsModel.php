@@ -10,16 +10,15 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Trait ListsModel
  * @package lumen\curd\common
- * @property string model
- * @property array post
- * @property array lists_validate
- * @property array lists_default_validate
- * @property array lists_before_result
- * @property array lists_condition
- * @property Closure lists_condition_group
- * @property string lists_order_columns
- * @property string lists_order_direct
- * @property array lists_columns
+ * @property string $model
+ * @property array $post
+ * @property array $lists_validate
+ * @property array $lists_default_validate
+ * @property array $lists_before_result
+ * @property array $lists_condition
+ * @property Closure|null $lists_query
+ * @property array $lists_order
+ * @property string lists_field
  */
 trait ListsModel
 {
@@ -61,14 +60,14 @@ trait ListsModel
 
             $listsQuery = DB::table($this->model)
                 ->where($condition)
-                ->orderBy($this->lists_order_columns, $this->lists_order_direct)
+                ->orderBy(...$this->lists_order)
                 ->take($this->post['page']['limit'])
                 ->skip($this->post['page']['index'] - 1);
 
             $lists = empty($this->lists_condition_group) ?
-                $listsQuery->get($this->lists_columns) :
+                $listsQuery->get([$this->lists_field]) :
                 $listsQuery->where($this->lists_condition_group)
-                    ->get($this->lists_columns);
+                    ->get([$this->lists_field]);
 
             return method_exists($this, '__listsCustomReturn') ?
                 $this->__listsCustomReturn($lists, $total) : [

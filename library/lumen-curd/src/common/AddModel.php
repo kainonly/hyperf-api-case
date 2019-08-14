@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Trait AddModel
  * @package lumen\curd\common
- * @property string model
- * @property array post
- * @property array add_validate
- * @property array add_default_validate
- * @property array add_before_result
- * @property array add_after_result
- * @property array add_fail_result
+ * @property string $model
+ * @property array $post
+ * @property array $add_validate
+ * @property array $add_default_validate
+ * @property array $add_before_result
+ * @property array $add_after_result
+ * @property array $add_fail_result
  */
 trait AddModel
 {

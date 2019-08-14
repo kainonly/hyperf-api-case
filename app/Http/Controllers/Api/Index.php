@@ -26,7 +26,7 @@ class Index extends Base
 
     public function test()
     {
-        $data = JwtAuth::setToken('default', []);
+        $data = JwtAuth::setToken('xsrf');
         dump($data);
 //        Cookie::queue('nnaa', $data['token']);
     }

@@ -8,15 +8,15 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Trait EditModel
  * @package lumen\curd\common
- * @property string model
- * @property array post
- * @property boolean edit_switch
- * @property array edit_validate
- * @property array edit_default_validate
- * @property array edit_before_result
- * @property array edit_condition
- * @property array edit_after_result
- * @property array edit_fail_result
+ * @property string $model
+ * @property array $post
+ * @property boolean $edit_switch
+ * @property array $edit_validate
+ * @property array $edit_default_validate
+ * @property array $edit_before_result
+ * @property array $edit_condition
+ * @property array $edit_after_result
+ * @property array $edit_fail_result
  */
 trait EditModel
 {

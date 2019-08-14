@@ -7,10 +7,10 @@ use lumen\curd\CurdController;
 
 class Base extends CurdController
 {
-
     public function __construct(Request $request)
     {
         $this->middleware('cors');
-        parent::__construct($request);
+        $this->request = $request;
+        $this->post = $request->toArray();
     }
 }

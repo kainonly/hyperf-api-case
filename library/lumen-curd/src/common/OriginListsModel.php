@@ -10,16 +10,15 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Trait ListsModel
  * @package lumen\curd\common
- * @property string model
- * @property array post
- * @property array origin_lists_validate
- * @property array origin_lists_default_validate
- * @property array origin_lists_before_result
- * @property array origin_lists_condition
- * @property Closure origin_lists_condition_group
- * @property string origin_lists_order_columns
- * @property string origin_lists_order_direct
- * @property array origin_lists_columns
+ * @property string $model
+ * @property array $post
+ * @property array $origin_lists_validate
+ * @property array $origin_lists_default_validate
+ * @property array $origin_lists_before_result
+ * @property array $origin_lists_condition
+ * @property Closure|null $origin_lists_query
+ * @property string $origin_lists_order
+ * @property string $origin_lists_field
  */
 trait OriginListsModel
 {
@@ -51,16 +50,14 @@ trait OriginListsModel
                 );
             }
 
-            $listsQuery = DB::table($this->model)->where($condition)
-                ->orderBy(
-                    $this->origin_lists_order_columns,
-                    $this->origin_lists_order_direct
-                );
+            $listsQuery = DB::table($this->model)
+                ->where($condition)
+                ->orderBy(...$this->origin_lists_order);
 
-            $lists = empty($this->origin_lists_condition_group) ?
-                $listsQuery->get($this->origin_lists_columns) :
-                $listsQuery->where($this->origin_lists_condition_group)
-                    ->get($this->origin_lists_columns);
+            $lists = empty($this->origin_lists_query) ?
+                $listsQuery->get([$this->origin_lists_field]) :
+                $listsQuery->where($this->origin_lists_query)
+                    ->get([$this->origin_lists_field]);
 
             return method_exists($this, '__originListsCustomReturn') ?
                 $this->__originListsCustomReturn($lists) : [

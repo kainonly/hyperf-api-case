@@ -8,15 +8,15 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Trait DeleteModel
  * @package lumen\curd\common
- * @property string model
- * @property array post
- * @property array delete_validate
- * @property array delete_default_validate
- * @property array delete_before_result
- * @property array delete_prep_result
- * @property array delete_condition
- * @property array delete_after_result
- * @property array delete_fail_result
+ * @property string $model
+ * @property array $post
+ * @property array $delete_validate
+ * @property array $delete_default_validate
+ * @property array $delete_before_result
+ * @property array $delete_prep_result
+ * @property array $delete_condition
+ * @property array $delete_after_result
+ * @property array $delete_fail_result
  */
 trait DeleteModel
 {
