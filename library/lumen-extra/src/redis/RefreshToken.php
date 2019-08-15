@@ -7,7 +7,7 @@ use lumen\extra\common\RedisModel;
 
 final class RefreshToken extends RedisModel
 {
-    protected $key = 'RefreshToken:';
+    protected $key = 'refresh-token:';
 
     /**
      * Factory Refresh Token
