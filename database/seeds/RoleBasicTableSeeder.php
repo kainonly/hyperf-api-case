@@ -2,9 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
-class AdminSeeder extends Seeder
+class RoleBasicTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,9 +12,12 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admin')->insert([
-            'username' => 'admin',
-            'password' => Hash::make('12345678'),
+        DB::table('role_basic')->insert([
+            'name' => json_encode([
+                'zh_cn' => '超级管理员',
+                'en_us' => 'super'
+            ], JSON_UNESCAPED_UNICODE),
+            'key' => '*',
             'create_time' => time(),
             'update_time' => time()
         ]);

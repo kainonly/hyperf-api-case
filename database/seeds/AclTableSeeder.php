@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ApiTypeSeeder extends Seeder
+class AclTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,56 +12,70 @@ class ApiTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('api_type')->insert([
+        DB::table('acl')->insert([
             [
-                'id' => 1,
+                'key' => 'main',
                 'name' => json_encode([
-                    'zh_cn' => '基础模块',
-                    'en_us' => 'Base Module'
+                    'zh_cn' => '公共模块',
+                    'en_us' => 'Common Module'
                 ], JSON_UNESCAPED_UNICODE),
+                'write' => 'uploads',
+                'read' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 2,
+            ],
+            [
+                'key' => 'router',
                 'name' => json_encode([
                     'zh_cn' => '路由模块',
                     'en_us' => 'Router Module'
                 ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 3,
+            ],
+            [
+                'key' => 'api',
                 'name' => json_encode([
                     'zh_cn' => '接口模块',
                     'en_us' => 'Api Module'
                 ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
-            ]
-            , [
-                'id' => 4,
-                'name' => json_encode([
-                    'zh_cn' => '接口类型模块',
-                    'en_us' => 'Api Type Module'
-                ], JSON_UNESCAPED_UNICODE),
-                'create_time' => time(),
-                'update_time' => time()
-            ]
-            , [
-                'id' => 5,
+            ],
+            [
+                'key' => 'admin',
                 'name' => json_encode([
                     'zh_cn' => '管理员模块',
                     'en_us' => 'Admin Module'
                 ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
-            ]
-            , [
-                'id' => 6,
+            ],
+            [
+                'key' => 'role',
                 'name' => json_encode([
                     'zh_cn' => '权限组模块',
-                    'en_us' => 'Router Module'
+                    'en_us' => 'Role Module'
                 ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'app',
+                'name' => json_encode([
+                    'zh_cn' => '应用模块',
+                    'en_us' => 'App Api'
+                ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
             ]

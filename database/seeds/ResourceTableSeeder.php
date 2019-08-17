@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class RouterSeeder extends Seeder
+class ResourceTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,203 +12,217 @@ class RouterSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('router')->insert([
+        DB::table('resource')->insert([
             [
-                'id' => 1,
-                'parent' => 0,
+                'key' => 'system',
+                'parent' => 'origin',
                 'name' => json_encode([
                     'zh_cn' => '系统设置',
                     'en_us' => 'System'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
+                'router' => 0,
+                'policy' => 0,
                 'icon' => 'setting',
-                'routerlink' => '',
-                'sort' => 0,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 2,
-                'parent' => 1,
+            ],
+            [
+                'key' => 'router-index',
+                'parent' => 'system',
                 'name' => json_encode([
                     'zh_cn' => '路由管理',
                     'en_us' => 'Router'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
-                'icon' => '',
-                'routerlink' => 'router-index',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 3,
-                'parent' => 2,
+            ],
+            [
+                'key' => 'router-add',
+                'parent' => 'router-index',
                 'name' => json_encode([
                     'zh_cn' => '路由新增',
                     'en_us' => 'Router Add'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'router-add',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 4,
-                'parent' => 2,
+            ],
+            [
+                'key' => 'router-edit',
+                'parent' => 'router-index',
                 'name' => json_encode([
                     'zh_cn' => '路由修改',
                     'en_us' => 'Router Edit'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'router-edit',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 5,
-                'parent' => 1,
-                'name' => json_encode([
-                    'zh_cn' => '权限组',
-                    'en_us' => 'Role'
-                ], JSON_UNESCAPED_UNICODE),
-                'nav' => 1,
-                'icon' => '',
-                'routerlink' => 'role-index',
-                'sort' => 0,
-                'create_time' => time(),
-                'update_time' => time()
-            ], [
-                'id' => 6,
-                'parent' => 5,
-                'name' => json_encode([
-                    'zh_cn' => '权限组新增',
-                    'en_us' => 'Role Add'
-                ], JSON_UNESCAPED_UNICODE),
-                'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'role-add',
-                'sort' => 0,
-                'create_time' => time(),
-                'update_time' => time()
-            ], [
-                'id' => 7,
-                'parent' => 5,
-                'name' => json_encode([
-                    'zh_cn' => '权限组修改',
-                    'en_us' => 'Role Edit'
-                ], JSON_UNESCAPED_UNICODE),
-                'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'role-edit',
-                'sort' => 0,
-                'create_time' => time(),
-                'update_time' => time()
-            ], [
-                'id' => 8,
-                'parent' => 1,
+            ],
+            [
+                'key' => 'api-index',
+                'parent' => 'system',
                 'name' => json_encode([
                     'zh_cn' => '接口管理',
                     'en_us' => 'Api'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
-                'icon' => '',
-                'routerlink' => 'api-index',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 9,
-                'parent' => 8,
+            ],
+            [
+                'key' => 'api-add',
+                'parent' => 'api-index',
                 'name' => json_encode([
                     'zh_cn' => '接口新增',
                     'en_us' => 'Api Add'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'api-add',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 10,
-                'parent' => 8,
+            ],
+            [
+                'key' => 'api-edit',
+                'parent' => 'api-index',
                 'name' => json_encode([
                     'zh_cn' => '接口修改',
                     'en_us' => 'Api Edit'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'api-edit',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 11,
-                'parent' => 1,
+            ],
+            [
+                'key' => 'role-index',
+                'parent' => 'system',
                 'name' => json_encode([
-                    'zh_cn' => '管理员管理',
+                    'zh_cn' => '权限组',
+                    'en_us' => 'Role'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 1,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'role-add',
+                'parent' => 'role-index',
+                'name' => json_encode([
+                    'zh_cn' => '权限组新增',
+                    'en_us' => 'Role Add'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'role-edit',
+                'parent' => 'role-index',
+                'name' => json_encode([
+                    'zh_cn' => '权限组修改',
+                    'en_us' => 'Role Edit'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'admin-index',
+                'parent' => 'system',
+                'name' => json_encode([
+                    'zh_cn' => '管理员',
                     'en_us' => 'Admin'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
-                'icon' => '',
-                'routerlink' => 'admin-index',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 12,
-                'parent' => 11,
+            ],
+            [
+                'key' => 'admin-add',
+                'parent' => 'admin-index',
                 'name' => json_encode([
                     'zh_cn' => '管理员新增',
                     'en_us' => 'Admin Add'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'admin-add',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 13,
-                'parent' => 11,
+            ],
+            [
+                'key' => 'admin-edit',
+                'parent' => 'admin-index',
                 'name' => json_encode([
                     'zh_cn' => '管理员修改',
                     'en_us' => 'Admin Edit'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'admin-edit',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 14,
-                'parent' => 0,
+            ],
+            [
+                'key' => 'center',
+                'parent' => 'system',
                 'name' => json_encode([
                     'zh_cn' => '个人中心',
                     'en_us' => 'Center'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => '',
-                'sort' => 0,
+                'router' => 0,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ], [
-                'id' => 15,
-                'parent' => 14,
+            ],
+            [
+                'key' => 'profile',
+                'parent' => 'center',
                 'name' => json_encode([
                     'zh_cn' => '信息修改',
                     'en_us' => 'Profile'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
-                'icon' => '',
-                'routerlink' => 'profile',
-                'sort' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ],
+            ]
         ]);
     }
 }
