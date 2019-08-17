@@ -7,9 +7,9 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "laravel/lumen-framework": "5.8.*",
-        "illuminate/cookie": "^5.8",
-        "illuminate/redis": "^5.8",
-        "barryvdh/laravel-cors": "^0.11.3"
+        "barryvdh/laravel-cors": "^0.11.3",
+        "kain/lumen-curd": "dev-master",
+        "kain/lumen-extra": "dev-master"
     },
     "autoload": {
         "classmap": [

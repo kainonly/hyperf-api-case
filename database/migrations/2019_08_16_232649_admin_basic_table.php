@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ApiTable extends Migration
+class AdminBasicTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,40 +14,38 @@ class ApiTable extends Migration
      */
     public function up()
     {
-        Schema::create('api', function (Blueprint $table) {
+        Schema::create('admin_basic', function (Blueprint $table) {
             $table->increments('id')
-                ->comment('主键');
+                ->comment('primary key');
 
-            $table->json('name')
-                ->comment('接口名称');
-
-            $table->string('url', 30)
+            $table->string('username', 30)
                 ->unique()
-                ->comment('授权路径');
+                ->comment('username');
 
-            $table->text('write')
-                ->nullable()
-                ->comment('可写列表');
+            $table->text('password')
+                ->comment('password');
 
-            $table->text('read')
+            $table->string('call', 30)
                 ->nullable()
-                ->comment('可读列表');
+                ->comment('call');
 
             $table->boolean('status')
                 ->default(1)
                 ->unsigned()
-                ->comment('状态');
+                ->comment('status');
 
             $table->integer('create_time')
                 ->default(0)
                 ->unsigned()
-                ->comment('创建时间');
+                ->comment('create time');
 
             $table->integer('update_time')
                 ->default(0)
                 ->unsigned()
-                ->comment('更新时间');
+                ->comment('update time');
         });
+
+        DB::statement("ALTER TABLE `v_admin_basic` comment 'Admin Table'");
     }
 
     /**
@@ -56,6 +55,6 @@ class ApiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('resource');
+        Schema::dropIfExists('admin_basic');
     }
 }

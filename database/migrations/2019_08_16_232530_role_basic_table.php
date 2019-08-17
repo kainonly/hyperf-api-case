@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RoleTable extends Migration
+class RoleBasicTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,38 +14,38 @@ class RoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('role', function (Blueprint $table) {
+        Schema::create('role_basic', function (Blueprint $table) {
             $table->increments('id')
-                ->comment('主键');
+                ->comment('primary key');
+
+            $table->string('key', 30)
+                ->unique()
+                ->comment('role key');
 
             $table->json('name')
-                ->comment('权限名称');
-
-            $table->text('router')
-                ->comment('路由授权');
-
-            $table->text('api')
-                ->comment('接口授权');
+                ->comment('role name');
 
             $table->text('note')
                 ->nullable()
-                ->comment('备注');
+                ->comment('mark');
 
             $table->boolean('status')
                 ->default(1)
                 ->unsigned()
-                ->comment('状态');
+                ->comment('status');
 
             $table->integer('create_time')
                 ->default(0)
                 ->unsigned()
-                ->comment('创建时间');
+                ->comment('create time');
 
             $table->integer('update_time')
                 ->default(0)
                 ->unsigned()
-                ->comment('更新时间');
+                ->comment('update time');
         });
+
+        DB::statement("ALTER TABLE `v_role_basic` comment 'Role Table'");
     }
 
     /**
@@ -54,6 +55,6 @@ class RoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role');
+        Schema::dropIfExists('role_basic');
     }
 }
