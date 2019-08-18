@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
-
-use Illuminate\Support\Facades\Cookie;
-use lumen\extra\facade\JwtAuth;
+namespace App\Http\Api\Controllers;
 
 class Index extends Base
 {
@@ -22,12 +19,5 @@ class Index extends Base
         return [
             'status' => 'ok'
         ];
-    }
-
-    public function test()
-    {
-        $data = JwtAuth::setToken('xsrf');
-        dump($data);
-//        Cookie::queue('nnaa', $data['token']);
     }
 }

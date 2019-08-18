@@ -102,13 +102,13 @@ $app->register(App\Providers\EventServiceProvider::class);
 */
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers\Api',
+    'namespace' => 'App\Http\Api\Controllers',
 ], function () {
     require __DIR__ . '/../routes/api.php';
 });
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers\System',
+    'namespace' => 'App\Http\System\Controllers',
     'prefix' => 'system'
 ], function () {
     require __DIR__ . '/../routes/system.php';

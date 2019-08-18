@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\System;
+namespace App\Http\System\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use lumen\extra\JwtCookieAuth;
 
 class Main extends Base
 {
