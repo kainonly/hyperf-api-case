@@ -23,17 +23,19 @@ class Acl extends RedisModel
         if (empty($lists)) {
             return true;
         }
-
         return !empty($this->redis->pipeline(
-            function (Pipeline $pipeline) use ($lists) {
+            function ($pipeline) use ($lists) {
+                /**
+                 * @var Pipeline $pipeline
+                 */
                 foreach ($lists as $key => $value) {
-                    $pipeline->hset($this->key, $value['key'], json_encode([
-                        'write' => $value['write'],
-                        'read' => $value['read']
+                    $pipeline->hset($this->key, $value->key, json_encode([
+                        'write' => $value->write,
+                        'read' => $value->read
                     ]));
                 }
-            }
-        ));
+            })
+        );
     }
 
     /**

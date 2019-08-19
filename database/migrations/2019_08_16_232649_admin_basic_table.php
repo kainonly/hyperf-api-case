@@ -25,9 +25,21 @@ class AdminBasicTable extends Migration
             $table->text('password')
                 ->comment('password');
 
+            $table->string('email', 100)
+                ->nullable()
+                ->comment('email');
+
+            $table->string('phone', 20)
+                ->nullable()
+                ->comment('phone');
+
             $table->string('call', 30)
                 ->nullable()
                 ->comment('call');
+
+            $table->text('avatar')
+                ->nullable()
+                ->comment('avatar');
 
             $table->boolean('status')
                 ->default(1)

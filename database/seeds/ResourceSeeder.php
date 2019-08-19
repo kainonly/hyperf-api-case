@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ResourceTableSeeder extends Seeder
+class ResourceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -28,11 +28,11 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'router-index',
+                'key' => 'resource-index',
                 'parent' => 'system',
                 'name' => json_encode([
-                    'zh_cn' => '路由管理',
-                    'en_us' => 'Router'
+                    'zh_cn' => '资源控制管理',
+                    'en_us' => 'Resource'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
                 'router' => 1,
@@ -42,11 +42,11 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'router-add',
-                'parent' => 'router-index',
+                'key' => 'resource-add',
+                'parent' => 'resource-index',
                 'name' => json_encode([
-                    'zh_cn' => '路由新增',
-                    'en_us' => 'Router Add'
+                    'zh_cn' => '资源控制新增',
+                    'en_us' => 'Resource Add'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
                 'router' => 1,
@@ -56,11 +56,11 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'router-edit',
-                'parent' => 'router-index',
+                'key' => 'resource-edit',
+                'parent' => 'resource-index',
                 'name' => json_encode([
-                    'zh_cn' => '路由修改',
-                    'en_us' => 'Router Edit'
+                    'zh_cn' => '资源控制修改',
+                    'en_us' => 'Resource Edit'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
                 'router' => 1,
@@ -70,11 +70,11 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'api-index',
+                'key' => 'acl-index',
                 'parent' => 'system',
                 'name' => json_encode([
-                    'zh_cn' => '接口管理',
-                    'en_us' => 'Api'
+                    'zh_cn' => '访问控制管理',
+                    'en_us' => 'Acl'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
                 'router' => 1,
@@ -84,11 +84,11 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'api-add',
-                'parent' => 'api-index',
+                'key' => 'acl-add',
+                'parent' => 'acl-index',
                 'name' => json_encode([
-                    'zh_cn' => '接口新增',
-                    'en_us' => 'Api Add'
+                    'zh_cn' => '访问控制新增',
+                    'en_us' => 'Acl Add'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
                 'router' => 1,
@@ -98,11 +98,11 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'api-edit',
-                'parent' => 'api-index',
+                'key' => 'acl-edit',
+                'parent' => 'acl-index',
                 'name' => json_encode([
-                    'zh_cn' => '接口修改',
-                    'en_us' => 'Api Edit'
+                    'zh_cn' => '访问控制修改',
+                    'en_us' => 'Acl Edit'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
                 'router' => 1,
@@ -197,7 +197,7 @@ class ResourceTableSeeder extends Seeder
             ],
             [
                 'key' => 'center',
-                'parent' => 'system',
+                'parent' => 'origin',
                 'name' => json_encode([
                     'zh_cn' => '个人中心',
                     'en_us' => 'Center'
@@ -224,5 +224,7 @@ class ResourceTableSeeder extends Seeder
                 'update_time' => time()
             ]
         ]);
+
+        (new \App\Http\System\Redis\Resource())->refresh();
     }
 }

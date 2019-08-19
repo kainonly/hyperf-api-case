@@ -12,14 +12,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            AclTableSeeder::class,
-            ResourceTableSeeder::class,
-            PolicyTableSeeder::class,
-            RoleBasicTableSeeder::class,
-            RoleAclTableSeeder::class,
-            RoleResourceTableSeeder::class,
-            AdminBasicTableSeeder::class,
-            AdminRoleTableSeeder::class
+            AclSeeder::class,
+            ResourceSeeder::class,
+            PolicySeeder::class,
+            RoleSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

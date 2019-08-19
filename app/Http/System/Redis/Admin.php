@@ -25,11 +25,14 @@ class Admin extends RedisModel
         }
 
         return !empty($this->redis->pipeline(
-            function (Pipeline $pipeline) use ($lists) {
+            function ($pipeline) use ($lists) {
+                /**
+                 * @var Pipeline $pipeline
+                 */
                 foreach ($lists as $key => $value) {
                     $pipeline->hset(
                         $this->key,
-                        $value['username'],
+                        $value->username,
                         json_encode($value)
                     );
                 }

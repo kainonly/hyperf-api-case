@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class PolicyTableSeeder extends Seeder
+class PolicySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,8 +12,5 @@ class PolicyTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('policy')->insert([
-
-        ]);
     }
 }

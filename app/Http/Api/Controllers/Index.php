@@ -2,6 +2,8 @@
 
 namespace App\Http\Api\Controllers;
 
+use Illuminate\Support\Facades\DB;
+
 class Index extends Base
 {
     /**
@@ -16,6 +18,8 @@ class Index extends Base
 
     public function index()
     {
+        $data = DB::table('role')->get();
+        dump($data);
         return [
             'status' => 'ok'
         ];

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AclTableSeeder extends Seeder
+class AclSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -25,10 +25,10 @@ class AclTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'router',
+                'key' => 'resource',
                 'name' => json_encode([
-                    'zh_cn' => '路由模块',
-                    'en_us' => 'Router Module'
+                    'zh_cn' => '资源控制模块',
+                    'en_us' => 'Resource Module'
                 ], JSON_UNESCAPED_UNICODE),
                 'write' => 'add,edit,delete',
                 'read' => 'originLists,lists,get',
@@ -36,10 +36,10 @@ class AclTableSeeder extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'api',
+                'key' => 'acl',
                 'name' => json_encode([
-                    'zh_cn' => '接口模块',
-                    'en_us' => 'Api Module'
+                    'zh_cn' => '访问控制模块',
+                    'en_us' => 'Acl Module'
                 ], JSON_UNESCAPED_UNICODE),
                 'write' => 'add,edit,delete',
                 'read' => 'originLists,lists,get',
@@ -67,18 +67,9 @@ class AclTableSeeder extends Seeder
                 'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
-            ],
-            [
-                'key' => 'app',
-                'name' => json_encode([
-                    'zh_cn' => '应用模块',
-                    'en_us' => 'App Api'
-                ], JSON_UNESCAPED_UNICODE),
-                'write' => 'add,edit,delete',
-                'read' => 'originLists,lists,get',
-                'create_time' => time(),
-                'update_time' => time()
             ]
         ]);
+
+        (new \App\Http\System\Redis\Acl())->refresh();
     }
 }

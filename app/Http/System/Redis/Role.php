@@ -25,14 +25,17 @@ class Role extends RedisModel
         }
 
         return !empty($this->redis->pipeline(
-            function (Pipeline $pipeline) use ($lists) {
+            function ($pipeline) use ($lists) {
+                /**
+                 * @var Pipeline $pipeline
+                 */
                 foreach ($lists as $key => $value) {
                     $pipeline->hset(
                         $this->key,
-                        $value['key'],
+                        $value->key,
                         json_encode([
-                            'acl' => $value['acl'],
-                            'resource' => $value['resource']
+                            'acl' => $value->acl,
+                            'resource' => $value->resource
                         ])
                     );
                 }

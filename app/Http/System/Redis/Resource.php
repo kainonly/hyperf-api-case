@@ -18,7 +18,7 @@ class Resource extends RedisModel
         $lists = DB::table('resource')
             ->where('status', '=', 1)
             ->orderBy('sort')
-            ->get(['id', 'key', 'parent', 'name', 'nav', 'router', 'policy' . 'icon']);
+            ->get(['id', 'key', 'parent', 'name', 'nav', 'router', 'policy', 'icon']);
 
         return (boolean)$this->redis->set($this->key, json_encode($lists));
     }
