@@ -2,12 +2,14 @@
 
 namespace App\Http\System\Controllers;
 
+use App\Http\System\Redis\Admin;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use lumen\extra\facade\Auth;
 
 class Main extends Base
 {
@@ -23,12 +25,8 @@ class Main extends Base
             'msg' => $validator->errors()
         ];
 
-        $data = DB::table('staff')
-            ->where('username', '=', $this->post['username'])
-            ->where('status', '=', 1)
-            ->first();
-
-        if (!$data) return [
+        $data = (new Admin)->get($this->post['username']);
+        if (empty($data)) return [
             'error' => 1,
             'msg' => 'error:status'
         ];
@@ -38,7 +36,10 @@ class Main extends Base
             'msg' => 'error:incorrect'
         ];
 
-        return JwtCookieAuth::setToken('system', $data->id, $data->role) ? [
+        return Auth::set('system', [
+            'username' => $data['username'],
+            'role' => $data['role']
+        ]) ? [
             'error' => 0,
             'msg' => 'ok'
         ] : [
@@ -49,7 +50,7 @@ class Main extends Base
 
     public function logout()
     {
-        JwtCookieAuth::tokenClear('system');
+        Auth::clear('system');
         return [
             'error' => 0
         ];
@@ -61,7 +62,7 @@ class Main extends Base
      */
     public function verify()
     {
-        return JwtCookieAuth::tokenVerify('system') ? [
+        return Auth::verify('system') ? [
             'error' => 0,
             'msg' => 'ok'
         ] : [
@@ -70,7 +71,7 @@ class Main extends Base
         ];
     }
 
-    public function menu(Request $request)
+    public function resource(Request $request)
     {
         return [
             'error' => 0,
@@ -103,10 +104,10 @@ class Main extends Base
         ];
     }
 
-    public function information(Request $request)
+    public function information()
     {
-        $data = DB::table('staff')
-            ->where('id', '=', $request->user)
+        $data = DB::table('admin')
+            ->where('username', '=', Auth::symbol('system')->username)
             ->where('status', '=', 1)
             ->first();
 
@@ -128,8 +129,9 @@ class Main extends Base
             'msg' => $validator->errors()
         ];
 
-        $data = DB::table('staff')
-            ->where('id', '=', $request->user)
+        $username = Auth::symbol('system')->username;
+        $data = DB::table('admin')
+            ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
 
@@ -148,8 +150,8 @@ class Main extends Base
         );
 
         try {
-            DB::table('staff')
-                ->where('id', '=', $request->user)
+            DB::table('admin')
+                ->where('username', '=', $username)
                 ->update($this->post);
 
             return [
