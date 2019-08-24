@@ -25,6 +25,7 @@ $app->withFacades();
 $app->withEloquent();
 
 $app->configure('app');
+$app->configure('cors');
 $app->configure('cookie');
 $app->configure('hashing');
 $app->configure('jwt');
@@ -65,7 +66,6 @@ $app->middleware([
 
 $app->routeMiddleware([
     'cors' => Barryvdh\Cors\HandleCors::class,
-    'post' => App\Middleware\OnlyPostMiddleware::class
 ]);
 
 /*

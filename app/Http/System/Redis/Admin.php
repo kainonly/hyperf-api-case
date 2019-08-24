@@ -17,7 +17,7 @@ class Admin extends RedisModel
     {
         $this->redis->del([$this->key]);
         $lists = DB::table('admin')
-            ->where('status', '=', 1)
+            ->where('status', 1)
             ->get(['id', 'role', 'username', 'password']);
 
         if (empty($lists)) {

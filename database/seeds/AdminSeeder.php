@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
         DB::transaction(function () {
             $resultId = DB::table('admin_basic')->insertGetId([
                 'username' => 'kain',
-                'password' => Hash::make('123456'),
+                'password' => Hash::make('12345678'),
                 'call' => 'kain',
                 'create_time' => time(),
                 'update_time' => time()

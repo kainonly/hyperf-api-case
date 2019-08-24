@@ -2,7 +2,6 @@
 
 namespace App\Http\System\Controllers;
 
-use App\Http\System\Redis\Admin;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -10,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use lumen\extra\facade\Auth;
+use App\Http\System\Redis\Admin;
 
 class Main extends Base
 {
@@ -31,7 +31,7 @@ class Main extends Base
             'msg' => 'error:status'
         ];
 
-        if (!Hash::check($this->post['password'], $data->password)) return [
+        if (!Hash::check($this->post['password'], $data['password'])) return [
             'error' => 1,
             'msg' => 'error:incorrect'
         ];
@@ -56,10 +56,6 @@ class Main extends Base
         ];
     }
 
-    /**
-     * 验证有效性
-     * @return array
-     */
     public function verify()
     {
         return Auth::verify('system') ? [
