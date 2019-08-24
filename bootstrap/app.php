@@ -23,11 +23,11 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 $app->withEloquent();
+
 $app->configure('app');
-$app->configure('session');
+$app->configure('cookie');
 $app->configure('hashing');
 $app->configure('jwt');
-
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -49,11 +49,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-$app->bind(
-    Illuminate\Contracts\Cookie\QueueingFactory::class,
-    'cookie'
-);
-
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -66,7 +61,6 @@ $app->bind(
 */
 
 $app->middleware([
-    Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class
 ]);
 
 $app->routeMiddleware([
@@ -84,11 +78,12 @@ $app->routeMiddleware([
 |
 */
 
-$app->register(Illuminate\Cookie\CookieServiceProvider::class);
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
-$app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
-$app->register(App\Providers\EventServiceProvider::class);
+$app->register(Barryvdh\Cors\ServiceProvider::class);
+$app->register(lumen\extra\providers\CookieServiceProvider::class);
+$app->register(lumen\extra\providers\JwtServiceProvider::class);
+$app->register(lumen\extra\providers\AuthServiceProvider::class);
+$app->register(lumen\extra\providers\RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
