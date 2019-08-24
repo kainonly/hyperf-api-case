@@ -10,7 +10,10 @@ class Base extends CurdController
     public function __construct(Request $request)
     {
         $this->middleware('cors');
+        $this->middleware('post');
         $this->request = $request;
-        $this->post = $request->toArray();
+        if ($request->method() == 'POST') {
+            $this->post = $request->toArray();
+        }
     }
 }

@@ -65,6 +65,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'cors' => Barryvdh\Cors\HandleCors::class,
+    'post' => App\Middleware\OnlyPostMiddleware::class
 ]);
 
 /*
