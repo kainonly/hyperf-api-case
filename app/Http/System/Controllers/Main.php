@@ -67,7 +67,7 @@ class Main extends Base
         ];
     }
 
-    public function resource(Request $request)
+    public function resource()
     {
         return [
             'error' => 0,
@@ -113,7 +113,7 @@ class Main extends Base
         ];
     }
 
-    public function update(Request $request)
+    public function update()
     {
         $validator = Validator::make($this->post, [
             'old_password' => 'sometimes|between:8,18',
