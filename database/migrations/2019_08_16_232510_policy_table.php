@@ -24,8 +24,10 @@ class PolicyTable extends Migration
             $table->string('acl_key', 30)
                 ->comment('access control key');
 
-            $table->enum('policy', ['r', 'rw'])
-                ->comment('policy');
+            $table->boolean('policy')
+                ->default(0)
+                ->unsigned()
+                ->comment('policy,0:readonly,1:read & write');
 
             $table->foreign('resource_key')
                 ->references('key')
