@@ -23,19 +23,6 @@ class RoleSeeder extends Seeder
                 'update_time' => time()
             ]);
 
-            $acl = DB::table('acl')
-                ->get(['key'])
-                ->map(function ($v) {
-                    return [
-                        'role_key' => '*',
-                        'acl_key' => $v->key,
-                        'policy' => 'rw'
-                    ];
-                });
-
-            DB::table('role_acl')
-                ->insert($acl->toArray());
-
             $resource = DB::table('resource')
                 ->get(['key'])
                 ->map(function ($v) {
