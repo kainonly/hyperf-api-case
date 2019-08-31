@@ -157,7 +157,7 @@ class Main extends Base
                 ->first();
 
             if (!empty($this->post['old_password'])) {
-                if (!Hash::check($this->post['old_password'], $data['password'])) {
+                if (!Hash::check($this->post['old_password'], $data->password)) {
                     return [
                         'error' => 1,
                         'msg' => 'error:password'

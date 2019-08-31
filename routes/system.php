@@ -13,3 +13,14 @@ Route::group([
     Route::post('update', 'Main@update');
     Route::post('uploads', 'Main@uploads');
 });
+
+Route::group([
+    'prefix' => 'main'
+], function () {
+    Route::post('get', 'Acl@get');
+    Route::post('originLists', 'Acl@originLists');
+    Route::post('lists', 'Acl@lists');
+    Route::post('add', 'Acl@add');
+    Route::post('edit', 'Acl@edit');
+    Route::post('delete', 'Acl@delete');
+});
