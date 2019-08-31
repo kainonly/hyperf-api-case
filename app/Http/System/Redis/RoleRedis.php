@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\DB;
 use lumen\extra\common\RedisModel;
 use Predis\Pipeline\Pipeline;
 
-class Admin extends RedisModel
+class RoleRedis extends RedisModel
 {
-    protected $key = 'system:admin';
+    protected $key = 'system:role';
 
     /**
      * @return bool
@@ -16,9 +16,9 @@ class Admin extends RedisModel
     public function refresh()
     {
         $this->redis->del([$this->key]);
-        $lists = DB::table('admin')
-            ->where('status', 1)
-            ->get(['id', 'role', 'username', 'password']);
+        $lists = DB::table('role')
+            ->where('status', '=', 1)
+            ->get(['key', 'acl', 'resource']);
 
         if (empty($lists)) {
             return true;
@@ -32,8 +32,11 @@ class Admin extends RedisModel
                 foreach ($lists as $key => $value) {
                     $pipeline->hset(
                         $this->key,
-                        $value->username,
-                        json_encode($value)
+                        $value->key,
+                        json_encode([
+                            'acl' => $value->acl,
+                            'resource' => $value->resource
+                        ])
                     );
                 }
             }
@@ -41,15 +44,16 @@ class Admin extends RedisModel
     }
 
     /**
-     * @param string $username
+     * @param string $roleKey
      * @return mixed
      */
-    public function get(string $username)
+    public function get(string $roleKey)
     {
         if (!$this->redis->exists($this->key)) {
             $this->refresh();
         }
 
-        return json_decode($this->redis->hGet($this->key, $username), true);
+        return json_decode($this->redis->hget($this->key, $roleKey), true);
     }
+
 }

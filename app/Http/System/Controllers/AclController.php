@@ -2,7 +2,9 @@
 
 namespace App\Http\System\Controllers;
 
+use App\Http\System\Redis\AclRedis;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use lumen\curd\common\AddModel;
 use lumen\curd\common\DeleteModel;
 use lumen\curd\common\EditModel;
@@ -13,17 +15,17 @@ use lumen\curd\lifecycle\AddAfterHooks;
 use lumen\curd\lifecycle\DeleteAfterHooks;
 use lumen\curd\lifecycle\EditAfterHooks;
 
-class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
+class AclController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
     use GetModel, OriginListsModel, ListsModel, AddModel, EditModel, DeleteModel;
     protected $model = 'acl';
     protected $add_validate = [
-        'key' => 'required',
-        'name' => 'required'
+        'key' => 'required|string',
+        'name' => 'required|json'
     ];
     protected $edit_validate = [
-        'key' => 'required',
-        'name' => 'required'
+        'key' => 'required|string',
+        'name' => 'required|json'
     ];
 
     /**
@@ -54,20 +56,30 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
         return $this->setRedis();
     }
 
+    /**
+     * Set Acl Redis
+     * @return bool
+     */
     private function setRedis()
     {
-        return (new \App\Http\System\Redis\Acl)
-            ->refresh();
+        return (new AclRedis)->refresh();
     }
 
+    /**
+     * Validate Exists Acl Key
+     * @return array
+     * @api /system/acl/valided_key
+     */
     public function validedKey()
     {
-        if (empty($this->post['key'])) {
-            return [
-                'error' => 1,
-                'msg' => 'error:require_key'
-            ];
-        }
+        $validator = Validator::make($this->post, [
+            'key' => 'required|string',
+        ]);
+
+        if ($validator->fails()) return [
+            'error' => 1,
+            'msg' => $validator->errors()
+        ];
 
         $result = DB::table($this->model)
             ->where('key', '=', $this->post['key'])

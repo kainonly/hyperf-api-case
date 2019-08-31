@@ -36,6 +36,6 @@ class RoleSeeder extends Seeder
                 ->insert($resource->toArray());
         });
 
-        (new \App\Http\System\Redis\Role())->refresh();
+        (new \App\Http\System\Redis\RoleRedis())->refresh();
     }
 }

@@ -28,6 +28,6 @@ class AdminSeeder extends Seeder
             ]);
         });
 
-        (new \App\Http\System\Redis\Admin())->refresh();
+        (new \App\Http\System\Redis\AdminRedis())->refresh();
     }
 }

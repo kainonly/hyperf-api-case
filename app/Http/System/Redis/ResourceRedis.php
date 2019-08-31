@@ -5,7 +5,7 @@ namespace App\Http\System\Redis;
 use Illuminate\Support\Facades\DB;
 use lumen\extra\common\RedisModel;
 
-class Resource extends RedisModel
+class ResourceRedis extends RedisModel
 {
     protected $key = 'system:resource';
 

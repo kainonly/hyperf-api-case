@@ -70,6 +70,6 @@ class AclSeeder extends Seeder
             ]
         ]);
 
-        (new \App\Http\System\Redis\Acl())->refresh();
+        (new \App\Http\System\Redis\AclRedis())->refresh();
     }
 }

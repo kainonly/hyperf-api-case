@@ -225,6 +225,6 @@ class ResourceSeeder extends Seeder
             ]
         ]);
 
-        (new \App\Http\System\Redis\Resource())->refresh();
+        (new \App\Http\System\Redis\ResourceRedis())->refresh();
     }
 }

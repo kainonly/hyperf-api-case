@@ -5,7 +5,7 @@ namespace App\Http\System\Controllers;
 use Illuminate\Http\Request;
 use lumen\curd\CurdController;
 
-class Base extends CurdController
+abstract class BaseController extends CurdController
 {
     public function __construct(Request $request)
     {

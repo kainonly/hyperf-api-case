@@ -3,17 +3,17 @@
 namespace App\Http\System\Controllers;
 
 use Carbon\Carbon;
-use App\Http\System\Redis\Resource;
-use App\Http\System\Redis\Role;
+use App\Http\System\Redis\ResourceRedis;
+use App\Http\System\Redis\RoleRedis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use lumen\extra\facade\Auth;
-use App\Http\System\Redis\Admin;
+use App\Http\System\Redis\AdminRedis;
 
-class Main extends Base
+class MainController extends BaseController
 {
     /**
      * User Login
@@ -32,7 +32,7 @@ class Main extends Base
             'msg' => $validator->errors()
         ];
 
-        $data = (new Admin)->get($this->post['username']);
+        $data = (new AdminRedis)->get($this->post['username']);
         if (!$data) return [
             'error' => 1,
             'msg' => 'error:status'
@@ -94,10 +94,10 @@ class Main extends Base
      */
     public function resource()
     {
-        $router = (new Resource)->get();
+        $router = (new ResourceRedis)->get();
         $role = [];
         foreach (Auth::symbol('system')->role as $hasRoleKey) {
-            $hasRole = (new Role)->get($hasRoleKey);
+            $hasRole = (new RoleRedis)->get($hasRoleKey);
             array_push(
                 $role,
                 ...explode(',', $hasRole['resource'])
@@ -177,7 +177,7 @@ class Main extends Base
                 ->where('username', '=', $username)
                 ->update($this->post);
 
-            (new Admin)->refresh();
+            (new AdminRedis)->refresh();
 
             return [
                 'error' => 0,
@@ -199,6 +199,15 @@ class Main extends Base
      */
     public function uploads(Request $request)
     {
+        $validator = Validator::make($this->post, [
+            'image' => 'required|image',
+        ]);
+
+        if (!$validator->failed()) return [
+            'error' => 1,
+            'msg' => $validator->errors()
+        ];
+
         $file = $request->file('image');
         if (!$file->isValid()) return [
             'error' => 1,
