@@ -23,6 +23,7 @@ Route::group([
     Route::post('add', 'AclController@add');
     Route::post('edit', 'AclController@edit');
     Route::post('delete', 'AclController@delete');
+    Route::post('valided_key', 'AclController@validedKey');
 });
 
 Route::group([
@@ -33,6 +34,7 @@ Route::group([
     Route::post('add', 'ResourceController@add');
     Route::post('edit', 'ResourceController@edit');
     Route::post('delete', 'ResourceController@delete');
+    Route::post('valided_key', 'ResourceController@validedKey');
 });
 
 Route::group([
@@ -42,3 +44,16 @@ Route::group([
     Route::post('add', 'PolicyController@add');
     Route::post('delete', 'PolicyController@delete');
 });
+
+Route::group([
+    'prefix' => 'role'
+], function () {
+    Route::post('get', 'RoleController@get');
+    Route::post('originLists', 'RoleController@originLists');
+    Route::post('lists', 'RoleController@lists');
+    Route::post('add', 'RoleBasicController@add');
+    Route::post('edit', 'RoleBasicController@edit');
+    Route::post('delete', 'RoleBasicController@delete');
+    Route::post('valided_key', 'RoleBasicController@validedKey');
+});
+
