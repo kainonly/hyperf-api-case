@@ -2,7 +2,7 @@
 
 namespace App\Http\Api\Controllers;
 
-class Index extends Base
+class IndexController extends BaseController
 {
     public function index()
     {
