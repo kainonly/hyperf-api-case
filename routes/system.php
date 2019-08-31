@@ -35,3 +35,10 @@ Route::group([
     Route::post('delete', 'ResourceController@delete');
 });
 
+Route::group([
+    'prefix' => 'policy'
+], function () {
+    Route::post('originLists', 'PolicyController@originLists');
+    Route::post('add', 'PolicyController@add');
+    Route::post('delete', 'PolicyController@delete');
+});

@@ -21,6 +21,14 @@ class ResourceController extends BaseController implements
     use GetModel, OriginListsModel, AddModel, EditModel, DeleteModel;
     protected $model = 'resource';
     protected $origin_lists_order = ['sort'];
+    protected $add_validate = [
+        'key' => 'required|string',
+        'name' => 'required|json'
+    ];
+    protected $edit_validate = [
+        'key' => 'required|string',
+        'name' => 'required|json'
+    ];
 
     /**
      * Add post processing
