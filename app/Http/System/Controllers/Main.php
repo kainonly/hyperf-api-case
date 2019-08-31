@@ -3,8 +3,10 @@
 namespace App\Http\System\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Database\QueryException;
+use App\Http\System\Redis\Resource;
+use App\Http\System\Redis\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +15,11 @@ use App\Http\System\Redis\Admin;
 
 class Main extends Base
 {
+    /**
+     * User Login
+     * @return array
+     * @api /system/main/login
+     */
     public function login()
     {
         $validator = Validator::make($this->post, [
@@ -26,19 +33,21 @@ class Main extends Base
         ];
 
         $data = (new Admin)->get($this->post['username']);
-        if (empty($data)) return [
+        if (!$data) return [
             'error' => 1,
             'msg' => 'error:status'
         ];
 
-        if (!Hash::check($this->post['password'], $data['password'])) return [
-            'error' => 1,
-            'msg' => 'error:incorrect'
-        ];
+        if (!Hash::check($this->post['password'], $data['password'])) {
+            return [
+                'error' => 1,
+                'msg' => 'error:incorrect'
+            ];
+        }
 
         return Auth::set('system', [
             'username' => $data['username'],
-            'role' => $data['role']
+            'role' => explode(',', $data['role'])
         ]) ? [
             'error' => 0,
             'msg' => 'ok'
@@ -48,14 +57,25 @@ class Main extends Base
         ];
     }
 
+    /**
+     * User Logout
+     * @return array
+     * @api /system/main/logout
+     */
     public function logout()
     {
         Auth::clear('system');
         return [
-            'error' => 0
+            'error' => 0,
+            'msg' => 'ok'
         ];
     }
 
+    /**
+     * User Token Verify
+     * @return array
+     * @api /system/main/verify
+     */
     public function verify()
     {
         return Auth::verify('system') ? [
@@ -67,14 +87,116 @@ class Main extends Base
         ];
     }
 
+    /**
+     * Get Resource Lists
+     * @return array
+     * @api /system/main/resource
+     */
     public function resource()
     {
+        $router = (new Resource)->get();
+        $role = [];
+        foreach (Auth::symbol('system')->role as $hasRoleKey) {
+            $hasRole = (new Role)->get($hasRoleKey);
+            array_push(
+                $role,
+                ...explode(',', $hasRole['resource'])
+            );
+        }
+        $routerRole = array_unique($role);
+        $lists = Arr::where($router, function ($value) use ($routerRole) {
+            return in_array($value['key'], $routerRole);
+        });
         return [
             'error' => 0,
-            'data' => []
+            'data' => array_values($lists)
         ];
     }
 
+    /**
+     * Get Profile Information
+     * @return array
+     * @api /system/main/information
+     */
+    public function information()
+    {
+        $username = Auth::symbol('system')->username;
+        $data = DB::table('admin_basic')
+            ->where('username', '=', $username)
+            ->where('status', '=', 1)
+            ->first(['email', 'phone', 'call', 'avatar']);
+
+        return [
+            'error' => 0,
+            'data' => $data
+        ];
+    }
+
+    /**
+     * Update Profile
+     * @return array
+     * @api /system/main/update
+     */
+    public function update()
+    {
+        $validator = Validator::make($this->post, [
+            'old_password' => 'sometimes|between:8,18',
+            'new_password' => 'required_with:old_password|between:8,18'
+        ]);
+
+        if (!$validator->failed()) return [
+            'error' => 1,
+            'msg' => $validator->errors()
+        ];
+
+        try {
+            $username = Auth::symbol('system')->username;
+            $data = DB::table('admin_basic')
+                ->where('username', '=', $username)
+                ->where('status', '=', 1)
+                ->first();
+
+            if (!empty($this->post['old_password'])) {
+                if (!Hash::check($this->post['old_password'], $data['password'])) {
+                    return [
+                        'error' => 1,
+                        'msg' => 'error:password'
+                    ];
+                }
+
+                $this->post['password'] = Hash::make($this->post['new_password']);
+            }
+
+            unset(
+                $this->post['old_password'],
+                $this->post['new_password']
+            );
+
+
+            DB::table('admin_basic')
+                ->where('username', '=', $username)
+                ->update($this->post);
+
+            (new Admin)->refresh();
+
+            return [
+                'error' => 0,
+                'msg' => 'ok'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Files Upload to Tencent COS
+     * @param Request $request
+     * @return array
+     * @api /system/main/uploads
+     */
     public function uploads(Request $request)
     {
         $file = $request->file('image');
@@ -98,67 +220,5 @@ class Main extends Base
                 'hash_name' => $file->hashName()
             ]
         ];
-    }
-
-    public function information()
-    {
-        $data = DB::table('admin')
-            ->where('username', '=', Auth::symbol('system')->username)
-            ->where('status', '=', 1)
-            ->first();
-
-        return [
-            'error' => 0,
-            'data' => $data
-        ];
-    }
-
-    public function update()
-    {
-        $validator = Validator::make($this->post, [
-            'old_password' => 'sometimes|between:8,18',
-            'new_password' => 'required_with:old_password|between:8,18'
-        ]);
-
-        if (!$validator->failed()) return [
-            'error' => 1,
-            'msg' => $validator->errors()
-        ];
-
-        $username = Auth::symbol('system')->username;
-        $data = DB::table('admin')
-            ->where('username', '=', $username)
-            ->where('status', '=', 1)
-            ->first();
-
-        if (!empty($this->post['old_password'])) {
-            if (!Hash::check($this->post['old_password'], $data['password'])) return [
-                'error' => 1,
-                'msg' => 'error:password'
-            ];
-
-            $this->post['password'] = Hash::make($this->post['new_password']);
-        }
-
-        unset(
-            $this->post['old_password'],
-            $this->post['new_password']
-        );
-
-        try {
-            DB::table('admin')
-                ->where('username', '=', $username)
-                ->update($this->post);
-
-            return [
-                'error' => 0,
-                'msg' => 'ok'
-            ];
-        } catch (QueryException $e) {
-            return [
-                'error' => 1,
-                'msg' => $e->getMessage()
-            ];
-        }
     }
 }
