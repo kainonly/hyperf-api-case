@@ -57,3 +57,15 @@ Route::group([
     Route::post('valided_key', 'RoleBasicController@validedKey');
 });
 
+Route::group([
+    'prefix' => 'admin'
+], function () {
+    Route::post('get', 'AdminController@get');
+    Route::post('originLists', 'AdminController@originLists');
+    Route::post('lists', 'AdminController@lists');
+    Route::post('add', 'AdminBasicController@add');
+    Route::post('edit', 'AdminBasicController@edit');
+    Route::post('delete', 'AdminBasicController@delete');
+    Route::post('valided_username', 'AdminBasicController@validedUsername');
+});
+
