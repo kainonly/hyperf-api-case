@@ -97,11 +97,8 @@ class MainController extends BaseController
         $router = (new ResourceRedis)->get();
         $role = [];
         foreach (Auth::symbol('system')->role as $hasRoleKey) {
-            $hasRole = (new RoleRedis)->get($hasRoleKey);
-            array_push(
-                $role,
-                ...explode(',', $hasRole['resource'])
-            );
+            $resource = (new RoleRedis)->get($hasRoleKey, 'resource');
+            array_push($role, ...$resource);
         }
         $routerRole = array_unique($role);
         $lists = Arr::where($router, function ($value) use ($routerRole) {
@@ -177,7 +174,7 @@ class MainController extends BaseController
                 ->where('username', '=', $username)
                 ->update($this->post);
 
-            (new AdminRedis)->refresh();
+            (new AdminRedis)->clear();
 
             return [
                 'error' => 0,

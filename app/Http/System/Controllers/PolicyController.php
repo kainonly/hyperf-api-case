@@ -27,7 +27,7 @@ class PolicyController extends BaseController implements AddAfterHooks, DeleteAf
      */
     public function __addAfterHooks($id)
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -36,15 +36,15 @@ class PolicyController extends BaseController implements AddAfterHooks, DeleteAf
      */
     public function __deleteAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
-     * Set Role Redis
+     * Clear Role Redis
      * @return bool
      */
-    private function setRedis()
+    private function clearRedis()
     {
-        return (new RoleRedis)->refresh();
+        return (new RoleRedis)->clear();
     }
 }

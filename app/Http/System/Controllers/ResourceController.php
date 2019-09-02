@@ -37,7 +37,7 @@ class ResourceController extends BaseController implements
      */
     public function __addAfterHooks($id)
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -46,7 +46,7 @@ class ResourceController extends BaseController implements
      */
     public function __editAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -79,7 +79,7 @@ class ResourceController extends BaseController implements
      */
     public function __deleteAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -104,7 +104,7 @@ class ResourceController extends BaseController implements
             foreach ($this->post['data'] as $value) {
                 DB::table($this->model)->update($value);
             }
-            return $this->setRedis();
+            return $this->clearRedis();
         }) ? [
             'error' => 0,
             'msg' => 'success'
@@ -115,12 +115,12 @@ class ResourceController extends BaseController implements
     }
 
     /**
-     * Set Resource Redis
+     * Clear Resource Redis
      * @return bool
      */
-    private function setRedis()
+    private function clearRedis()
     {
-        return (new ResourceRedis)->refresh();
+        return (new ResourceRedis)->clear();
     }
 
     /**

@@ -9,47 +9,54 @@ use Predis\Pipeline\Pipeline;
 class AdminRedis extends RedisModel
 {
     protected $key = 'system:admin';
+    private $rows = [];
 
     /**
+     * Clear Redis
      * @return bool
      */
-    public function refresh()
+    public function clear()
     {
-        $this->redis->del([$this->key]);
-        $lists = DB::table('admin')
-            ->where('status', 1)
-            ->get(['id', 'role', 'username', 'password']);
-
-        if (empty($lists)) {
-            return true;
-        }
-
-        return !empty($this->redis->pipeline(
-            function ($pipeline) use ($lists) {
-                /**
-                 * @var Pipeline $pipeline
-                 */
-                foreach ($lists as $key => $value) {
-                    $pipeline->hset(
-                        $this->key,
-                        $value->username,
-                        json_encode($value)
-                    );
-                }
-            }
-        ));
+        return (bool)$this->redis->del([$this->key]);
     }
 
     /**
-     * @param string $username
-     * @return mixed
+     * Get User Data
+     * @param string $username Username
+     * @return array
      */
     public function get(string $username)
     {
         if (!$this->redis->exists($this->key)) {
-            $this->refresh();
+            $this->update($username);
+        } else {
+            $this->rows = json_decode($this->redis->hGet($this->key, $username), true);
+        }
+        return $this->rows;
+    }
+
+    /**
+     * Update Redis
+     * @param string $username
+     */
+    private function update(string $username)
+    {
+
+        $lists = DB::table('admin')
+            ->where('status', '=', 1)
+            ->get(['id', 'role', 'username', 'password']);
+
+        if (empty($lists)) {
+            return;
         }
 
-        return json_decode($this->redis->hGet($this->key, $username), true);
+        $this->redis->pipeline(function (Pipeline $pipeline) use ($username, $lists) {
+            foreach ($lists as $key => $value) {
+                $pipeline->hset($this->key, $value['username'], json_encode($value));
+                if ($username == $value['username']) {
+                    $this->rows = $value;
+                }
+            }
+        });
     }
 }

@@ -35,7 +35,7 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
      */
     public function __addAfterHooks($id)
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -44,7 +44,7 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
      */
     public function __editAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -53,16 +53,16 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
      */
     public function __deleteAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
-     * Set Acl Redis
+     * Clear Acl Redis
      * @return bool
      */
-    private function setRedis()
+    private function clearRedis()
     {
-        return (new AclRedis)->refresh();
+        return (new AclRedis)->clear();
     }
 
     /**

@@ -47,7 +47,7 @@ class AdminBasicController extends BaseController implements
             'admin_id' => $id,
             'role_key' => $this->role
         ]);
-        return $result && $this->setRedis();
+        return $result && $this->clearRedis();
     }
 
     /**
@@ -61,6 +61,7 @@ class AdminBasicController extends BaseController implements
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
+
         if ($rows->id == $this->post['id']) {
             $this->edit_before_result = [
                 'error' => 1,
@@ -110,7 +111,7 @@ class AdminBasicController extends BaseController implements
                 ]);
         }
 
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -140,16 +141,16 @@ class AdminBasicController extends BaseController implements
      */
     public function __deleteAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
-     * Set Admin Redis
+     * Clear Admin Redis
      * @return bool
      */
-    private function setRedis()
+    private function clearRedis()
     {
-        return (new AdminRedis)->refresh();
+        return (new AdminRedis)->clear();
     }
 
     /**

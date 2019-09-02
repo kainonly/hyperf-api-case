@@ -29,6 +29,7 @@ class AdminController extends BaseController implements GetCustom
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
+
         if ($rows->id == $this->post['id']) {
             $data['self'] = true;
         }

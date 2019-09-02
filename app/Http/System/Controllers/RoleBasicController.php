@@ -49,7 +49,7 @@ class RoleBasicController extends BaseController implements
             ]);
         }
         $result = DB::table('role_resource')->insert($data);
-        return $result && $this->setRedis();
+        return $result && $this->clearRedis();
     }
 
     /**
@@ -90,7 +90,7 @@ class RoleBasicController extends BaseController implements
                 return false;
             }
         }
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
@@ -99,16 +99,16 @@ class RoleBasicController extends BaseController implements
      */
     public function __deleteAfterHooks()
     {
-        return $this->setRedis();
+        return $this->clearRedis();
     }
 
     /**
-     * Set Role Redis
+     * Clear Role Redis
      * @return bool
      */
-    private function setRedis()
+    private function clearRedis()
     {
-        return (new RoleRedis)->refresh();
+        return (new RoleRedis)->clear();
     }
 
     /**
