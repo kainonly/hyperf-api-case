@@ -15,6 +15,14 @@ use App\Http\System\Redis\AdminRedis;
 
 class MainController extends BaseController
 {
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        $this->middleware('system.auth', [
+            'except' => ['login', 'logout', 'verify']
+        ]);
+    }
+
     /**
      * User Login
      * @return array

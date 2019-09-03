@@ -66,7 +66,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'cors' => Barryvdh\Cors\HandleCors::class,
-    'systemAuth' => App\Http\System\Middleware\SystemAuthVerify::class
+    'system.auth' => App\Http\System\Middleware\SystemAuthVerify::class
 ]);
 
 /*
@@ -106,7 +106,7 @@ $app->router->group([
 
 $app->router->group([
     'namespace' => 'App\Http\System\Controllers',
-    'prefix' => 'system'
+    'prefix' => 'system',
 ], function () {
     require __DIR__ . '/../routes/system.php';
 });
