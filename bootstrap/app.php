@@ -22,7 +22,6 @@ $app = new Laravel\Lumen\Application(
 );
 
 $app->withFacades();
-$app->withEloquent();
 
 $app->configure('app');
 $app->configure('cors');
@@ -86,6 +85,7 @@ $app->register(lumen\extra\providers\CookieServiceProvider::class);
 $app->register(lumen\extra\providers\JwtServiceProvider::class);
 $app->register(lumen\extra\providers\AuthServiceProvider::class);
 $app->register(lumen\extra\providers\RedisServiceProvider::class);
+$app->register(Hhxsv5\LaravelS\Illuminate\LaravelSServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

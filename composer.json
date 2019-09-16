@@ -5,11 +5,11 @@
     "require": {
         "ext-json": "*",
         "ext-pdo": "*",
+        "laravel/lumen-framework": "^6.0",
         "barryvdh/laravel-cors": "^0.11.3",
         "kain/lumen-curd": "dev-master",
         "kain/lumen-extra": "dev-master",
-        "laravel/lumen-framework": "5.8.*",
-        "swooletw/laravel-swoole": "^2.6"
+        "hhxsv5/laravel-s": "^3.5"
     },
     "autoload": {
         "classmap": [
