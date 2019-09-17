@@ -1,11 +1,6 @@
 version: '3.7'
 services:
-  update:
-    image: kainonly/composer-alpine
-    command: 'composer update --optimize-autoloader --no-dev --ignore-platform-reqs'
-    volumes:
-      - ./:/app
-  swoole:
+  dev:
     image: kainonly/swoole-alpine
     restart: always
     command: 'php bin/laravels start'
