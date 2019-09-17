@@ -7,6 +7,7 @@ class IndexController extends BaseController
     public function index()
     {
         return [
+            'version' => 1,
             'status' => 'ok',
         ];
     }
