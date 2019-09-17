@@ -2,9 +2,14 @@ version: '3.7'
 services:
   dev:
     image: kainonly/swoole-alpine
-    restart: always
     command: 'php bin/laravels start'
     volumes:
       - ./:/app
     ports:
       - 5200:5200
+  update:
+    image: kainonly/composer-alpine
+    command: 'composer update --prefer-dist -o --no-dev --ignore-platform-reqs'
+    volumes:
+      - ../composer:/tmp
+      - ./:/app

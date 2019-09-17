@@ -8,9 +8,10 @@ class IndexController extends BaseController
 {
     public function index()
     {
+        $data = DB::table('resource')->get();
         return [
             'status' => 'ok',
-            'resource' => DB::table('resource')->get()
+            'resource' => $data->toArray()
         ];
     }
 }

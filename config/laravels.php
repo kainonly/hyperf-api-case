@@ -7,7 +7,7 @@ return [
     'listen_ip' => env('LARAVELS_LISTEN_IP', '0.0.0.0'),
     'listen_port' => env('LARAVELS_LISTEN_PORT', 5200),
     'socket_type' => defined('SWOOLE_SOCK_TCP') ? SWOOLE_SOCK_TCP : 1,
-    'enable_coroutine_runtime' => true,
+    'enable_coroutine_runtime' => false,
     'server' => env('LARAVELS_SERVER', 'LaravelS'),
     'handle_static' => env('LARAVELS_HANDLE_STATIC', false),
     'laravel_base_path' => env('LARAVEL_BASE_PATH', base_path()),
