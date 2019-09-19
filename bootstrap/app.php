@@ -49,6 +49,12 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton('cookie', function () use ($app) {
+    return $app->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
+});
+
+$app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -81,10 +87,9 @@ $app->routeMiddleware([
 
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
-$app->register(lumen\extra\providers\CookieServiceProvider::class);
 $app->register(lumen\extra\providers\JwtServiceProvider::class);
 $app->register(lumen\extra\providers\AuthServiceProvider::class);
-$app->register(lumen\extra\providers\RedisServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Hhxsv5\LaravelS\Illuminate\LaravelSServiceProvider::class);
 
 /*
