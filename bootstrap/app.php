@@ -22,11 +22,13 @@ $app = new Laravel\Lumen\Application(
 );
 
 $app->withFacades();
+$app->withEloquent();
 
 $app->configure('app');
 $app->configure('cors');
+$app->configure('cookie');
 $app->configure('hashing');
-//$app->configure('jwt');
+$app->configure('jwt');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -80,8 +82,10 @@ $app->routeMiddleware([
 
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
-//$app->register(lumen\extra\providers\JwtServiceProvider::class);
-//$app->register(lumen\extra\providers\AuthServiceProvider::class);
+$app->register(lumen\extra\providers\CookieServiceProvider::class);
+$app->register(lumen\extra\providers\JwtServiceProvider::class);
+$app->register(lumen\extra\providers\AuthServiceProvider::class);
+$app->register(lumen\extra\providers\RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
