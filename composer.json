@@ -6,9 +6,6 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "barryvdh/laravel-cors": "^0.11.3",
-        "hhxsv5/laravel-s": "^3.5",
-        "illuminate/cookie": "^6.0",
-        "illuminate/redis": "^6.0",
         "kain/lumen-curd": "dev-master",
         "kain/lumen-extra": "dev-master",
         "laravel/lumen-framework": "^6.0"

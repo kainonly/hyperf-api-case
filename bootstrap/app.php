@@ -25,9 +25,8 @@ $app->withFacades();
 
 $app->configure('app');
 $app->configure('cors');
-$app->configure('cookie');
 $app->configure('hashing');
-$app->configure('jwt');
+//$app->configure('jwt');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -48,12 +47,6 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
-
-$app->singleton('cookie', function () use ($app) {
-    return $app->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
-});
-
-$app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
 
 /*
 |--------------------------------------------------------------------------
@@ -87,10 +80,8 @@ $app->routeMiddleware([
 
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
-$app->register(lumen\extra\providers\JwtServiceProvider::class);
-$app->register(lumen\extra\providers\AuthServiceProvider::class);
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
-$app->register(Hhxsv5\LaravelS\Illuminate\LaravelSServiceProvider::class);
+//$app->register(lumen\extra\providers\JwtServiceProvider::class);
+//$app->register(lumen\extra\providers\AuthServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
