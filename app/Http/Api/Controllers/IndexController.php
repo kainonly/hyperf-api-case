@@ -6,8 +6,6 @@ class IndexController extends BaseController
 {
     public function index()
     {
-        return [
-            'status' => 'ok'
-        ];
+        return [];
     }
 }
