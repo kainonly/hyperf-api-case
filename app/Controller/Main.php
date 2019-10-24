@@ -41,7 +41,7 @@ class Main extends Base
                 ];
             }
 
-            return $this->__create('system', [
+            return $this->__create('app', [
                 'username' => $raws->username,
                 'role' => $raws->role
             ]);
@@ -58,7 +58,7 @@ class Main extends Base
      */
     public function verify()
     {
-        return $this->__verify('system');
+        return $this->__verify('app');
     }
 
     /**
@@ -67,6 +67,6 @@ class Main extends Base
      */
     public function logout()
     {
-        return $this->__destory('system');
+        return $this->__destory('app');
     }
 }
