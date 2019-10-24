@@ -20,9 +20,4 @@ class Index
             'version' => 1.0,
         ];
     }
-
-    public function info()
-    {
-        return phpinfo();
-    }
 }
