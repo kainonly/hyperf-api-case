@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\Support\Traits\Auth;
 
@@ -64,6 +65,7 @@ class Main extends Base
     /**
      * @return \Psr\Http\Message\ResponseInterface
      * @PostMapping(path="logout")
+     * @Middleware(\App\Middleware\AppAuthVerify::class)
      */
     public function logout()
     {
