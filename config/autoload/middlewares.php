@@ -12,6 +12,5 @@ declare(strict_types=1);
 
 return [
     'http' => [
-        \Hyperf\Support\Middleware\Cors::class
     ],
 ];
