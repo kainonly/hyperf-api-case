@@ -1,38 +1,75 @@
 {
-    "description": "Van component restful api by Lumen",
-    "license": "MIT",
-    "type": "project",
-    "require": {
-        "ext-json": "*",
-        "ext-pdo": "*",
-        "barryvdh/laravel-cors": "^0.11.3",
-        "kain/lumen-curd": "dev-master",
-        "kain/lumen-extra": "dev-master",
-        "laravel/lumen-framework": "^6.0"
+  "name": "kain/van-api",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.2",
+    "ext-redis": "*",
+    "ext-http": "*",
+    "ext-json": "*",
+    "ext-swoole": ">=4.4",
+    "hyperf/cache": "~1.1.0",
+    "hyperf/command": "~1.1.0",
+    "hyperf/config": "~1.1.0",
+    "hyperf/contract": "~1.1.0",
+    "hyperf/database": "~1.1.0",
+    "hyperf/db-connection": "~1.1.0",
+    "hyperf/devtool": "~1.1.0",
+    "hyperf/di": "~1.1.0",
+    "hyperf/dispatcher": "~1.1.0",
+    "hyperf/event": "~1.1.0",
+    "hyperf/exception-handler": "~1.1.0",
+    "hyperf/framework": "~1.1.0",
+    "hyperf/guzzle": "~1.1.0",
+    "hyperf/http-server": "~1.1.0",
+    "hyperf/logger": "~1.1.0",
+    "hyperf/memory": "~1.1.0",
+    "hyperf/paginator": "~1.1.0",
+    "hyperf/pool": "~1.1.0",
+    "hyperf/process": "~1.1.0",
+    "hyperf/redis": "~1.1.0",
+    "hyperf/utils": "~1.1.0",
+    "hyperf/validation": "^1.1",
+    "kain/hyperf-curd": "dev-master",
+    "kain/hyperf-extra": "dev-master",
+    "kain/hyperf-support": "dev-master"
+  },
+  "require-dev": {
+    "swoft/swoole-ide-helper": "^4.2",
+    "phpmd/phpmd": "^2.6",
+    "friendsofphp/php-cs-fixer": "^2.14",
+    "mockery/mockery": "^1.0",
+    "doctrine/common": "^2.9",
+    "phpstan/phpstan": "^0.11.2",
+    "hyperf/testing": "~1.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
     },
-    "autoload": {
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ],
-        "psr-4": {
-            "App\\": "app/"
-        }
-    },
-    "scripts": {
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ]
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://mirrors.aliyun.com/composer/"
-        }
+    "files": []
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HyperfTest\\": "./test/"
     }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": [],
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
+    "test": "co-phpunit -c phpunit.xml --colors=always",
+    "cs-fix": "php-cs-fixer fix $1",
+    "analyze": "phpstan analyse --memory-limit 300M -l 0 -c phpstan.neon ./app ./config",
+    "start": "php ./bin/hyperf.php start"
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  }
 }
