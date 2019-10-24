@@ -41,7 +41,7 @@ class Main extends Base
                 ];
             }
 
-            return $this->__create('default', [
+            return $this->__create('system', [
                 'username' => $raws->username,
                 'role' => $raws->role
             ]);
@@ -58,7 +58,7 @@ class Main extends Base
      */
     public function verify()
     {
-        return $this->__verify('default');
+        return $this->__verify('system');
     }
 
     /**
@@ -67,6 +67,6 @@ class Main extends Base
      */
     public function logout()
     {
-        return $this->__destory('default');
+        return $this->__destory('system');
     }
 }
