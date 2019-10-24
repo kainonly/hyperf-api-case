@@ -12,7 +12,7 @@ use Hyperf\HttpServer\Annotation\Middlewares;
  * @package App\Controller
  * @Controller()
  * @Middlewares({
- *  @Middleware(\App\Middleware\SystemAuthVerify::class)
+ *  @Middleware(\App\Middleware\AppAuthVerify::class)
  * })
  */
 class Acl extends Base

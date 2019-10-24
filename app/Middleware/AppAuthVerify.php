@@ -4,7 +4,7 @@ namespace App\Middleware;
 
 use Hyperf\Support\Middleware\AuthVerify;
 
-class SystemAuthVerify extends AuthVerify
+class AppAuthVerify extends AuthVerify
 {
-    protected $scene = 'system';
+    protected $scene = 'app';
 }
