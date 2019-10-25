@@ -38,8 +38,4 @@ Router::addGroup('/system', function () {
     ], $options);
     Router::post('/acl/validedKey', \App\Controller\System\Acl::class . '@validedKey', $options);
 
-    RouterMap::set(\App\Controller\System\Resource::class, '/resource', [
-        'get', 'originLists', 'lists', 'add', 'edit', 'delete'
-    ], $options);
-    Router::post('/resource/validedKey', \App\Controller\System\Resource::class . '@validedKey', $options);
 });
