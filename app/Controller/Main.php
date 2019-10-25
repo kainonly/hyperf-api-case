@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Hyperf\DbConnection\Db;
+use App\RedisModel\Admin;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
 use Hyperf\HttpServer\Annotation\PostMapping;
@@ -23,28 +23,38 @@ class Main extends Base
     public function login()
     {
         try {
-            $raws = Db::table('admin')
-                ->where('username', '=', $this->post['username'])
-                ->where('status', '=', 1)
-                ->first();
+            $validator = $this->validation->make($this->post, [
+                'username' => 'required|between:4,20',
+                'password' => 'required|between:8,18',
+            ]);
 
-            if (empty((array)$raws)) {
+            if ($validator->fails()) {
                 return [
                     'error' => 1,
-                    'msg' => 'username not exists'
+                    'msg' => $validator->errors()
                 ];
             }
 
-            if (!$this->hash->check($this->post['password'], $raws->password)) {
+            $data = Admin::create($this->container)
+                ->get($this->post['username']);
+
+            if (empty($data)) {
                 return [
                     'error' => 1,
-                    'msg' => 'password'
+                    'msg' => 'error:username_not_exists'
+                ];
+            }
+
+            if (!$this->hash->check($this->post['password'], $data['password'])) {
+                return [
+                    'error' => 1,
+                    'msg' => 'error:password_incorrect'
                 ];
             }
 
             return $this->__create('app', [
-                'username' => $raws->username,
-                'role' => $raws->role
+                'user' => $data['username'],
+                'role' => explode(',', $data['role'])
             ]);
         } catch (\Exception $e) {
             return [
