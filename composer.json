@@ -29,9 +29,8 @@
     "hyperf/redis": "~1.1.0",
     "hyperf/utils": "~1.1.0",
     "hyperf/validation": "^1.1",
-    "kain/hyperf-curd": "^1.0",
-    "kain/hyperf-extra": "^1.0",
-    "kain/hyperf-support": "^1.0"
+    "ramsey/uuid": "^3.8",
+    "lcobucci/jwt": "^3.3"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
@@ -44,7 +43,10 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "app/"
+      "App\\": "app/",
+      "Hyperf\\Curd\\": "library/hyperf-curd/src/",
+      "Hyperf\\Extra\\": "library/hyperf-extra/src/",
+      "Hyperf\\Support\\": "library/hyperf-support/src/"
     },
     "files": []
   },
@@ -52,6 +54,13 @@
     "psr-4": {
       "HyperfTest\\": "./test/"
     }
+  },
+  "suggest": {
+    "ext-openssl": "Required to use HTTPS.",
+    "ext-json": "Required to use JSON.",
+    "ext-pdo": "Required to use MySQL Client.",
+    "ext-pdo_mysql": "Required to use MySQL Client.",
+    "ext-redis": "Required to use Redis Client."
   },
   "minimum-stability": "dev",
   "prefer-stable": true,

@@ -11,3 +11,5 @@ vendor/
 .DS_Store
 *.lock
 .phpunit*
+node_modules
+package-lock.json
