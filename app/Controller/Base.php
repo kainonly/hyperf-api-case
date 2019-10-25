@@ -26,5 +26,4 @@ class Base extends CurdController
      * @var UtilsServiceInterface
      */
     protected $utils;
-
 }

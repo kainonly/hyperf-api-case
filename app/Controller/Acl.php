@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\RedisModel\Role;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -36,6 +37,7 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
      */
     public function __addAfterHooks($id)
     {
+        $this->clearRedis();
         return true;
     }
 
@@ -45,6 +47,7 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
      */
     public function __editAfterHooks()
     {
+        $this->clearRedis();
         return true;
     }
 
@@ -54,8 +57,16 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
      */
     public function __deleteAfterHooks()
     {
+        $this->clearRedis();
         return true;
     }
+
+    private function clearRedis()
+    {
+        \App\RedisModel\Acl::create($this->container)->clear();
+        Role::create($this->container)->clear();
+    }
+
 
     /**
      * Exists Acl Key
@@ -70,13 +81,13 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
             ];
         }
 
-        $result = Db::table($this->model)
+        $exists = Db::table($this->model)
             ->where('key', '=', $this->post['key'])
             ->exists();
 
         return [
             'error' => 0,
-            'data' => $result
+            'data' => $exists
         ];
     }
 }

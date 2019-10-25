@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\RedisModel\Role;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -36,6 +37,7 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
      */
     public function __addAfterHooks($id)
     {
+        $this->clearRedis();
         return true;
     }
 
@@ -45,6 +47,7 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
      */
     public function __editAfterHooks()
     {
+        $this->clearRedis();
         return true;
     }
 
@@ -54,7 +57,21 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
      */
     public function __deleteBeforeHooks()
     {
-        return true;
+        $queryData = Db::table($this->model)
+            ->whereIn('id', $this->post['id'])
+            ->first();
+
+        $exists = Db::table($this->model)
+            ->where('parent', '=', $queryData->key)
+            ->exists();
+
+        if ($exists) {
+            $this->delete_before_result = [
+                'error' => 1,
+                'msg' => 'error:has_child'
+            ];
+        }
+        return !$exists;
     }
 
     /**
@@ -63,6 +80,7 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
      */
     public function __deleteAfterHooks()
     {
+        $this->clearRedis();
         return true;
     }
 
@@ -83,6 +101,7 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
             foreach ($this->post['data'] as $value) {
                 Db::table($this->model)->update($value);
             }
+            $this->clearRedis();
             return true;
         }) ? [
             'error' => 0,
@@ -91,6 +110,12 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
             'error' => 1,
             'msg' => 'error'
         ];
+    }
+
+    private function clearRedis()
+    {
+        \App\RedisModel\Resource::create($this->container)->clear();
+        Role::create($this->container)->clear();
     }
 
     /**
@@ -106,13 +131,13 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
             ];
         }
 
-        $result = Db::table($this->model)
+        $exists = Db::table($this->model)
             ->where('key', '=', $this->post['key'])
             ->exists();
 
         return [
             'error' => 0,
-            'data' => $result
+            'data' => $exists
         ];
     }
 }
