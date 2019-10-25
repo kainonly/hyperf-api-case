@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\System;
 
 use App\RedisModel\Admin;
 use Hyperf\Support\Traits\Auth;
@@ -41,7 +41,7 @@ class Main extends Base
                 ];
             }
 
-            return $this->__create('app', [
+            return $this->__create('system', [
                 'user' => $data['username'],
                 'role' => explode(',', $data['role'])
             ]);
@@ -55,7 +55,7 @@ class Main extends Base
 
     public function verify()
     {
-        return $this->__verify('app');
+        return $this->__verify('system');
     }
 
     /**
@@ -63,6 +63,6 @@ class Main extends Base
      */
     public function logout()
     {
-        return $this->__destory('app');
+        return $this->__destory('system');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\System;
 
 use App\RedisModel\Role;
 use Hyperf\Curd\Common\AddModel;

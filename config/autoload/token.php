@@ -2,8 +2,8 @@
 return [
     'key' => env('TOKEN_KEY'),
     'options' => [
-        'app' => [
-            'issuer' => 'app',
+        'system' => [
+            'issuer' => 'system',
             'audience' => 'everyone',
             'expires' => 3600
         ]

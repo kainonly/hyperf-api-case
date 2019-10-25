@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\System;
 
 use Hyperf\Curd\CurdController;
 use Hyperf\Extra\Contract\HashServiceInterface;
