@@ -29,9 +29,9 @@
     "hyperf/redis": "~1.1.0",
     "hyperf/utils": "~1.1.0",
     "hyperf/validation": "^1.1",
-    "kain/hyperf-curd": "dev-master",
-    "kain/hyperf-extra": "dev-master",
-    "kain/hyperf-support": "dev-master"
+    "kain/hyperf-curd": "^1.0",
+    "kain/hyperf-extra": "^1.0",
+    "kain/hyperf-support": "^1.0"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
