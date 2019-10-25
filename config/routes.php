@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 use Hyperf\HttpServer\Router\Router;
+use \Hyperf\Curd\RouterMap;
 
 Router::get('/', function () {
     return [
@@ -32,18 +33,13 @@ Router::addGroup('/system', function () {
         Router::post('/logout', \App\Controller\System\Main::class . '@logout');
     });
 
-    Router::addGroup('/acl', function () {
-        Router::post('/get', \App\Controller\System\Acl::class . '@get');
-        Router::post('/originLists', \App\Controller\System\Acl::class . '@originLists');
-        Router::post('/lists', \App\Controller\System\Acl::class . '@lists');
-        Router::post('/add', \App\Controller\System\Acl::class . '@add');
-        Router::post('/edit', \App\Controller\System\Acl::class . '@edit');
-        Router::post('/delete', \App\Controller\System\Acl::class . '@delete');
-    }, $options);
+    RouterMap::set(\App\Controller\System\Acl::class, '/acl', [
+        'get', 'originLists', 'lists', 'add', 'edit', 'delete'
+    ], $options);
+    Router::post('/acl/validedKey', \App\Controller\System\Acl::class . '@validedKey', $options);
 
-    Router::get('/acl/index', function () {
-        return [
-            'test' => 1
-        ];
-    });
+    RouterMap::set(\App\Controller\System\Resource::class, '/resource', [
+        'get', 'originLists', 'lists', 'add', 'edit', 'delete'
+    ], $options);
+    Router::post('/resource/validedKey', \App\Controller\System\Resource::class . '@validedKey', $options);
 });
