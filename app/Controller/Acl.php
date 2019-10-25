@@ -13,18 +13,7 @@ use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
 
-/**
- * Class Acl
- * @package App\Controller
- * @Controller()
- * @Middlewares({
- *  @Middleware(\App\Middleware\AppAuthVerify::class)
- * })
- */
 class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;

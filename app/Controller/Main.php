@@ -3,23 +3,12 @@
 namespace App\Controller;
 
 use App\RedisModel\Admin;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\Support\Traits\Auth;
 
-/**
- * Class Main
- * @package App\Controller
- * @Controller()
- */
 class Main extends Base
 {
     use Auth;
 
-    /**
-     * @PostMapping(path="login")
-     */
     public function login()
     {
         try {
@@ -64,9 +53,6 @@ class Main extends Base
         }
     }
 
-    /**
-     * @PostMapping(path="verify")
-     */
     public function verify()
     {
         return $this->__verify('app');
@@ -74,8 +60,6 @@ class Main extends Base
 
     /**
      * @return \Psr\Http\Message\ResponseInterface
-     * @PostMapping(path="logout")
-     * @Middleware(\App\Middleware\AppAuthVerify::class)
      */
     public function logout()
     {

@@ -27,7 +27,6 @@ class Admin extends RedisModel
 
     private function update(string $username)
     {
-
         $queryLists = Db::table('admin')
             ->where('status', '=', 1)
             ->get(['id', 'role', 'username', 'password']);

@@ -13,18 +13,7 @@ use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteBeforeHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
 
-/**
- * Class Resource
- * @package App\Controller
- * @Controller()
- * @Middlewares({
- *  @Middleware(\App\Middleware\AppAuthVerify::class)
- * })
- */
 class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
