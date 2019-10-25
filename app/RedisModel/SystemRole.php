@@ -5,9 +5,9 @@ namespace App\RedisModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class Role extends RedisModel
+class SystemRole extends RedisModel
 {
-    protected $key = 'app:role';
+    protected $key = 'system:role';
     private $rows = [];
 
     public function clear()
@@ -37,14 +37,14 @@ class Role extends RedisModel
 
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $lists[$value['key']] = json_encode([
-                'acl' => $value['acl'],
-                'resource' => $value['resource']
+            $lists[$value->key] = json_encode([
+                'acl' => $value->acl,
+                'resource' => $value->resource
             ]);
-            if ($key == $value['key']) {
+            if ($key == $value->key) {
                 $this->rows = [
-                    'acl' => $value['acl'],
-                    'resource' => $value['resource']
+                    'acl' => $value->acl,
+                    'resource' => $value->resource
                 ];
             }
         }

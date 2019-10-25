@@ -5,9 +5,9 @@ namespace App\RedisModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class Admin extends RedisModel
+class SystemAdmin extends RedisModel
 {
-    protected $key = 'app:admin';
+    protected $key = 'system:admin';
     private $rows = [];
 
     public function clear()
@@ -37,8 +37,8 @@ class Admin extends RedisModel
 
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $lists[$value['username']] = json_encode($value);
-            if ($username == $value['username']) {
+            $lists[$value->username] = json_encode($value);
+            if ($username == $value->username) {
                 $this->rows = $value;
             }
         }

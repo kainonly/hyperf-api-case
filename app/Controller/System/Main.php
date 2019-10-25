@@ -2,7 +2,7 @@
 
 namespace App\Controller\System;
 
-use App\RedisModel\Admin;
+use App\RedisModel\SystemAdmin;
 use Hyperf\Support\Traits\Auth;
 
 class Main extends Base
@@ -24,7 +24,7 @@ class Main extends Base
                 ];
             }
 
-            $data = Admin::create($this->container)
+            $data = SystemAdmin::create($this->container)
                 ->get($this->post['username']);
 
             if (empty($data)) {

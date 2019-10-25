@@ -5,9 +5,9 @@ namespace App\RedisModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class Acl extends RedisModel
+class SystemAcl extends RedisModel
 {
-    protected $key = 'app:acl';
+    protected $key = 'system:acl';
     private $rows = [];
 
     public function clear()
@@ -47,14 +47,14 @@ class Acl extends RedisModel
         }
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $data[$value['key']] = json_encode([
-                'write' => $value['write'],
-                'read' => $value['read']
+            $data[$value->key] = json_encode([
+                'write' => $value->write,
+                'read' => $value->read
             ]);
-            if ($key == $value['key']) {
+            if ($key == $value->key) {
                 $this->rows = [
-                    'write' => $value['write'],
-                    'read' => $value['read']
+                    'write' => $value->write,
+                    'read' => $value->read
                 ];
             }
         }

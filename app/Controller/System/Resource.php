@@ -2,7 +2,7 @@
 
 namespace App\Controller\System;
 
-use App\RedisModel\Role;
+use App\RedisModel\SystemRole;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -103,8 +103,8 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
 
     private function clearRedis()
     {
-        \App\RedisModel\Resource::create($this->container)->clear();
-        Role::create($this->container)->clear();
+        \App\RedisModel\SystemResource::create($this->container)->clear();
+        SystemRole::create($this->container)->clear();
     }
 
     /**

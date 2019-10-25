@@ -2,7 +2,7 @@
 
 namespace App\Controller\System;
 
-use App\RedisModel\Role;
+use App\RedisModel\SystemRole;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -52,8 +52,8 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
 
     private function clearRedis()
     {
-        \App\RedisModel\Acl::create($this->container)->clear();
-        Role::create($this->container)->clear();
+        \App\RedisModel\SystemAcl::create($this->container)->clear();
+        SystemRole::create($this->container)->clear();
     }
 
 

@@ -5,9 +5,9 @@ namespace App\RedisModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class Resource extends RedisModel
+class SystemResource extends RedisModel
 {
-    protected $key = 'app:resource';
+    protected $key = 'system:resource';
     private $rows = [];
 
     public function clear()
