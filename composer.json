@@ -4,8 +4,13 @@
     "require": {
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-redis": "*",
         "laravel/lumen-framework": "^6.0",
         "barryvdh/laravel-cors": "^0.11.3"
+    },
+    "require-dev": {
+        "ramsey/uuid": "^3.8",
+        "lcobucci/jwt": "^3.3"
     },
     "autoload": {
         "classmap": [
@@ -14,7 +19,9 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Lumen\\Curd\\": "library/lumen-curd/src/"
+            "Lumen\\Curd\\": "library/lumen-curd/src/",
+            "Lumen\\Extra\\": "library/lumen-extra/src/",
+            "Lumen\\Support\\": "library/lumen-support/src/"
         }
     },
     "scripts": {
@@ -30,9 +37,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": {
-        "aliyun": {
+        "packagist": {
             "type": "composer",
-            "url": "https://mirrors.aliyun.com/composer"
+            "url": "https://mirrors.aliyun.com/composer/"
         }
     },
     "license": "MIT"
