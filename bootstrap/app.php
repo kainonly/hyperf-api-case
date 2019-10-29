@@ -87,6 +87,7 @@ $app->routeMiddleware([]);
 |
 */
 
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->register(Lumen\Extra\Providers\TokenServiceProvider::class);
