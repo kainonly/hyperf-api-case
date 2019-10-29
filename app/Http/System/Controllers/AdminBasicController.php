@@ -6,16 +6,16 @@ use App\Http\System\Redis\AdminRedis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use lumen\curd\common\AddModel;
-use lumen\curd\common\DeleteModel;
-use lumen\curd\common\EditModel;
-use lumen\curd\lifecycle\AddAfterHooks;
-use lumen\curd\lifecycle\AddBeforeHooks;
-use lumen\curd\lifecycle\DeleteAfterHooks;
-use lumen\curd\lifecycle\DeleteBeforeHooks;
-use lumen\curd\lifecycle\EditAfterHooks;
-use lumen\curd\lifecycle\EditBeforeHooks;
-use lumen\extra\facade\Auth;
+use Lumen\Curd\Common\AddModel;
+use Lumen\Curd\Common\DeleteModel;
+use Lumen\Curd\Common\EditModel;
+use Lumen\Curd\Lifecycle\AddAfterHooks;
+use Lumen\Curd\Lifecycle\AddBeforeHooks;
+use Lumen\Curd\Lifecycle\DeleteAfterHooks;
+use Lumen\Curd\Lifecycle\DeleteBeforeHooks;
+use Lumen\Curd\Lifecycle\EditAfterHooks;
+use Lumen\Curd\Lifecycle\EditBeforeHooks;
+use Lumen\Extra\Facade\Context;
 
 class AdminBasicController extends BaseController implements
     AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
@@ -56,7 +56,7 @@ class AdminBasicController extends BaseController implements
      */
     public function __editBeforeHooks()
     {
-        $username = Auth::symbol('system')->user;
+        $username = Context::get('auth')['username'];
         $rows = DB::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
@@ -120,7 +120,7 @@ class AdminBasicController extends BaseController implements
      */
     public function __deleteBeforeHooks()
     {
-        $username = Auth::symbol('system')->user;
+        $username = Context::get('auth')['username'];
         $result = DB::table($this->model)
             ->where('username', '=', $username)
             ->where('status', '=', 1)
@@ -169,13 +169,13 @@ class AdminBasicController extends BaseController implements
             'msg' => $validator->errors()
         ];
 
-        $result = DB::table('admin_basic')
+        $exists = DB::table('admin_basic')
             ->where('username', '=', $this->post['username'])
-            ->count();
+            ->exists();
 
         return [
             'error' => 0,
-            'data' => !empty($result)
+            'data' => $exists
         ];
     }
 

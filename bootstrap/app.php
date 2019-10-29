@@ -74,7 +74,10 @@ $app->middleware([
     \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class
 ]);
 
-$app->routeMiddleware([]);
+$app->routeMiddleware([
+    'system.auth' => \App\Http\System\Middleware\SystemAuthVerify::class,
+    'system.rbac' => \App\Http\System\Middleware\SystemRbacVerify::class
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +93,7 @@ $app->routeMiddleware([]);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
+$app->register(Lumen\Extra\Providers\ContextServiceProvider::class);
 $app->register(Lumen\Extra\Providers\TokenServiceProvider::class);
 
 

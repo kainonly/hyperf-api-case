@@ -11,12 +11,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\System\Redis\AdminRedis;
+use Lumen\Extra\Facade\Context;
+use Lumen\Support\Traits\Auth;
 
 class MainController extends BaseController
 {
+    use Auth;
+
     public function __construct(Request $request)
     {
         parent::__construct($request);
+        $this->middleware('system.auth', [
+            'except' => ['login', 'logout', 'verify']
+        ]);
     }
 
     /**
@@ -36,29 +43,23 @@ class MainController extends BaseController
             'msg' => $validator->errors()
         ];
 
-        $data = (new AdminRedis)->get($this->post['username']);
-        if (!$data) return [
+        $raws = AdminRedis::create()->get($this->post['username']);
+        if (empty($raws)) return [
             'error' => 1,
             'msg' => 'error:status'
         ];
 
-        if (!Hash::check($this->post['password'], $data['password'])) {
+        if (!Hash::check($this->post['password'], $raws['password'])) {
             return [
                 'error' => 1,
                 'msg' => 'error:incorrect'
             ];
         }
 
-        return Auth::set('system', [
-            'username' => $data['username'],
-            'role' => explode(',', $data['role'])
-        ]) ? [
-            'error' => 0,
-            'msg' => 'ok'
-        ] : [
-            'error' => 1,
-            'msg' => 'failed'
-        ];
+        return $this->__create('system', [
+            'username' => $raws['username'],
+            'role' => explode(',', $raws['role'])
+        ]);
     }
 
     /**
@@ -68,11 +69,7 @@ class MainController extends BaseController
      */
     public function logout()
     {
-        Auth::clear('system');
-        return [
-            'error' => 0,
-            'msg' => 'ok'
-        ];
+        return $this->__destory('system');
     }
 
     /**
@@ -82,13 +79,7 @@ class MainController extends BaseController
      */
     public function verify()
     {
-        return Auth::verify('system') ? [
-            'error' => 0,
-            'msg' => 'ok'
-        ] : [
-            'error' => 1,
-            'msg' => 'failed'
-        ];
+        return $this->__verify('system');
     }
 
     /**
@@ -100,7 +91,7 @@ class MainController extends BaseController
     {
         $router = (new ResourceRedis)->get();
         $role = [];
-        foreach (Auth::symbol('system')->role as $hasRoleKey) {
+        foreach (Context::get('auth')['role'] as $hasRoleKey) {
             $resource = (new RoleRedis)->get($hasRoleKey, 'resource');
             array_push($role, ...$resource);
         }
@@ -121,7 +112,7 @@ class MainController extends BaseController
      */
     public function information()
     {
-        $username = Auth::symbol('system')->username;
+        $username = Context::get('auth')['username'];
         $data = DB::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
@@ -151,7 +142,7 @@ class MainController extends BaseController
         ];
 
         try {
-            $username = Auth::symbol('system')->username;
+            $username = Context::get('auth')['username'];
             $data = DB::table('admin_basic')
                 ->where('username', '=', $username)
                 ->where('status', '=', 1)
@@ -193,7 +184,7 @@ class MainController extends BaseController
     }
 
     /**
-     * Files Upload to Tencent COS
+     * Files Upload
      * @param Request $request
      * @return array
      * @api /system/main/uploads

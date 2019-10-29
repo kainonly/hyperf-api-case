@@ -3,11 +3,11 @@
 namespace App\Http\System\Controllers;
 
 use App\Http\System\Redis\RoleRedis;
-use lumen\curd\common\AddModel;
-use lumen\curd\common\DeleteModel;
-use lumen\curd\common\OriginListsModel;
-use lumen\curd\lifecycle\AddAfterHooks;
-use lumen\curd\lifecycle\DeleteAfterHooks;
+use Lumen\Curd\Common\AddModel;
+use Lumen\Curd\Common\DeleteModel;
+use Lumen\Curd\Common\OriginListsModel;
+use Lumen\Curd\Lifecycle\AddAfterHooks;
+use Lumen\Curd\Lifecycle\DeleteAfterHooks;
 
 class PolicyController extends BaseController implements AddAfterHooks, DeleteAfterHooks
 {

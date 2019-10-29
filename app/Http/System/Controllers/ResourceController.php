@@ -5,15 +5,15 @@ namespace App\Http\System\Controllers;
 use App\Http\System\Redis\ResourceRedis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use lumen\curd\common\AddModel;
-use lumen\curd\common\DeleteModel;
-use lumen\curd\common\EditModel;
-use lumen\curd\common\GetModel;
-use lumen\curd\common\OriginListsModel;
-use lumen\curd\lifecycle\AddAfterHooks;
-use lumen\curd\lifecycle\DeleteAfterHooks;
-use lumen\curd\lifecycle\DeleteBeforeHooks;
-use lumen\curd\lifecycle\EditAfterHooks;
+use Lumen\Curd\Common\AddModel;
+use Lumen\Curd\Common\DeleteModel;
+use Lumen\Curd\Common\EditModel;
+use Lumen\Curd\Common\GetModel;
+use Lumen\Curd\Common\OriginListsModel;
+use Lumen\Curd\Lifecycle\AddAfterHooks;
+use Lumen\Curd\Lifecycle\DeleteAfterHooks;
+use Lumen\Curd\Lifecycle\DeleteBeforeHooks;
+use Lumen\Curd\Lifecycle\EditAfterHooks;
 
 class ResourceController extends BaseController implements
     AddAfterHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
@@ -139,13 +139,13 @@ class ResourceController extends BaseController implements
             'msg' => $validator->errors()
         ];
 
-        $result = DB::table($this->model)
+        $exists = DB::table($this->model)
             ->where('key', '=', $this->post['key'])
-            ->count();
+            ->exists();
 
         return [
             'error' => 0,
-            'data' => !empty($result)
+            'data' => $exists
         ];
     }
 

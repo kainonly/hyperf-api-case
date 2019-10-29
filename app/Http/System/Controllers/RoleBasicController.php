@@ -5,14 +5,14 @@ namespace App\Http\System\Controllers;
 use App\Http\System\Redis\RoleRedis;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use lumen\curd\common\AddModel;
-use lumen\curd\common\DeleteModel;
-use lumen\curd\common\EditModel;
-use lumen\curd\lifecycle\AddAfterHooks;
-use lumen\curd\lifecycle\AddBeforeHooks;
-use lumen\curd\lifecycle\DeleteAfterHooks;
-use lumen\curd\lifecycle\EditAfterHooks;
-use lumen\curd\lifecycle\EditBeforeHooks;
+use Lumen\Curd\Common\AddModel;
+use Lumen\Curd\Common\DeleteModel;
+use Lumen\Curd\Common\EditModel;
+use Lumen\Curd\Lifecycle\AddAfterHooks;
+use Lumen\Curd\Lifecycle\AddBeforeHooks;
+use Lumen\Curd\Lifecycle\DeleteAfterHooks;
+use Lumen\Curd\Lifecycle\EditAfterHooks;
+use Lumen\Curd\Lifecycle\EditBeforeHooks;
 
 class RoleBasicController extends BaseController implements
     AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteAfterHooks
@@ -127,13 +127,13 @@ class RoleBasicController extends BaseController implements
             'msg' => $validator->errors()
         ];
 
-        $result = DB::table('role_basic')
+        $exists = DB::table('role_basic')
             ->where('key', '=', $this->post['key'])
-            ->count();
+            ->exists();
 
         return [
             'error' => 0,
-            'data' => !empty($result)
+            'data' => $exists
         ];
     }
 }

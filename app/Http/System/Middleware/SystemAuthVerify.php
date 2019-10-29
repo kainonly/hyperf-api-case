@@ -2,7 +2,7 @@
 
 namespace App\Http\System\Middleware;
 
-use lumen\extra\middleware\AuthVerify;
+use Lumen\Support\Middleware\AuthVerify;
 
 class SystemAuthVerify extends AuthVerify
 {

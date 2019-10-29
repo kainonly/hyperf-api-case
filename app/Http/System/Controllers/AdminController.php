@@ -3,11 +3,11 @@
 namespace App\Http\System\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use lumen\curd\common\GetModel;
-use lumen\curd\common\ListsModel;
-use lumen\curd\common\OriginListsModel;
-use lumen\curd\lifecycle\GetCustom;
-use lumen\extra\facade\Auth;
+use Lumen\Curd\Common\GetModel;
+use Lumen\Curd\Common\ListsModel;
+use Lumen\Curd\Common\OriginListsModel;
+use Lumen\Curd\Lifecycle\GetCustom;
+use Lumen\Extra\Facade\Context;
 
 class AdminController extends BaseController implements GetCustom
 {
@@ -24,7 +24,7 @@ class AdminController extends BaseController implements GetCustom
      */
     public function __getCustomReturn($data)
     {
-        $username = Auth::symbol('system')->user;
+        $username = Context::get('auth')['username'];
         $rows = DB::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
