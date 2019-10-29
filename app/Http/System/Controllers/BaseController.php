@@ -11,7 +11,5 @@ abstract class BaseController extends CurdController
     {
         $this->request = $request;
         $this->post = $request->toArray();
-        $this->middleware('cors');
-        $this->middleware('system.auth');
     }
 }

@@ -26,9 +26,8 @@ $app->withEloquent();
 
 $app->configure('app');
 $app->configure('cors');
-$app->configure('cookie');
 $app->configure('hashing');
-$app->configure('jwt');
+$app->configure('token');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -64,10 +63,7 @@ $app->singleton(
 $app->middleware([
 ]);
 
-$app->routeMiddleware([
-    'cors' => Barryvdh\Cors\HandleCors::class,
-    'system.auth' => App\Http\System\Middleware\SystemAuthVerify::class
-]);
+$app->routeMiddleware([]);
 
 /*
 |--------------------------------------------------------------------------
@@ -82,10 +78,7 @@ $app->routeMiddleware([
 
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
-$app->register(lumen\extra\providers\CookieServiceProvider::class);
-$app->register(lumen\extra\providers\JwtServiceProvider::class);
-$app->register(lumen\extra\providers\AuthServiceProvider::class);
-$app->register(lumen\extra\providers\RedisServiceProvider::class);
+$app->register(Lumen\Extra\Providers\TokenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

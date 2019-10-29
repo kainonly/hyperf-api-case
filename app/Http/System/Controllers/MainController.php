@@ -10,7 +10,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use lumen\extra\facade\Auth;
 use App\Http\System\Redis\AdminRedis;
 
 class MainController extends BaseController
@@ -18,9 +17,6 @@ class MainController extends BaseController
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->middleware('system.auth', [
-            'except' => ['login', 'logout', 'verify']
-        ]);
     }
 
     /**
