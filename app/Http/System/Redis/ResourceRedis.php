@@ -3,7 +3,7 @@
 namespace App\Http\System\Redis;
 
 use Illuminate\Support\Facades\DB;
-use lumen\extra\common\RedisModel;
+use Lumen\Support\Common\RedisModel;
 
 class ResourceRedis extends RedisModel
 {
@@ -16,7 +16,7 @@ class ResourceRedis extends RedisModel
      */
     public function clear()
     {
-        return (bool)$this->redis->del([$this->key]);
+        return (bool)$this->redis->del($this->key);
     }
 
     /**
@@ -39,16 +39,16 @@ class ResourceRedis extends RedisModel
      */
     private function update()
     {
-        $lists = DB::table('resource')
+        $queryLists = Db::table('resource')
             ->where('status', '=', 1)
             ->orderBy('sort')
-            ->get(['id', 'key', 'parent', 'name', 'nav', 'router', 'policy', 'icon']);
+            ->get(['key', 'parent', 'name', 'nav', 'router', 'policy', 'icon']);
 
-        if (empty($lists)) {
+        if ($queryLists->isEmpty()) {
             return;
         }
 
-        $this->redis->set($this->key, json_encode($lists));
-        $this->rows = $lists;
+        $this->redis->set($this->key, $queryLists->toJson());
+        $this->rows = $queryLists->toArray();
     }
 }

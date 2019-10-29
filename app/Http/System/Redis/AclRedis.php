@@ -3,8 +3,7 @@
 namespace App\Http\System\Redis;
 
 use Illuminate\Support\Facades\DB;
-use lumen\extra\common\RedisModel;
-use Predis\Pipeline\Pipeline;
+use Lumen\Support\Common\RedisModel;
 
 class AclRedis extends RedisModel
 {
@@ -17,7 +16,7 @@ class AclRedis extends RedisModel
      */
     public function clear()
     {
-        return (bool)$this->redis->del([$this->key]);
+        return (bool)$this->redis->del($this->key);
     }
 
     /**
@@ -52,27 +51,26 @@ class AclRedis extends RedisModel
      */
     private function update(string $key)
     {
-        $lists = DB::table('acl')
+        $queryLists = DB::table('acl')
             ->where('status', '=', 1)
             ->get(['key', 'write', 'read']);
 
-        if (empty($lists)) {
+        if ($queryLists->isEmpty()) {
             return;
         }
-
-        $this->redis->pipeline(function (Pipeline $pipeline) use ($key, $lists) {
-            foreach ($lists as $index => $value) {
-                $pipeline->hset($this->key, $value['key'], json_encode([
-                    'write' => $value['write'],
-                    'read' => $value['read']
-                ]));
-                if ($key == $value['key']) {
-                    $this->rows = [
-                        'write' => $value['write'],
-                        'read' => $value['read']
-                    ];
-                }
+        $lists = [];
+        foreach ($queryLists->toArray() as $value) {
+            $data[$value->key] = json_encode([
+                'write' => $value->write,
+                'read' => $value->read
+            ]);
+            if ($key == $value->key) {
+                $this->rows = [
+                    'write' => $value->write,
+                    'read' => $value->read
+                ];
             }
-        });
+        }
+        $this->redis->hMSet($this->key, $lists);
     }
 }

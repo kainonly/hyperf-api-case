@@ -3,8 +3,7 @@
 namespace App\Http\System\Redis;
 
 use Illuminate\Support\Facades\DB;
-use lumen\extra\common\RedisModel;
-use Predis\Pipeline\Pipeline;
+use Lumen\Support\Common\RedisModel;
 
 class AdminRedis extends RedisModel
 {
@@ -17,7 +16,7 @@ class AdminRedis extends RedisModel
      */
     public function clear()
     {
-        return (bool)$this->redis->del([$this->key]);
+        return (bool)$this->redis->del($this->key);
     }
 
     /**
@@ -41,22 +40,20 @@ class AdminRedis extends RedisModel
      */
     private function update(string $username)
     {
-
-        $lists = DB::table('admin')
+        $queryLists = DB::table('admin')
             ->where('status', '=', 1)
             ->get(['id', 'role', 'username', 'password']);
 
-        if (empty($lists)) {
+        if ($queryLists->isEmpty()) {
             return;
         }
-
-        $this->redis->pipeline(function (Pipeline $pipeline) use ($username, $lists) {
-            foreach ($lists as $key => $value) {
-                $pipeline->hset($this->key, $value['username'], json_encode($value));
-                if ($username == $value['username']) {
-                    $this->rows = $value;
-                }
+        $lists = [];
+        foreach ($queryLists->toArray() as $value) {
+            $lists[$value->username] = json_encode($value);
+            if ($username == $value->username) {
+                $this->rows = $value;
             }
-        });
+        }
+        $this->redis->hMSet($this->key, $lists);
     }
 }
