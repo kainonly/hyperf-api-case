@@ -24,7 +24,7 @@ class AdminController extends BaseController implements GetCustom
      */
     public function __getCustomReturn($data)
     {
-        $username = Context::get('auth')['username'];
+        $username = Context::get('auth')->username;
         $rows = DB::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)

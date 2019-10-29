@@ -3,7 +3,7 @@
 namespace App\Http\System\Controllers;
 
 use Illuminate\Http\Request;
-use lumen\curd\CurdController;
+use Lumen\Curd\CurdController;
 
 abstract class BaseController extends CurdController
 {

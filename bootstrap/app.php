@@ -75,6 +75,7 @@ $app->middleware([
 ]);
 
 $app->routeMiddleware([
+    'cors' => \Barryvdh\Cors\HandleCors::class,
     'system.auth' => \App\Http\System\Middleware\SystemAuthVerify::class,
     'system.rbac' => \App\Http\System\Middleware\SystemRbacVerify::class
 ]);

@@ -56,7 +56,7 @@ class AdminBasicController extends BaseController implements
      */
     public function __editBeforeHooks()
     {
-        $username = Context::get('auth')['username'];
+        $username = Context::get('auth')->username;
         $rows = DB::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
@@ -120,7 +120,7 @@ class AdminBasicController extends BaseController implements
      */
     public function __deleteBeforeHooks()
     {
-        $username = Context::get('auth')['username'];
+        $username = Context::get('auth')->username;
         $result = DB::table($this->model)
             ->where('username', '=', $username)
             ->where('status', '=', 1)

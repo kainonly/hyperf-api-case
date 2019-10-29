@@ -1,7 +1,7 @@
 <?php
 return [
     'supportsCredentials' => true,
-    'allowedOrigins' => explode(',', env('ALLOWED_ORIGINS')),
+    'allowedOrigins' => ['http://localhost:4200'],
     'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
     'allowedMethods' => ['POST'],
     'exposedHeaders' => [],

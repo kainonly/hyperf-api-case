@@ -89,10 +89,10 @@ class MainController extends BaseController
      */
     public function resource()
     {
-        $router = (new ResourceRedis)->get();
+        $router = ResourceRedis::create()->get();
         $role = [];
-        foreach (Context::get('auth')['role'] as $hasRoleKey) {
-            $resource = (new RoleRedis)->get($hasRoleKey, 'resource');
+        foreach (Context::get('auth')->role as $hasRoleKey) {
+            $resource = RoleRedis::create()->get($hasRoleKey, 'resource');
             array_push($role, ...$resource);
         }
         $routerRole = array_unique($role);
@@ -112,7 +112,7 @@ class MainController extends BaseController
      */
     public function information()
     {
-        $username = Context::get('auth')['username'];
+        $username = Context::get('auth')->username;
         $data = DB::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
@@ -142,7 +142,7 @@ class MainController extends BaseController
         ];
 
         try {
-            $username = Context::get('auth')['username'];
+            $username = Context::get('auth')->username;
             $data = DB::table('admin_basic')
                 ->where('username', '=', $username)
                 ->where('status', '=', 1)
