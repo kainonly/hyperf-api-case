@@ -10,6 +10,6 @@ abstract class BaseController extends CurdController
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->post = $request->toArray();
+        $this->post = $request->post();
     }
 }

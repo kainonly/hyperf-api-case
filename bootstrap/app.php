@@ -25,6 +25,7 @@ $app->withFacades();
 $app->withEloquent();
 
 $app->configure('app');
+$app->configure('session');
 $app->configure('cors');
 $app->configure('hashing');
 $app->configure('token');
@@ -49,6 +50,15 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->bind(Illuminate\Contracts\Cookie\QueueingFactory::class, 'cookie');
+$app->singleton('cookie', function () use ($app) {
+    return $app->loadComponent(
+        'session',
+        \Illuminate\Cookie\CookieServiceProvider::class,
+        'cookie'
+    );
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -61,6 +71,7 @@ $app->singleton(
 */
 
 $app->middleware([
+    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class
 ]);
 
 $app->routeMiddleware([]);
@@ -79,6 +90,7 @@ $app->routeMiddleware([]);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Barryvdh\Cors\ServiceProvider::class);
 $app->register(Lumen\Extra\Providers\TokenServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
