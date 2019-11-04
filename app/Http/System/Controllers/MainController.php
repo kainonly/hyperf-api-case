@@ -24,6 +24,9 @@ class MainController extends BaseController
         $this->middleware('system.auth', [
             'except' => ['login', 'logout', 'verify']
         ]);
+        $this->middleware('system.rbac', [
+            'only' => ['uploads']
+        ]);
     }
 
     /**
