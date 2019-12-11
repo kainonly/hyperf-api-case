@@ -1,0 +1,3 @@
+[submodule "library/lumen-amqp"]
+	path = library/lumen-amqp
+	url = git@github.com:kainonly/lumen-amqp.git
