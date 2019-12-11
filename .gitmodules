@@ -1,3 +1,12 @@
 [submodule "library/lumen-amqp"]
 	path = library/lumen-amqp
 	url = git@github.com:kainonly/lumen-amqp.git
+[submodule "library/lumen-support"]
+	path = library/lumen-support
+	url = git@github.com:kainonly/lumen-support.git
+[submodule "library/lumen-curd"]
+	path = library/lumen-curd
+	url = git@github.com:kainonly/lumen-curd.git
+[submodule "library/lumen-extra"]
+	path = library/lumen-extra
+	url = git@github.com:kainonly/lumen-extra.git
