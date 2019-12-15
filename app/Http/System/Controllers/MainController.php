@@ -5,6 +5,7 @@ namespace App\Http\System\Controllers;
 use Carbon\Carbon;
 use App\Http\System\Redis\ResourceRedis;
 use App\Http\System\Redis\RoleRedis;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -178,7 +179,7 @@ class MainController extends BaseController
                 'error' => 0,
                 'msg' => 'ok'
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [
                 'error' => 1,
                 'msg' => $e->getMessage()

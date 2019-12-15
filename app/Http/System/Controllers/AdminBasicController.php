@@ -125,6 +125,7 @@ class AdminBasicController extends BaseController implements
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
+
         if (in_array($result->id, $this->post['id'])) {
             $this->delete_before_result = [
                 'error' => 1,
@@ -150,7 +151,7 @@ class AdminBasicController extends BaseController implements
      */
     private function clearRedis()
     {
-        return (new AdminRedis)->clear();
+        return AdminRedis::create()->clear();
     }
 
     /**
