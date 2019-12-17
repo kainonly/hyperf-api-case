@@ -1,5 +1,5 @@
 {
-    "description": "Open source management infrastructure platform api",
+    "description": "Example of lumen use",
     "type": "project",
     "require": {
         "ext-json": "*",
