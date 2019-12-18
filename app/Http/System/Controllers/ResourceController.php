@@ -120,7 +120,7 @@ class ResourceController extends BaseController implements
      */
     private function clearRedis()
     {
-        return (new ResourceRedis)->clear();
+        return ResourceRedis::create()->clear();
     }
 
     /**

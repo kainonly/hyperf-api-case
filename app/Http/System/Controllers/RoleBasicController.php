@@ -108,7 +108,7 @@ class RoleBasicController extends BaseController implements
      */
     private function clearRedis()
     {
-        return (new RoleRedis)->clear();
+        return RoleRedis::create()->clear();
     }
 
     /**
