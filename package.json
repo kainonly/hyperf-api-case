@@ -1,5 +1,5 @@
 {
-  "name": "fastify-api-case",
+  "name": "van-api-case",
   "scripts": {
     "start": "tsc-watch -p src/tsconfig.build.json --onSuccess \"node cache/main.js\""
   },
