@@ -2,7 +2,7 @@ import { Application } from '../projects/van-core/src/public-api';
 
 const app = new Application();
 
-app.bootstrap('0.0.0.0', 3000, {
+app.bootstrap('127.0.0.1', 3000, {
   logger: true,
 }).then(address => {
   app.getServer().log.info(`server listening on ${address}`);
