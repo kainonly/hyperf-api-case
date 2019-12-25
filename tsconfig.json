@@ -1,19 +1,13 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist",
     "sourceMap": true,
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "removeComments": true,
     "incremental": true,
-    "moduleResolution": "node",
     "module": "commonjs",
-    "target": "es2019",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "target": "esnext"
   },
   "exclude": [
     "node_modules",
