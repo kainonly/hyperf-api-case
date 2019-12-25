@@ -1,18 +1,33 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./cache",
-    "module": "commonjs",
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2019",
-    "sourceMap": false,
-    "declaration": false,
+    "downlevelIteration": true,
     "removeComments": true,
-    "incremental": true
+    "incremental": true,
+    "importHelpers": true,
+    "module": "commonjs",
+    "target": "es2019",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "van-core": [
+        "projects/van-core/src/public-api.ts"
+      ]
+    }
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules",
-    "dist",
-    "cache"
+    "projects",
+    "dist"
   ]
 }
