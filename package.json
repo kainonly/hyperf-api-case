@@ -1,0 +1,17 @@
+{
+  "name": "fastify-api-case",
+  "scripts": {
+    "start": "tsc-watch -p src/tsconfig.build.json --onSuccess \"node cache/main.js\""
+  },
+  "dependencies": {
+    "fastify": "^2.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.5.4",
+    "tsc-watch": "^4.0.0",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.4"
+  }
+}
