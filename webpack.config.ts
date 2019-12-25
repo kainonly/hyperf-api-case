@@ -1,10 +1,11 @@
 import * as path from 'path';
 import * as webpack from 'webpack';
 import * as nodeExternals from 'webpack-node-externals';
+import * as NodemonPlugin from 'nodemon-webpack-plugin';
 
-const compiler = webpack({
+const config: webpack.Configuration = {
   entry: './src/main.ts',
-  target: 'async-node',
+  target: 'node',
   node: {
     __dirname: false,
     __filename: false,
@@ -22,25 +23,16 @@ const compiler = webpack({
   externals: [
     nodeExternals(),
   ],
+  plugins: [
+    new NodemonPlugin(),
+  ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: '[name].js',
+    filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
-});
+};
 
-compiler.watch({
-  ignored: [
-    'node_modules',
-    'dist',
-  ],
-}, (err, stats) => {
-  if (err) {
-    console.log(err.message);
-    return;
-  }
-  console.log('ok');
-});
-export default compiler.options;
+export default config;
