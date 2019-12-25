@@ -1,0 +1,3 @@
+[submodule "projects/van-core"]
+	path = projects/van-core
+	url = git@github.com:kainonly/van-core.git
