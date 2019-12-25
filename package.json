@@ -3,7 +3,8 @@
   "scripts": {
     "start": "tsc-watch -p tsconfig.json --onSuccess \"node dist/out-tsc/src/main.js\"",
     "build:van-core": "tsc --build projects/van-core/tsconfig.lib.json",
-    "build": "tsc --build tsconfig.json"
+    "build": "tsc --build tsconfig.json",
+    "dev": "node dist/out-tsc/src/main.js"
   },
   "dependencies": {
     "fastify": "^2.11.0"
