@@ -1,33 +1,22 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist",
+    "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true,
     "removeComments": true,
     "incremental": true,
-    "importHelpers": true,
+    "moduleResolution": "node",
     "module": "commonjs",
     "target": "es2019",
     "typeRoots": [
       "node_modules/@types"
-    ],
-    "paths": {
-      "van-core": [
-        "projects/van-core/src/public-api.ts"
-      ]
-    }
+    ]
   },
-  "include": [
-    "src/**/*"
-  ],
   "exclude": [
     "node_modules",
-    "projects",
     "dist"
   ]
 }

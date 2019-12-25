@@ -1,3 +1,0 @@
-[submodule "src/library/van-core"]
-	path = src/library/van-core
-	url = git@github.com:kainonly/van-core.git
