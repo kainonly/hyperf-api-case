@@ -2,7 +2,8 @@
   "name": "van-api-case",
   "scripts": {
     "start": "rimraf dist && webpack --watch",
-    "dev": "node dist/main.js"
+    "clear:van-core": "rimraf projects/van-core/dist",
+    "build:van-core": "npm run clear:van-core && tsc --build projects/van-core/tsconfig.json"
   },
   "dependencies": {
     "fastify": "^2.11.0"
