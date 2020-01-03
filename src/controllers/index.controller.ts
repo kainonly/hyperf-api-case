@@ -1,4 +1,4 @@
-import { RestController } from '../../projects/van-core/src/lib/controller';
+import { RestController } from 'van-core';
 
 @RestController
 export class IndexController {

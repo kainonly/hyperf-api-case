@@ -1,4 +1,4 @@
-import { Application } from '../projects/van-core/src/public-api';
+import { Application } from 'van-core';
 
 const app = new Application();
 

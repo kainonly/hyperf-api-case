@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist",
     "sourceMap": true,
     "declaration": false,
@@ -7,7 +8,12 @@
     "experimentalDecorators": true,
     "incremental": true,
     "module": "commonjs",
-    "target": "esnext"
+    "target": "esnext",
+    "paths": {
+      "van-core": [
+        "projects/van-core/src/public-api.ts"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
