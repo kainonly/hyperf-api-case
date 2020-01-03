@@ -3,7 +3,11 @@
   "scripts": {
     "start": "rimraf dist && webpack --watch",
     "clear:van-core": "rimraf projects/van-core/dist",
-    "build:van-core": "npm run clear:van-core && tsc --build projects/van-core/tsconfig.json"
+    "build:van-core": "npm run clear:van-core && tsc --build projects/van-core/tsconfig.json",
+    "clear:van-common": "rimraf projects/van-common/dist",
+    "build:van-common": "npm run clear:van-common && tsc --build projects/van-common/tsconfig.json",
+    "clear:van-curd": "rimraf projects/van-curd/dist",
+    "build:van-curd": "npm run clear:van-curd && tsc --build projects/van-curd/tsconfig.json"
   },
   "dependencies": {
     "fastify": "^2.11.0"
