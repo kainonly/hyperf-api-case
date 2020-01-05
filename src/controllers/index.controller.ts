@@ -1,6 +1,6 @@
-import { RestController } from 'van-core';
+import { Controller } from 'van-core';
 
-@RestController
+@Controller
 export class IndexController {
 
 }
