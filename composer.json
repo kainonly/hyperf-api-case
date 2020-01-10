@@ -24,7 +24,10 @@
     "hyperf/pool": "~1.1.0",
     "hyperf/process": "~1.1.0",
     "hyperf/redis": "~1.1.0",
-    "hyperf/utils": "~1.1.0"
+    "hyperf/utils": "~1.1.0",
+    "hyperf/validation": "^1.1",
+    "ramsey/uuid": "^3.9",
+    "lcobucci/jwt": "^3.3"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
