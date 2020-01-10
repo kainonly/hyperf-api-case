@@ -1,9 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller\System;
 
 use App\RedisModel\SystemAdmin;
 use Hyperf\Support\Traits\Auth;
+use Psr\Http\Message\ResponseInterface;
 
 class Main extends Base
 {
@@ -59,7 +61,7 @@ class Main extends Base
     }
 
     /**
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public function logout()
     {
