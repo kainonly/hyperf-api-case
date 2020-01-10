@@ -1,31 +1,46 @@
 <?php
+declare (strict_types=1);
 
-namespace App\RedisModel;
+namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class SystemRole extends RedisModel
+class RoleRedis extends RedisModel
 {
     protected $key = 'system:role';
-    private $rows = [];
+    private $data = [];
 
-    public function clear()
+    /**
+     * Clear Cache
+     */
+    public function clear(): void
     {
         $this->redis->del($this->key);
     }
 
-    public function get(string $key, string $type)
+    /**
+     * Get Cache
+     * @param string $key
+     * @param string $type
+     * @return array
+     */
+    public function get(string $key, string $type): array
     {
         if (!$this->redis->exists($this->key)) {
             $this->update($key);
         } else {
-            $this->rows = json_decode($this->redis->hget($this->key, $key), true);
+            $raws = $this->redis->hget($this->key, $key);
+            $this->data = !empty($raws) ? json_decode($raws, true) : [];
         }
-        return explode(',', $this->rows[$type]);
+        return explode(',', $this->data[$type]);
     }
 
-    private function update(string $key)
+    /**
+     * Refresh Cache
+     * @param string $key
+     */
+    private function update(string $key): void
     {
         $queryLists = Db::table('role')
             ->where('status', '=', 1)
@@ -42,7 +57,7 @@ class SystemRole extends RedisModel
                 'resource' => $value->resource
             ]);
             if ($key == $value->key) {
-                $this->rows = [
+                $this->data = [
                     'acl' => $value->acl,
                     'resource' => $value->resource
                 ];

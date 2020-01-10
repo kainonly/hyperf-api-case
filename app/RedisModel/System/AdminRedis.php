@@ -1,31 +1,45 @@
 <?php
+declare (strict_types=1);
 
-namespace App\RedisModel;
+namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class SystemAdmin extends RedisModel
+class AdminRedis extends RedisModel
 {
     protected $key = 'system:admin';
-    private $rows = [];
+    private $data = [];
 
-    public function clear()
+    /**
+     * Clear Cache
+     */
+    public function clear(): void
     {
         $this->redis->del($this->key);
     }
 
-    public function get(string $username)
+    /**
+     * Get Cache
+     * @param string $username
+     * @return array
+     */
+    public function get(string $username): array
     {
         if (!$this->redis->exists($this->key)) {
             $this->update($username);
         } else {
-            $this->rows = json_decode($this->redis->hGet($this->key, $username), true);
+            $raws = $this->redis->hGet($this->key, $username);
+            $this->data = !empty($raws) ? json_decode($raws, true) : [];
         }
-        return $this->rows;
+        return $this->data;
     }
 
-    private function update(string $username)
+    /**
+     * Refresh Cache
+     * @param string $username
+     */
+    private function update(string $username): void
     {
         $queryLists = Db::table('admin')
             ->where('status', '=', 1)
@@ -39,7 +53,7 @@ class SystemAdmin extends RedisModel
         foreach ($queryLists->toArray() as $value) {
             $lists[$value->username] = json_encode($value);
             if ($username == $value->username) {
-                $this->rows = $value;
+                $this->data = $value;
             }
         }
         $this->redis->hMSet($this->key, $lists);

@@ -1,42 +1,56 @@
 <?php
+declare (strict_types=1);
 
-namespace App\RedisModel;
+namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class SystemAcl extends RedisModel
+class AclRedis extends RedisModel
 {
     protected $key = 'system:acl';
-    private $rows = [];
+    private $data = [];
 
-    public function clear()
+    /**
+     * Clear Cache
+     */
+    public function clear(): void
     {
         $this->redis->del($this->key);
     }
 
-    public function get(string $key, int $policy)
+    /**
+     * Get Cache
+     * @param string $key
+     * @param int $policy
+     * @return array
+     */
+    public function get(string $key, int $policy): array
     {
         if (!$this->redis->exists($this->key)) {
             $this->update($key);
         } else {
-            $this->rows = json_decode($this->redis->hGet($this->key, $key), true);
+            $raws = $this->redis->hGet($this->key, $key);
+            $this->data = !empty($raws) ? json_decode($raws, true) : [];
         }
-
         switch ($policy) {
             case 0:
-                return explode(',', $this->rows['read']);
+                return explode(',', $this->data['read']);
             case 1:
                 return array_merge(
-                    explode(',', $this->rows['read']),
-                    explode(',', $this->rows['write'])
+                    explode(',', $this->data['read']),
+                    explode(',', $this->data['write'])
                 );
             default:
                 return [];
         }
     }
 
-    private function update(string $key)
+    /**
+     * Refresh Cache
+     * @param string $key
+     */
+    private function update(string $key): void
     {
         $queryLists = Db::table('acl')
             ->where('status', '=', 1)
@@ -45,6 +59,7 @@ class SystemAcl extends RedisModel
         if ($queryLists->isEmpty()) {
             return;
         }
+
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
             $data[$value->key] = json_encode([
@@ -52,7 +67,7 @@ class SystemAcl extends RedisModel
                 'read' => $value->read
             ]);
             if ($key == $value->key) {
-                $this->rows = [
+                $this->data = [
                     'write' => $value->write,
                     'read' => $value->read
                 ];

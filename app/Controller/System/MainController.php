@@ -3,15 +3,22 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
-use App\RedisModel\SystemAdmin;
+use Exception;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\Support\Traits\Auth;
 use Psr\Http\Message\ResponseInterface;
+use App\RedisModel\System\AdminRedis;
 
-class Main extends Base
+/**
+ * Class MainController
+ * @package App\Controller\System
+ * @Controller(prefix="system/main")
+ */
+class MainController extends BaseController
 {
     use Auth;
 
-    public function login()
+    public function login(): ResponseInterface
     {
         try {
             $validator = $this->validation->make($this->post, [
@@ -20,50 +27,38 @@ class Main extends Base
             ]);
 
             if ($validator->fails()) {
-                return [
-                    'error' => 1,
-                    'msg' => $validator->errors()
-                ];
+                throw new Exception($validator->errors());
             }
 
-            $data = SystemAdmin::create($this->container)
+            $data = AdminRedis::create($this->container)
                 ->get($this->post['username']);
 
             if (empty($data)) {
-                return [
-                    'error' => 1,
-                    'msg' => 'error:username_not_exists'
-                ];
+                throw new Exception('error:username_not_exists');
             }
 
             if (!$this->hash->check($this->post['password'], $data['password'])) {
-                return [
-                    'error' => 1,
-                    'msg' => 'error:password_incorrect'
-                ];
+                throw new Exception('error:password_incorrect');
             }
 
             return $this->__create('system', [
                 'user' => $data['username'],
                 'role' => explode(',', $data['role'])
             ]);
-        } catch (\Exception $e) {
-            return [
+        } catch (Exception $e) {
+            return $this->response->json([
                 'error' => 1,
                 'msg' => $e->getMessage()
-            ];
+            ]);
         }
     }
 
-    public function verify()
+    public function verify(): ResponseInterface
     {
         return $this->__verify('system');
     }
 
-    /**
-     * @return ResponseInterface
-     */
-    public function logout()
+    public function logout(): ResponseInterface
     {
         return $this->__destory('system');
     }
