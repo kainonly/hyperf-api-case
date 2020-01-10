@@ -4,6 +4,7 @@
   "require": {
     "php": ">=7.2",
     "ext-swoole": ">=4.4",
+    "ext-redis": "*",
     "hyperf/cache": "~1.1.0",
     "hyperf/command": "~1.1.0",
     "hyperf/config": "~1.1.0",
