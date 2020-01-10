@@ -26,32 +26,19 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;
     protected $model = 'acl';
 
-    /**
-     * Add post processing
-     * @param string|int $id
-     * @return mixed
-     */
-    public function __addAfterHooks($id)
+    public function __addAfterHooks(int $id): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    /**
-     * Modify post processing
-     * @return mixed
-     */
-    public function __editAfterHooks()
+    public function __editAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    /**
-     * Delete post processing
-     * @return mixed
-     */
-    public function __deleteAfterHooks()
+    public function __deleteAfterHooks(): bool
     {
         $this->clearRedis();
         return true;

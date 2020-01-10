@@ -20,32 +20,19 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
     protected $model = 'resource';
 
-    /**
-     * Add post processing
-     * @param string|int $id
-     * @return mixed
-     */
-    public function __addAfterHooks($id)
+    public function __addAfterHooks(int $id): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    /**
-     * Modify post processing
-     * @return mixed
-     */
-    public function __editAfterHooks()
+    public function __editAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    /**
-     * Delete pre-processing
-     * @return boolean
-     */
-    public function __deleteBeforeHooks()
+    public function __deleteBeforeHooks(): bool
     {
         $queryData = Db::table($this->model)
             ->whereIn('id', $this->post['id'])
@@ -64,11 +51,7 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
         return !$exists;
     }
 
-    /**
-     * Delete post processing
-     * @return mixed
-     */
-    public function __deleteAfterHooks()
+    public function __deleteAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
