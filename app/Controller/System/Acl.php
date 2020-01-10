@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller\System;
 
@@ -13,7 +14,13 @@ use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
+use Hyperf\HttpServer\Annotation\Controller;
 
+/**
+ * Class Acl
+ * @package App\Controller\System
+ * @Controller(prefix="system/acl")
+ */
 class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;
