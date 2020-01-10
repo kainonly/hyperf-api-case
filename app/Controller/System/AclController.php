@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
-use App\RedisModel\SystemRole;
+use App\RedisModel\System\AclRedis;
+use App\RedisModel\System\RoleRedis;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -21,7 +22,7 @@ use Hyperf\HttpServer\Annotation\Controller;
  * @package App\Controller\System
  * @Controller(prefix="system/acl")
  */
-class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
+class AclController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;
     protected $model = 'acl';
@@ -46,8 +47,8 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
 
     private function clearRedis()
     {
-        \App\RedisModel\SystemAcl::create($this->container)->clear();
-        SystemRole::create($this->container)->clear();
+        AclRedis::create($this->container)->clear();
+        RoleRedis::create($this->container)->clear();
     }
 
 
@@ -55,7 +56,7 @@ class Acl extends Base implements AddAfterHooks, EditAfterHooks, DeleteAfterHook
      * Exists Acl Key
      * @return array
      */
-    public function validedKey()
+    public function validedKey(): array
     {
         if (empty($this->post['key'])) {
             return [

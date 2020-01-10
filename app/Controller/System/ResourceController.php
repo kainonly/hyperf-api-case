@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
-use App\RedisModel\SystemRole;
+use App\RedisModel\System\ResourceRedis;
+use App\RedisModel\System\RoleRedis;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -14,8 +15,14 @@ use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteBeforeHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
+use Hyperf\HttpServer\Annotation\Controller;
 
-class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
+/**
+ * Class ResourceController
+ * @package App\Controller\System
+ * @Controller(prefix="system/resource")
+ */
+class ResourceController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
     protected $model = 'resource';
@@ -61,7 +68,7 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
      * Sort Lists
      * @return array
      */
-    public function sort()
+    public function sort(): array
     {
         if (empty($this->post['data'])) {
             return [
@@ -85,17 +92,17 @@ class Resource extends Base implements AddAfterHooks, EditAfterHooks, DeleteBefo
         ];
     }
 
-    private function clearRedis()
+    private function clearRedis(): void
     {
-        \App\RedisModel\SystemResource::create($this->container)->clear();
-        SystemRole::create($this->container)->clear();
+        ResourceRedis::create($this->container)->clear();
+        RoleRedis::create($this->container)->clear();
     }
 
     /**
      * Exists Resources Key
      * @return array
      */
-    public function validedKey()
+    public function validedKey(): array
     {
         if (empty($this->post['key'])) {
             return [

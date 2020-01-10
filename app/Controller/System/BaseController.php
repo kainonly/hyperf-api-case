@@ -12,7 +12,7 @@ use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 use Psr\Container\ContainerInterface;
 
-class Base extends CurdController
+class BaseController extends CurdController
 {
     /**
      * @var HashServiceInterface

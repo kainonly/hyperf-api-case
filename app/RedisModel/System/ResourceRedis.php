@@ -1,32 +1,43 @@
 <?php
+declare (strict_types=1);
 
-namespace App\RedisModel;
+namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\Support\Common\RedisModel;
 
-class SystemResource extends RedisModel
+class ResourceRedis extends RedisModel
 {
     protected $key = 'system:resource';
-    private $rows = [];
+    private $data = [];
 
-    public function clear()
+    /**
+     * Clear Cache
+     */
+    public function clear(): void
     {
         $this->redis->del($this->key);
     }
 
-    public function get()
+    /**
+     * Get Cache
+     * @return array
+     */
+    public function get(): array
     {
         if (!$this->redis->exists($this->key)) {
             $this->update();
         } else {
-            $this->rows = json_decode($this->redis->get($this->key), true);
+            $raws = $this->redis->get($this->key);
+            $this->data = json_decode($raws, true);
         }
-
-        return $this->rows;
+        return $this->data;
     }
 
-    private function update()
+    /**
+     * Refresh Cache
+     */
+    private function update(): void
     {
         $queryLists = Db::table('resource')
             ->where('status', '=', 1)
@@ -38,6 +49,6 @@ class SystemResource extends RedisModel
         }
 
         $this->redis->set($this->key, $queryLists->toJson());
-        $this->rows = $queryLists->toArray();
+        $this->data = $queryLists->toArray();
     }
 }
