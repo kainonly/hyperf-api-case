@@ -2,10 +2,11 @@
   "name": "hyperf-api-case",
   "type": "project",
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.4",
     "ext-swoole": ">=4.4",
     "ext-redis": "*",
     "ext-json": "*",
+    "ext-msgpack": "*",
     "hyperf/cache": "~1.1.0",
     "hyperf/command": "~1.1.0",
     "hyperf/config": "~1.1.0",
