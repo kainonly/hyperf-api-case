@@ -14,18 +14,9 @@ use Psr\Container\ContainerInterface;
 
 class BaseController extends CurdController
 {
-    /**
-     * @var HashServiceInterface
-     */
-    protected $hash;
-    /**
-     * @var TokenServiceInterface
-     */
-    protected $token;
-    /**
-     * @var UtilsServiceInterface
-     */
-    protected $utils;
+    protected HashServiceInterface $hash;
+    protected TokenServiceInterface $token;
+    protected UtilsServiceInterface $utils;
 
     public function __construct(
         ContainerInterface $container,

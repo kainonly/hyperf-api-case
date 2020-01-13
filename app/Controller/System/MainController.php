@@ -18,6 +18,10 @@ class MainController extends BaseController
 {
     use Auth;
 
+    /**
+     * User login
+     * @return ResponseInterface
+     */
     public function login(): ResponseInterface
     {
         try {
@@ -41,7 +45,7 @@ class MainController extends BaseController
                 throw new Exception('error:password_incorrect');
             }
 
-            return $this->__create('system', [
+            return $this->create('system', [
                 'user' => $data['username'],
                 'role' => explode(',', $data['role'])
             ]);
@@ -53,13 +57,35 @@ class MainController extends BaseController
         }
     }
 
+    /**
+     * User verify
+     * @return ResponseInterface
+     */
     public function verify(): ResponseInterface
     {
-        return $this->__verify('system');
+        try {
+            return $this->authVerify('system');
+        } catch (Exception $e) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ]);
+        }
     }
 
+    /**
+     * User logout
+     * @return ResponseInterface
+     */
     public function logout(): ResponseInterface
     {
-        return $this->__destory('system');
+        try {
+            return $this->destory('system');
+        } catch (Exception $e) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ]);
+        }
     }
 }

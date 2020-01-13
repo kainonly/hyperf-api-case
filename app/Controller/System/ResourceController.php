@@ -25,21 +25,21 @@ use Hyperf\HttpServer\Annotation\Controller;
 class ResourceController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
-    protected $model = 'resource';
+    protected string $model = 'resource';
 
-    public function __addAfterHooks(int $id): bool
+    public function addAfterHooks(int $id): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    public function __editAfterHooks(): bool
+    public function editAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    public function __deleteBeforeHooks(): bool
+    public function deleteBeforeHooks(): bool
     {
         $queryData = Db::table($this->model)
             ->whereIn('id', $this->post['id'])
@@ -58,7 +58,7 @@ class ResourceController extends BaseController implements AddAfterHooks, EditAf
         return !$exists;
     }
 
-    public function __deleteAfterHooks(): bool
+    public function deleteAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
