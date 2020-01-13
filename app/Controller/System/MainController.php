@@ -5,6 +5,7 @@ namespace App\Controller\System;
 
 use Exception;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\Support\Traits\Auth;
 use Psr\Http\Message\ResponseInterface;
 use App\RedisModel\System\AdminRedis;
@@ -21,6 +22,7 @@ class MainController extends BaseController
     /**
      * User login
      * @return ResponseInterface
+     * @PostMapping()
      */
     public function login(): ResponseInterface
     {
@@ -60,6 +62,7 @@ class MainController extends BaseController
     /**
      * User verify
      * @return ResponseInterface
+     * @PostMapping()
      */
     public function verify(): ResponseInterface
     {
@@ -76,6 +79,7 @@ class MainController extends BaseController
     /**
      * User logout
      * @return ResponseInterface
+     * @PostMapping()
      */
     public function logout(): ResponseInterface
     {
@@ -87,5 +91,41 @@ class MainController extends BaseController
                 'msg' => $e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * @return array
+     * @PostMapping()
+     */
+    public function resource(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     * @PostMapping()
+     */
+    public function information(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     * @PostMapping()
+     */
+    public function update(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     * @PostMapping()
+     */
+    public function uploads(): array
+    {
+        return [];
     }
 }
