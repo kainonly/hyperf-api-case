@@ -25,27 +25,27 @@ use Hyperf\HttpServer\Annotation\Controller;
 class AclController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;
-    protected $model = 'acl';
+    protected string $model = 'acl';
 
-    public function __addAfterHooks(int $id): bool
+    public function addAfterHooks(int $id): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    public function __editAfterHooks(): bool
+    public function editAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    public function __deleteAfterHooks(): bool
+    public function deleteAfterHooks(): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    private function clearRedis()
+    private function clearRedis(): void
     {
         AclRedis::create($this->container)->clear();
         RoleRedis::create($this->container)->clear();

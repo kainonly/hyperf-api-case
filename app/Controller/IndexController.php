@@ -5,7 +5,7 @@ namespace App\Controller;
 
 class IndexController
 {
-    public function index()
+    public function index(): array
     {
         return [
             'version' => 1.0,
