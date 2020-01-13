@@ -16,6 +16,7 @@ use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\PostMapping;
 
 /**
  * Class Acl
@@ -51,10 +52,10 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
         RoleRedis::create($this->container)->clear();
     }
 
-
     /**
      * Exists Acl Key
      * @return array
+     * @PostMapping()
      */
     public function validedKey(): array
     {

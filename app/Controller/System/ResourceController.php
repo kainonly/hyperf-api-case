@@ -14,6 +14,8 @@ use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteBeforeHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
+use Hyperf\Curd\Lifecycle\EditBeforeHooks;
+use Hyperf\Database\Exception\QueryException;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Controller;
 
@@ -22,10 +24,12 @@ use Hyperf\HttpServer\Annotation\Controller;
  * @package App\Controller\System
  * @Controller(prefix="system/resource")
  */
-class ResourceController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
+class ResourceController extends BaseController
+    implements AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
     protected string $model = 'resource';
+    private string $key;
 
     public function addAfterHooks(int $id): bool
     {
@@ -33,10 +37,36 @@ class ResourceController extends BaseController implements AddAfterHooks, EditAf
         return true;
     }
 
+    public function editBeforeHooks(): bool
+    {
+        if (!$this->edit_switch) {
+            $data = Db::table($this->model)
+                ->where('id', '=', $this->post['id'])
+                ->first();
+            $this->key = $data->key;
+        }
+        return true;
+    }
+
     public function editAfterHooks(): bool
     {
-        $this->clearRedis();
-        return true;
+        try {
+            if (!$this->edit_switch && $this->post['key'] != $this->key) {
+                Db::table($this->model)
+                    ->where('parent', '=', $this->key)
+                    ->update([
+                        'parent' => $this->post['key']
+                    ]);
+            }
+            $this->clearRedis();
+            return true;
+        } catch (QueryException $exception) {
+            $this->edit_after_result = [
+                'error' => 1,
+                'msg' => $exception->getMessage()
+            ];
+            return false;
+        }
     }
 
     public function deleteBeforeHooks(): bool
