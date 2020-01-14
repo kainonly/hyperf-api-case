@@ -8,8 +8,8 @@ use Hyperf\Support\Common\RedisModel;
 
 class AdminRedis extends RedisModel
 {
-    protected $key = 'system:admin';
-    private $data = [];
+    protected string $key = 'system:admin';
+    private array $data = [];
 
     /**
      * Clear Cache

@@ -7,5 +7,5 @@ use Hyperf\Support\Middleware\AuthVerify as BaseAuthVerify;
 
 class AuthVerify extends BaseAuthVerify
 {
-    protected $scene = 'system';
+    protected string $scene = 'system';
 }

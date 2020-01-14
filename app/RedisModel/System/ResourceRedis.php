@@ -8,8 +8,8 @@ use Hyperf\Support\Common\RedisModel;
 
 class ResourceRedis extends RedisModel
 {
-    protected $key = 'system:resource';
-    private $data = [];
+    protected string $key = 'system:resource';
+    private array $data = [];
 
     /**
      * Clear Cache
