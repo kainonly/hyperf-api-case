@@ -18,6 +18,7 @@ use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\Database\Exception\QueryException;
 use Hyperf\DbConnection\Db;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\PostMapping;
 
 /**
  * Class ResourceController
@@ -131,6 +132,7 @@ class ResourceController extends BaseController
     /**
      * Exists Resources Key
      * @return array
+     * @PostMapping()
      */
     public function validedKey(): array
     {
