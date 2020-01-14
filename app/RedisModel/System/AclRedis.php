@@ -8,8 +8,8 @@ use Hyperf\Support\Common\RedisModel;
 
 class AclRedis extends RedisModel
 {
-    protected $key = 'system:acl';
-    private $data = [];
+    protected string $key = 'system:acl';
+    private array $data = [];
 
     /**
      * Clear Cache

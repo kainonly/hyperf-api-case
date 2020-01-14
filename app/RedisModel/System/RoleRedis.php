@@ -8,8 +8,8 @@ use Hyperf\Support\Common\RedisModel;
 
 class RoleRedis extends RedisModel
 {
-    protected $key = 'system:role';
-    private $data = [];
+    protected string $key = 'system:role';
+    private array $data = [];
 
     /**
      * Clear Cache
