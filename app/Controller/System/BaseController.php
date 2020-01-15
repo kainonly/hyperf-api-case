@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use Hyperf\Curd\CurdController;
-use Hyperf\Extra\Contract\HashServiceInterface;
-use Hyperf\Extra\Contract\TokenServiceInterface;
-use Hyperf\Extra\Contract\UtilsServiceInterface;
+use Hyperf\Extra\Contract\HashInterface;
+use Hyperf\Extra\Contract\TokenInterface;
+use Hyperf\Extra\Contract\UtilsInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
@@ -14,18 +14,18 @@ use Psr\Container\ContainerInterface;
 
 class BaseController extends CurdController
 {
-    protected HashServiceInterface $hash;
-    protected TokenServiceInterface $token;
-    protected UtilsServiceInterface $utils;
+    protected HashInterface $hash;
+    protected TokenInterface $token;
+    protected UtilsInterface $utils;
 
     public function __construct(
         ContainerInterface $container,
         RequestInterface $request,
         ResponseInterface $response,
         ValidatorFactoryInterface $validation,
-        HashServiceInterface $hash,
-        TokenServiceInterface $token,
-        UtilsServiceInterface $utils
+        HashInterface $hash,
+        TokenInterface $token,
+        UtilsInterface $utils
     )
     {
         parent::__construct($container, $request, $response, $validation);

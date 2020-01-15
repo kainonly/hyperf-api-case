@@ -11,4 +11,5 @@ declare(strict_types=1);
  */
 
 return [
+    \Hyperf\Extra\Contract\HashInterface::class => \Hyperf\Extra\Service\HashService::class
 ];
