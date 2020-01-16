@@ -7,3 +7,6 @@
 [submodule "library/hyperf-support"]
 	path = library/hyperf-support
 	url = git@github.com:kainonly/hyperf-support.git
+[submodule "hyperf"]
+	path = hyperf
+	url = git@github.com:kainonly/hyperf.git
