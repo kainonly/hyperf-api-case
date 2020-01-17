@@ -2,8 +2,8 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
 use Hyperf\DbConnection\Db;
+use Hyperf\Support\Common\Migration;
 
 class CreateRoleBasicTable extends Migration
 {
@@ -36,8 +36,7 @@ class CreateRoleBasicTable extends Migration
                 ->unsigned()
                 ->comment('update time');
         });
-
-        Db::statement(/** @lang text */ "ALTER TABLE `v_role_basic` comment 'Role Table'");
+        $this->comment('role_basic', 'Role Table');
     }
 
     /**

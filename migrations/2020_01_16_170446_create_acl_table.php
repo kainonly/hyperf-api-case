@@ -2,8 +2,8 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
 use Hyperf\DbConnection\Db;
+use Hyperf\Support\Common\Migration;
 
 class CreateAclTable extends Migration
 {
@@ -39,7 +39,7 @@ class CreateAclTable extends Migration
                 ->unsigned()
                 ->comment('update time');
         });
-        Db::statement(/** @lang text */ "ALTER TABLE `v_acl` comment 'Access Control List Table'");
+        $this->comment('acl', 'Access Control List Table');
     }
 
     /**
