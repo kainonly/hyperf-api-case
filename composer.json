@@ -48,7 +48,9 @@
       "Hyperf\\Extra\\": "library/hyperf-extra/src/",
       "Hyperf\\Support\\": "library/hyperf-support/src/"
     },
-    "files": []
+    "files": [
+      "library/hyperf-curd/src/helper.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
