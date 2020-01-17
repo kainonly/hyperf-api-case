@@ -29,7 +29,7 @@ class ResourceRedis extends RedisModel
             $this->update();
         } else {
             $raws = $this->redis->get($this->key);
-            $this->data = json_decode($raws, true);
+            $this->data = msgpack_unpack($raws);
         }
         return $this->data;
     }
@@ -48,7 +48,8 @@ class ResourceRedis extends RedisModel
             return;
         }
 
-        $this->redis->set($this->key, $queryLists->toJson());
-        $this->data = $queryLists->toArray();
+        $data = (array)$queryLists->toArray();
+        $this->redis->set($this->key, msgpack_pack($data));
+        $this->data = $data;
     }
 }

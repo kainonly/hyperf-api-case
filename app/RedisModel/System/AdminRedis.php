@@ -9,7 +9,7 @@ use Hyperf\Support\Common\RedisModel;
 class AdminRedis extends RedisModel
 {
     protected string $key = 'system:admin';
-    private array $data = [];
+    private array $data;
 
     /**
      * Clear Cache
@@ -30,7 +30,7 @@ class AdminRedis extends RedisModel
             $this->update($username);
         } else {
             $raws = $this->redis->hGet($this->key, $username);
-            $this->data = !empty($raws) ? json_decode($raws, true) : [];
+            $this->data = !empty($raws) ? msgpack_unpack($raws) : [];
         }
         return $this->data;
     }
@@ -48,15 +48,13 @@ class AdminRedis extends RedisModel
         if ($queryLists->isEmpty()) {
             return;
         }
-
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $lists[$value->username] = json_encode($value);
+            $lists[$value->username] = msgpack_pack((array)$value);
             if ($username == $value->username) {
-                $this->data = $value;
+                $this->data = (array)$value;
             }
         }
         $this->redis->hMSet($this->key, $lists);
     }
-
 }

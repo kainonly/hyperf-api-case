@@ -31,7 +31,7 @@ class AclRedis extends RedisModel
             $this->update($key);
         } else {
             $raws = $this->redis->hGet($this->key, $key);
-            $this->data = !empty($raws) ? json_decode($raws, true) : [];
+            $this->data = !empty($raws) ? msgpack_unpack($raws) : [];
         }
         switch ($policy) {
             case 0:
@@ -62,7 +62,7 @@ class AclRedis extends RedisModel
 
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $data[$value->key] = json_encode([
+            $data[$value->key] = msgpack_pack([
                 'write' => $value->write,
                 'read' => $value->read
             ]);

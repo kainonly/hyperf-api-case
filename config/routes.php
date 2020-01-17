@@ -13,4 +13,13 @@ declare(strict_types=1);
 
 use Hyperf\HttpServer\Router\Router;
 
-Router::addRoute(['GET'], '/', 'App\Controller\IndexController@index');
+Router::get('/', [\App\Controller\IndexController::class, 'index']);
+Router::addGroup('/system', function () {
+    Router::get('/avb', [\App\Controller\IndexController::class, 'index']);
+    Router::post('/main/login', [\App\Controller\System\MainController::class, 'login']);
+    addCurdRoutes(\App\Controller\System\AclController::class);
+//    addCurdRoutes(\App\Controller\System\ResourceController::class);
+//    addCurdRoutes(\App\Controller\System\PolicyController::class);
+//    addCurdRoutes(\App\Controller\System\RoleController::class);
+//    addCurdRoutes(\App\Controller\System\AdminController::class);
+});
