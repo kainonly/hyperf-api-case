@@ -5,7 +5,6 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AclRedis;
 use App\RedisModel\System\RoleRedis;
-use App\Middleware\System\AuthVerify;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -16,19 +15,7 @@ use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
-use Hyperf\HttpServer\Annotation\PostMapping;
 
-/**
- * Class Acl
- * @package App\Controller\System
- * @Controller(prefix="system/acl")
- * @Middlewares({
- *     @Middleware(AuthVerify::class)
- * })
- */
 class AclController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;
@@ -61,7 +48,6 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
     /**
      * Exists Acl Key
      * @return array
-     * @PostMapping()
      */
     public function validedKey(): array
     {

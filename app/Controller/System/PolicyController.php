@@ -4,24 +4,12 @@ declare (strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\RoleRedis;
-use App\Middleware\System\AuthVerify;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
 
-/**
- * Class PolicyController
- * @package App\Controller\System
- * @Controller(prefix="system/policy")
- * @Middlewares({
- *     @Middleware(AuthVerify::class)
- * })
- */
 class PolicyController extends BaseController implements AddAfterHooks, DeleteAfterHooks
 {
     use OriginListsModel, AddModel, DeleteModel;

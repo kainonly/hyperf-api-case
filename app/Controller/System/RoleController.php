@@ -5,7 +5,6 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
-use App\Middleware\System\AuthVerify;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -18,18 +17,10 @@ use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\DbConnection\Db;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
-use Hyperf\HttpServer\Annotation\PostMapping;
 
 /**
  * Class RoleController
  * @package App\Controller\System
- * @Controller(prefix="system/role")
- * @Middlewares({
- *     @Middleware(AuthVerify::class)
- * })
  */
 class RoleController extends BaseController
     implements AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteAfterHooks
@@ -131,7 +122,6 @@ class RoleController extends BaseController
     /**
      * Exists Role Key
      * @return array
-     * @PostMapping()
      */
     public function validedKey(): array
     {
@@ -151,5 +141,4 @@ class RoleController extends BaseController
             'data' => $exists
         ];
     }
-
 }

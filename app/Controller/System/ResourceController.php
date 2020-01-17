@@ -5,7 +5,6 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
-use App\Middleware\System\AuthVerify;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -18,19 +17,7 @@ use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\Database\Exception\QueryException;
 use Hyperf\DbConnection\Db;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
-use Hyperf\HttpServer\Annotation\PostMapping;
 
-/**
- * Class ResourceController
- * @package App\Controller\System
- * @Controller(prefix="system/resource")
- * @Middlewares({
- *     @Middleware(AuthVerify::class)
- * })
- */
 class ResourceController extends BaseController
     implements AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
@@ -138,7 +125,6 @@ class ResourceController extends BaseController
     /**
      * Exists Resources Key
      * @return array
-     * @PostMapping()
      */
     public function validedKey(): array
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
-use App\Middleware\System\AuthVerify;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
@@ -19,20 +18,8 @@ use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\Curd\Lifecycle\GetCustom;
 use Hyperf\DbConnection\Db;
-use Hyperf\HttpServer\Annotation\Controller;
-use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\HttpServer\Annotation\Middlewares;
-use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\Utils\Context;
 
-/**
- * Class AdminController
- * @package App\Controller\System
- * @Controller(prefix="system/admin")
- * @Middlewares({
- *     @Middleware(AuthVerify::class)
- * })
- */
 class AdminController extends BaseController
     implements GetCustom, AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
@@ -191,7 +178,6 @@ class AdminController extends BaseController
     /**
      * Exists Acl Key
      * @return array
-     * @PostMapping()
      */
     public function validedUsername(): array
     {
