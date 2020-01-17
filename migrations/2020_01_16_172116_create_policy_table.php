@@ -2,8 +2,8 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
 use Hyperf\DbConnection\Db;
+use Hyperf\Support\Common\Migration;
 
 class CreatePolicyTable extends Migration
 {
@@ -35,8 +35,7 @@ class CreatePolicyTable extends Migration
                 ->onDelete('cascade');
             $table->unique(['resource_key', 'acl_key']);
         });
-
-        Db::statement(/** @lang text */ "ALTER TABLE `v_policy` comment 'Access Control Policy For Associated Resource Key Table'");
+        $this->comment('policy', 'Access Control Policy For Associated Resource Key Table');
     }
 
     /**

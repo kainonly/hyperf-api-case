@@ -2,8 +2,7 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
-use Hyperf\DbConnection\Db;
+use Hyperf\Support\Common\Migration;
 
 class CreateAdminRoleTable extends Migration
 {
@@ -32,8 +31,7 @@ class CreateAdminRoleTable extends Migration
                 ->onDelete('cascade');
             $table->unique(['admin_id', 'role_key']);
         });
-
-        Db::statement(/** @lang text */ "ALTER TABLE `v_admin_role` comment 'Role Policy For Associated Admin Table'");
+        $this->comment('admin_role', 'Role Policy For Associated Admin Table');
     }
 
     /**

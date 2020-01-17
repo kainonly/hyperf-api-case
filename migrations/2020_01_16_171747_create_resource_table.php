@@ -2,8 +2,8 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
 use Hyperf\DbConnection\Db;
+use Hyperf\Support\Common\Migration;
 
 class CreateResourceTable extends Migration
 {
@@ -55,8 +55,7 @@ class CreateResourceTable extends Migration
                 ->unsigned()
                 ->comment('update time');
         });
-
-        Db::statement(/** @lang text */ "ALTER TABLE `v_resource` comment 'Resource Manager Table'");
+        $this->comment('resource', 'Resource Manager Table');
     }
 
     /**
