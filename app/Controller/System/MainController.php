@@ -19,33 +19,25 @@ class MainController extends BaseController
      */
     public function login(): ResponseInterface
     {
+        $this->post = $this->request->post();
         $validator = $this->validation->make($this->post, [
             'username' => 'required|between:4,20',
             'password' => 'required|between:8,18',
         ]);
 
         if ($validator->fails()) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $validator->errors()
-            ]);
+            throw new Exception(join(',', $validator->errors()->all()));
         }
 
         $data = AdminRedis::create($this->container)
             ->get($this->post['username']);
 
         if (empty($data)) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => 'error:username_not_exists'
-            ]);
+            throw new Exception('error:username_not_exists');
         }
 
         if (!$this->hash->check($this->post['password'], $data['password'])) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => 'error:password_incorrect'
-            ]);
+            throw new Exception('error:password_incorrect');
         }
 
         return $this->create('system', [
@@ -57,33 +49,23 @@ class MainController extends BaseController
     /**
      * User verify
      * @return ResponseInterface
+     * @throws Exception
      */
     public function verify(): ResponseInterface
     {
-        try {
-            return $this->authVerify('system');
-        } catch (Exception $e) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $e->getMessage()
-            ]);
-        }
+        $this->post = $this->request->post();
+        return $this->authVerify('system');
     }
 
     /**
      * User logout
      * @return ResponseInterface
+     * @throws Exception
      */
     public function logout(): ResponseInterface
     {
-        try {
-            return $this->destory('system');
-        } catch (Exception $e) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $e->getMessage()
-            ]);
-        }
+        $this->post = $this->request->post();
+        return $this->destory('system');
     }
 
     /**
