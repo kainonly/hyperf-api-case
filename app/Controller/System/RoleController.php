@@ -125,6 +125,7 @@ class RoleController extends BaseController
      */
     public function validedKey(): array
     {
+        $this->post = $this->request->post();
         if (empty($this->post['key'])) {
             return [
                 'error' => 1,

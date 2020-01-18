@@ -94,6 +94,7 @@ class ResourceController extends BaseController
      */
     public function sort(): array
     {
+        $this->post = $this->request->post();
         if (empty($this->post['data'])) {
             return [
                 'error' => 1,
@@ -128,6 +129,7 @@ class ResourceController extends BaseController
      */
     public function validedKey(): array
     {
+        $this->post = $this->request->post();
         if (empty($this->post['key'])) {
             return [
                 'error' => 1,

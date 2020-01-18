@@ -51,6 +51,7 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
      */
     public function validedKey(): array
     {
+        $this->post = $this->request->post();
         if (empty($this->post['key'])) {
             return [
                 'error' => 1,

@@ -73,6 +73,7 @@ class MainController extends BaseController
      */
     public function resource(): array
     {
+        $this->post = $this->request->post();
         return [];
     }
 
@@ -81,6 +82,7 @@ class MainController extends BaseController
      */
     public function information(): array
     {
+        $this->post = $this->request->post();
         return [];
     }
 
@@ -89,6 +91,7 @@ class MainController extends BaseController
      */
     public function update(): array
     {
+        $this->post = $this->request->post();
         return [];
     }
 
@@ -97,6 +100,7 @@ class MainController extends BaseController
      */
     public function uploads(): array
     {
+        $this->post = $this->request->post();
         return [];
     }
 }

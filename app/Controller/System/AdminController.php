@@ -181,6 +181,7 @@ class AdminController extends BaseController
      */
     public function validedUsername(): array
     {
+        $this->post = $this->request->post();
         if (empty($this->post['username'])) {
             return [
                 'error' => 1,
