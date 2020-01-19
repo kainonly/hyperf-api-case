@@ -15,12 +15,12 @@ use Hyperf\HttpServer\Router\Router;
 
 Router::get('/', [\App\Controller\IndexController::class, 'index']);
 Router::addGroup('/system', function () {
-    Router::post('/main/login', [\App\Controller\System\MainController::class, 'login']);
-    addCurdRoutes(\App\Controller\System\AclController::class);
-    addCurdRoutes(\App\Controller\System\ResourceController::class);
-    addCurdRoutes(\App\Controller\System\PolicyController::class);
-    addCurdRoutes(\App\Controller\System\RoleController::class);
-    addCurdRoutes(\App\Controller\System\AdminController::class);
+    AutoController(\App\Controller\System\MainController::class);
+    AutoController(\App\Controller\System\AclController::class);
+    AutoController(\App\Controller\System\ResourceController::class);
+    AutoController(\App\Controller\System\PolicyController::class);
+    AutoController(\App\Controller\System\RoleController::class);
+    AutoController(\App\Controller\System\AdminController::class);
 }, [
     'middleware' => [
         \Hyperf\Extra\Cors\Cors::class
