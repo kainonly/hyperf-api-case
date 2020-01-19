@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use Hyperf\Curd\CurdController;
-use Hyperf\Extra\Contract\HashInterface;
-use Hyperf\Extra\Contract\TokenInterface;
-use Hyperf\Extra\Contract\UtilsInterface;
+use Hyperf\Extra\Hash\HashInterface;
+use Hyperf\Extra\Token\TokenInterface;
+use Hyperf\Extra\Utils\UtilsInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
