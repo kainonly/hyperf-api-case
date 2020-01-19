@@ -17,6 +17,7 @@ class BaseController extends CurdController
     protected HashInterface $hash;
     protected TokenInterface $token;
     protected UtilsInterface $utils;
+    protected array $middleware = [];
 
     public function __construct(
         ContainerInterface $container,
