@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use Exception;
-use Hyperf\Support\Traits\Auth;
+use Hyperf\Support\Func\Auth;
 use Psr\Http\Message\ResponseInterface;
 use App\RedisModel\System\AdminRedis;
 
