@@ -13,5 +13,6 @@ declare(strict_types=1);
 return [
     \Hyperf\Extra\Contract\HashInterface::class => \Hyperf\Extra\Service\HashService::class,
     \Hyperf\Extra\Contract\TokenInterface::class => \Hyperf\Extra\Service\TokenService::class,
-    \Hyperf\Extra\Contract\UtilsInterface::class => \Hyperf\Extra\Service\UtilsService::class
+    \Hyperf\Extra\Contract\UtilsInterface::class => \Hyperf\Extra\Service\UtilsService::class,
+    \Hyperf\Extra\Contract\CorsInterface::class => \Hyperf\Extra\Service\CorsService::class
 ];
