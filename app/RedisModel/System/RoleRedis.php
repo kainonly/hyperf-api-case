@@ -31,7 +31,8 @@ class RoleRedis extends RedisModel
             $this->update($key);
         } else {
             $raws = $this->redis->hget($this->key, $key);
-            $this->data = !empty($raws) ? json_decode($raws, true) : [];
+            $this->data = !empty($raws) ?
+                json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
         }
         return explode(',', $this->data[$type]);
     }
@@ -55,8 +56,8 @@ class RoleRedis extends RedisModel
             $lists[$value->key] = json_encode([
                 'acl' => $value->acl,
                 'resource' => $value->resource
-            ]);
-            if ($key == $value->key) {
+            ], JSON_THROW_ON_ERROR, 512);
+            if ($key === $value->key) {
                 $this->data = [
                     'acl' => $value->acl,
                     'resource' => $value->resource
