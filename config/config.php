@@ -21,10 +21,10 @@ return [
         'log_level' => [
             LogLevel::ALERT,
             LogLevel::CRITICAL,
-//            LogLevel::DEBUG,
+            LogLevel::DEBUG,
             LogLevel::EMERGENCY,
             LogLevel::ERROR,
-//            LogLevel::INFO,
+            LogLevel::INFO,
             LogLevel::NOTICE,
             LogLevel::WARNING,
         ],
