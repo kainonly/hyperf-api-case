@@ -9,7 +9,6 @@ use Hyperf\Extra\Common\RedisModel;
 class RoleRedis extends RedisModel
 {
     protected string $key = 'system:role';
-    private array $data = [];
 
     /**
      * Clear Cache
@@ -20,50 +19,46 @@ class RoleRedis extends RedisModel
     }
 
     /**
-     * Get Cache
-     * @param string $key
+     * Get Role
+     * @param array $keys
      * @param string $type
      * @return array
      */
-    public function get(string $key, string $type): array
+    public function get(array $keys, string $type): array
     {
         if (!$this->redis->exists($this->key)) {
-            $this->update($key);
-        } else {
-            $raws = $this->redis->hget($this->key, $key);
-            $this->data = !empty($raws) ?
-                json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
+            $this->update();
         }
-        return explode(',', $this->data[$type]);
+        $raws = $this->redis->hMGet($this->key, $keys);
+        $lists = [];
+        foreach ($raws as $value) {
+            $data = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            array_push($lists, ...explode(',', $data[$type]));
+        }
+        return $lists;
     }
 
     /**
      * Refresh Cache
-     * @param string $key
      */
-    private function update(string $key): void
+    private function update(): void
     {
-        $queryLists = Db::table('role')
+        $query = Db::table('role')
             ->where('status', '=', 1)
             ->get(['key', 'acl', 'resource']);
 
-        if ($queryLists->isEmpty()) {
+        if ($query->isEmpty()) {
             return;
         }
 
         $lists = [];
-        foreach ($queryLists->toArray() as $value) {
+        foreach ($query->toArray() as $value) {
             $lists[$value->key] = json_encode([
                 'acl' => $value->acl,
                 'resource' => $value->resource
             ], JSON_THROW_ON_ERROR, 512);
-            if ($key === $value->key) {
-                $this->data = [
-                    'acl' => $value->acl,
-                    'resource' => $value->resource
-                ];
-            }
         }
+
         $this->redis->hMSet($this->key, $lists);
     }
 }

@@ -2,7 +2,7 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Support\Common\Migration;
+use Hyperf\Extra\Common\Migration;
 
 class CreateAdminRoleTable extends Migration
 {
