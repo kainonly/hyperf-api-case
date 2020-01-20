@@ -4,9 +4,13 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use Exception;
+use App\RedisModel\System\ResourceRedis;
+use App\RedisModel\System\RoleRedis;
 use Hyperf\Support\Func\Auth;
+use Hyperf\Utils\Arr;
 use Psr\Http\Message\ResponseInterface;
 use App\RedisModel\System\AdminRedis;
+use RuntimeException;
 
 class MainController extends BaseController
 {
@@ -14,58 +18,76 @@ class MainController extends BaseController
 
     /**
      * User login
-     * @return ResponseInterface
-     * @throws Exception
      */
     public function login(): ResponseInterface
     {
-        $this->post = $this->request->post();
-        $validator = $this->validation->make($this->post, [
-            'username' => 'required|between:4,20',
-            'password' => 'required|between:8,18',
-        ]);
+        try {
+            $this->post = $this->request->post();
+            $validator = $this->validation->make($this->post, [
+                'username' => 'required|between:4,20',
+                'password' => 'required|between:8,18',
+            ]);
 
-        if ($validator->fails()) {
-            throw new Exception(join(',', $validator->errors()->all()));
+            if ($validator->fails()) {
+                return $this->response->json([
+                    'error' => 1,
+                    'msg' => $validator->errors()
+                ]);
+            }
+
+            $data = AdminRedis::create($this->container)
+                ->get($this->post['username']);
+
+            if (empty($data)) {
+                throw new RuntimeException('username not exists');
+            }
+
+            if (!$this->hash->check($this->post['password'], $data['password'])) {
+                throw new RuntimeException('password incorrect');
+            }
+
+            return $this->create('system', [
+                'user' => $data['username'],
+                'role' => explode(',', $data['role'])
+            ]);
+        } catch (Exception $e) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ]);
         }
-
-        $data = AdminRedis::create($this->container)
-            ->get($this->post['username']);
-
-        if (empty($data)) {
-            throw new Exception('error:username_not_exists');
-        }
-
-        if (!$this->hash->check($this->post['password'], $data['password'])) {
-            throw new Exception('error:password_incorrect');
-        }
-
-        return $this->create('system', [
-            'user' => $data['username'],
-            'role' => explode(',', $data['role'])
-        ]);
     }
 
     /**
      * User verify
-     * @return ResponseInterface
-     * @throws Exception
      */
     public function verify(): ResponseInterface
     {
-        $this->post = $this->request->post();
-        return $this->authVerify('system');
+        try {
+            $this->post = $this->request->post();
+            return $this->authVerify('system');
+        } catch (Exception $e) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
      * User logout
-     * @return ResponseInterface
-     * @throws Exception
      */
     public function logout(): ResponseInterface
     {
-        $this->post = $this->request->post();
-        return $this->destory('system');
+        try {
+            $this->post = $this->request->post();
+            return $this->destory('system');
+        } catch (Exception $e) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -74,7 +96,20 @@ class MainController extends BaseController
     public function resource(): array
     {
         $this->post = $this->request->post();
-        return [];
+        $router = ResourceRedis::create($this->container)->get();
+        $role = [];
+        foreach (['*'] as $hasRoleKey) {
+            $resource = RoleRedis::create($this->container)->get($hasRoleKey, 'resource');
+            array_push($role, ...$resource);
+        }
+        $routerRole = array_unique($role);
+        $lists = Arr::where($router, static function ($value) use ($routerRole) {
+            return in_array($value['key'], $routerRole, true);
+        });
+        return [
+            'error' => 0,
+            'data' => array_values($lists)
+        ];
     }
 
     /**

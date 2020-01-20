@@ -49,10 +49,10 @@ class RoleController extends BaseController
     {
         $resourceLists = [];
         foreach ($this->resource as $key => $value) {
-            array_push($resourceLists, [
+            $resourceLists[] = [
                 'role_key' => $this->post['key'],
                 'resource_key' => $value
-            ]);
+            ];
         }
         $result = Db::table('role_resource')
             ->insert($resourceLists);
@@ -83,10 +83,10 @@ class RoleController extends BaseController
         if (!$this->edit_model) {
             $resourceLists = [];
             foreach ($this->resource as $key => $value) {
-                array_push($resourceLists, [
+                $resourceLists[] = [
                     'role_key' => $this->post['key'],
                     'resource_key' => $value
-                ]);
+                ];
             }
             Db::table('role_resource')
                 ->where('role_key', '=', $this->post['key'])

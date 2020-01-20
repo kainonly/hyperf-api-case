@@ -37,7 +37,10 @@ class ResourceController extends BaseController
             $data = Db::table($this->model)
                 ->where('id', '=', $this->post['id'])
                 ->first();
-            $this->key = $data->key;
+
+            if (!empty($data)) {
+                $this->key = $data->key;
+            }
         }
         return true;
     }
@@ -45,7 +48,7 @@ class ResourceController extends BaseController
     public function editAfterHooks(): bool
     {
         try {
-            if (!$this->edit_switch && $this->post['key'] != $this->key) {
+            if (!$this->edit_switch && $this->post['key'] !== $this->key) {
                 Db::table($this->model)
                     ->where('parent', '=', $this->key)
                     ->update([
@@ -68,6 +71,10 @@ class ResourceController extends BaseController
         $queryData = Db::table($this->model)
             ->whereIn('id', $this->post['id'])
             ->first();
+
+        if (empty($queryData)) {
+            return false;
+        }
 
         $exists = Db::table($this->model)
             ->where('parent', '=', $queryData->key)
