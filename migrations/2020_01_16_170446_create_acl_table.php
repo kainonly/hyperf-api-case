@@ -2,8 +2,7 @@
 
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
-use Hyperf\DbConnection\Db;
-use Hyperf\Support\Common\Migration;
+use Hyperf\Extra\Common\Migration;
 
 class CreateAclTable extends Migration
 {

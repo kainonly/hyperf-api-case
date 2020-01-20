@@ -12,6 +12,7 @@ use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 use App\RedisModel\System\AdminRedis;
 use RuntimeException;
+use stdClass;
 
 class MainController extends BaseController
 {
@@ -46,11 +47,10 @@ class MainController extends BaseController
             if (!$this->hash->check($this->post['password'], $data['password'])) {
                 throw new RuntimeException('password incorrect');
             }
-
-            return $this->create('system', [
-                'user' => $data['username'],
-                'role' => explode(',', $data['role'])
-            ]);
+            $symbol = new stdClass();
+            $symbol->user = $data['username'];
+            $symbol->role = explode(',', $data['role']);
+            return $this->create('system', $symbol);
         } catch (Exception $e) {
             return $this->response->json([
                 'error' => 1,
