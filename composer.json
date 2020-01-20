@@ -6,7 +6,6 @@
     "ext-swoole": ">=4.4",
     "ext-redis": "*",
     "ext-json": "*",
-    "ext-msgpack": "*",
     "hyperf/cache": "~1.1.0",
     "hyperf/command": "~1.1.0",
     "hyperf/config": "~1.1.0",
@@ -33,6 +32,7 @@
     "lcobucci/jwt": "^3.3"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "swoft/swoole-ide-helper": "^4.2",
     "phpmd/phpmd": "^2.6",
     "friendsofphp/php-cs-fixer": "^2.14",
@@ -65,14 +65,10 @@
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ],
-    "post-autoload-dump": [
-      "init-proxy.sh"
-    ],
     "test": "co-phpunit -c phpunit.xml --colors=always",
     "cs-fix": "php-cs-fixer fix $1",
     "analyse": "phpstan analyse --memory-limit 300M -l 0 -c phpstan.neon ./app ./config",
-    "start": "php ./bin/hyperf.php start",
-    "init-proxy": "init-proxy.sh"
+    "start": "php ./bin/hyperf.php start"
   },
   "repositories": {
     "packagist": {
