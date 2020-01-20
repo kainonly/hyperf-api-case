@@ -30,7 +30,7 @@ class AdminRedis extends RedisModel
             $this->update($username);
         } else {
             $raws = $this->redis->hGet($this->key, $username);
-            $this->data = !empty($raws) ? msgpack_unpack($raws) : [];
+            $this->data = !empty($raws) ? json_decode($raws, true) : [];
         }
         return $this->data;
     }
@@ -50,7 +50,7 @@ class AdminRedis extends RedisModel
         }
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $lists[$value->username] = msgpack_pack((array)$value);
+            $lists[$value->username] = json_encode($value);
             if ($username == $value->username) {
                 $this->data = (array)$value;
             }

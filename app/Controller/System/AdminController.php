@@ -43,9 +43,11 @@ class AdminController extends BaseController
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
-        if ($rows->id == $this->post['id']) {
+
+        if (!empty($rows) && $rows->id === $this->post['id']) {
             $data['self'] = true;
         }
+
         return [
             'error' => 0,
             'data' => $data
@@ -92,7 +94,7 @@ class AdminController extends BaseController
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
-        if ($rows->id == $this->post['id']) {
+        if (!empty($rows) && $rows->id === $this->post['id']) {
             $this->edit_before_result = [
                 'error' => 1,
                 'msg' => 'error:self'
@@ -147,7 +149,7 @@ class AdminController extends BaseController
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
-        if (in_array($rows->id, $this->post['id'])) {
+        if (!empty($rows) && in_array($rows->id, $this->post['id'], true)) {
             $this->delete_before_result = [
                 'error' => 1,
                 'msg' => 'error:self'

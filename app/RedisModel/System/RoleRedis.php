@@ -31,7 +31,7 @@ class RoleRedis extends RedisModel
             $this->update($key);
         } else {
             $raws = $this->redis->hget($this->key, $key);
-            $this->data = !empty($raws) ? msgpack_unpack($raws) : [];
+            $this->data = !empty($raws) ? json_decode($raws, true) : [];
         }
         return explode(',', $this->data[$type]);
     }
@@ -52,7 +52,7 @@ class RoleRedis extends RedisModel
 
         $lists = [];
         foreach ($queryLists->toArray() as $value) {
-            $lists[$value->key] = msgpack_pack([
+            $lists[$value->key] = json_encode([
                 'acl' => $value->acl,
                 'resource' => $value->resource
             ]);
