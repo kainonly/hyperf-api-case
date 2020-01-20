@@ -48,6 +48,17 @@ class N1Acl extends Seeder
                 'update_time' => time()
             ],
             [
+                'key' => 'policy',
+                'name' => json_encode([
+                    'zh_cn' => '策略模块',
+                    'en_us' => 'Policy Module'
+                ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,delete',
+                'read' => 'originLists',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
                 'key' => 'admin',
                 'name' => json_encode([
                     'zh_cn' => '管理员模块',

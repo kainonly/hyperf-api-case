@@ -8,6 +8,7 @@ use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
 use Hyperf\Support\Func\Auth;
 use Hyperf\Utils\Arr;
+use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 use App\RedisModel\System\AdminRedis;
 use RuntimeException;
@@ -96,12 +97,10 @@ class MainController extends BaseController
     public function resource(): array
     {
         $this->post = $this->request->post();
-        $router = ResourceRedis::create($this->container)->get();
-        $role = [];
-        foreach (['*'] as $hasRoleKey) {
-            $resource = RoleRedis::create($this->container)->get($hasRoleKey, 'resource');
-            array_push($role, ...$resource);
-        }
+        $router = ResourceRedis::create($this->container)
+            ->get();
+        $role = RoleRedis::create($this->container)
+            ->get(Context::get('auth')->role, 'resource');
         $routerRole = array_unique($role);
         $lists = Arr::where($router, static function ($value) use ($routerRole) {
             $data = (array)$value;

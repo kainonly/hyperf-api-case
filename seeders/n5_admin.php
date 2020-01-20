@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Hyperf\Database\Seeders\Seeder;
 use Hyperf\DbConnection\Db;
-use Hyperf\Extra\Contract\HashInterface;
+use Hyperf\Extra\Hash\HashInterface;
 use Hyperf\Utils\ApplicationContext;
 
 class N5Admin extends Seeder

@@ -1,7 +1,7 @@
 <?php
 
 use Hyperf\DbConnection\Db;
-use Hyperf\Support\Common\Migration;
+use Hyperf\Extra\Common\Migration;
 
 class CreateRoleView extends Migration
 {
