@@ -104,7 +104,8 @@ class MainController extends BaseController
         }
         $routerRole = array_unique($role);
         $lists = Arr::where($router, static function ($value) use ($routerRole) {
-            return in_array($value['key'], $routerRole, true);
+            $data = (array)$value;
+            return in_array($data['key'], $routerRole, true);
         });
         return [
             'error' => 0,
