@@ -9,7 +9,6 @@ use Hyperf\Extra\Common\RedisModel;
 class AclRedis extends RedisModel
 {
     protected string $key = 'system:acl';
-    private array $data = [];
 
     /**
      * Clear Cache
@@ -28,20 +27,21 @@ class AclRedis extends RedisModel
     public function get(string $key, int $policy): array
     {
         if (!$this->redis->exists($this->key)) {
-            $this->update($key);
-        } else {
-            $raws = $this->redis->hGet($this->key, $key);
-            $this->data = !empty($raws) ?
-                json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
+            $this->update();
         }
+
+        $raws = $this->redis->hGet($this->key, $key);
+        $data = !empty($raws) ?
+            json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
+
         switch ($policy) {
             case 0:
-                return explode(',', $this->data['read']);
+                return explode(',', $data['read']);
             case 1:
-                return array_merge(
-                    explode(',', $this->data['read']),
-                    explode(',', $this->data['write'])
-                );
+                return [
+                    ...explode(',', $data['read']),
+                    ...explode(',', $data['write'])
+                ];
             default:
                 return [];
         }
@@ -49,30 +49,23 @@ class AclRedis extends RedisModel
 
     /**
      * Refresh Cache
-     * @param string $key
      */
-    private function update(string $key): void
+    private function update(): void
     {
-        $queryLists = Db::table('acl')
+        $query = Db::table('acl')
             ->where('status', '=', 1)
             ->get(['key', 'write', 'read']);
 
-        if ($queryLists->isEmpty()) {
+        if ($query->isEmpty()) {
             return;
         }
 
         $lists = [];
-        foreach ($queryLists->toArray() as $value) {
-            $data[$value->key] = json_encode([
+        foreach ($query->toArray() as $value) {
+            $lists[$value->key] = json_encode([
                 'write' => $value->write,
                 'read' => $value->read
             ], JSON_THROW_ON_ERROR, 512);
-            if ($key === $value->key) {
-                $this->data = [
-                    'write' => $value->write,
-                    'read' => $value->read
-                ];
-            }
         }
         $this->redis->hMSet($this->key, $lists);
     }
