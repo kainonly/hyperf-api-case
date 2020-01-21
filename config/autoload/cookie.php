@@ -6,6 +6,6 @@ return [
     'domain' => env('COOKIE_DOMAIN', ''),
     'secure' => (bool)env('COOKIE_SECURE', false),
     'httponly' => (bool)env('COOKIE_HTTPONLY', false),
-    'raw' => false,
+    'raw' => true,
     'samesite' => env('COOKIE_SAMESITE', null),
 ];
