@@ -4,8 +4,6 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\Client\CosClient;
-use GuzzleHttp\Psr7\LazyOpenStream;
-use GuzzleHttp\Psr7\Stream;
 use stdClass;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -190,12 +188,16 @@ class MainController extends BaseController
         $fileName = date('Ymd') . '/' .
             uuid()->toString() . '.' .
             $file->getExtension();
-        var_dump($file->getStream()->getContents());
-//        $result = CosClient::create()->put(
-//            $fileName,
-//            (new LazyOpenStream($file->getRealPath(), 'r'))->stream
-//        );
-//        var_dump($result);
-        return [];
+        $body = fopen($file->getRealPath(), 'rb');
+        $result = CosClient::create()->uploads(
+            $fileName,
+            $body
+        );
+        return [
+            'error' => 0,
+            'data' => [
+                'savename' => $result->toArray()['Key']
+            ]
+        ];
     }
 }

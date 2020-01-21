@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Client;
 
-use Psr\Http\Message\StreamInterface;
+use GuzzleHttp\Command\Result;
 use Qcloud\Cos\Client;
 
 class CosClient
@@ -29,7 +29,12 @@ class CosClient
         ]);
     }
 
-    public function put(string $key, StreamInterface $body)
+    /**
+     * @param string $key
+     * @param $body
+     * @return Result
+     */
+    public function uploads(string $key, $body): Result
     {
         return $this->client->upload(
             $this->options['cos']['bucket'],
