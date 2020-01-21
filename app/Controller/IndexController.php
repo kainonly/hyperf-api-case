@@ -13,7 +13,7 @@ class IndexController
         return $response->withCookie(new Cookie(
             'name',
             'kain',
-            0,
+            3600,
             '/',
             '',
             true,
