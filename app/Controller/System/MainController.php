@@ -3,16 +3,20 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use App\Client\CosClient;
+use GuzzleHttp\Psr7\LazyOpenStream;
+use GuzzleHttp\Psr7\Stream;
+use stdClass;
 use Exception;
+use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\DbConnection\Db;
 use Hyperf\Support\Func\Auth;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
-use App\RedisModel\System\AdminRedis;
 use RuntimeException;
-use stdClass;
 
 class MainController extends BaseController
 {
@@ -118,7 +122,14 @@ class MainController extends BaseController
     public function information(): array
     {
         $this->post = $this->request->post();
-        return [];
+        $data = Db::table('admin_basic')
+            ->where('username', '=', Context::get('auth')->user)
+            ->first(['email', 'phone', 'call', 'avatar']);
+
+        return [
+            'error' => 0,
+            'data' => $data
+        ];
     }
 
     /**
@@ -127,15 +138,64 @@ class MainController extends BaseController
     public function update(): array
     {
         $this->post = $this->request->post();
-        return [];
+        $validator = $this->validation->make($this->post, [
+            'old_password' => 'between:8,18',
+            'new_password' => 'required_with:old_password|between:8,18',
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validator->errors()
+            ];
+        }
+
+        $username = Context::get('auth')->user;
+        $data = Db::table('admin_basic')
+            ->where('username', '=', $username)
+            ->first();
+
+        if (!empty($this->post['old_password'])) {
+            if (!$this->hash->check($this->post['old_password'], $data->password)) {
+                throw new RuntimeException('password verification failed');
+            }
+            $this->post['password'] = $this->hash->create($this->post['new_password']);
+        }
+
+        unset($this->post['old_password'], $this->post['new_password']);
+        Db::table('admin_basic')
+            ->where('username', '=', $username)
+            ->update($this->post);
+
+        AdminRedis::create($this->container)->clear();
+        return [
+            'error' => 0,
+            'msg' => 'ok'
+        ];
     }
 
     /**
      * @return array
+     * @throws Exception
      */
     public function uploads(): array
     {
-        $this->post = $this->request->post();
+        if (!$this->request->hasFile('image')) {
+            return [
+                'error' => 1,
+                'msg' => 'upload file does not exist'
+            ];
+        }
+        $file = $this->request->file('image');
+        $fileName = date('Ymd') . '/' .
+            uuid()->toString() . '.' .
+            $file->getExtension();
+        var_dump($file->getStream()->getContents());
+//        $result = CosClient::create()->put(
+//            $fileName,
+//            (new LazyOpenStream($file->getRealPath(), 'r'))->stream
+//        );
+//        var_dump($result);
         return [];
     }
 }

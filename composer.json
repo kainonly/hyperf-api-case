@@ -29,7 +29,8 @@
     "hyperf/utils": "~1.1.0",
     "hyperf/validation": "^1.1",
     "ramsey/uuid": "^3.9",
-    "lcobucci/jwt": "^3.3"
+    "lcobucci/jwt": "^3.3",
+    "qcloud/cos-sdk-v5": ">=2.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
@@ -49,7 +50,7 @@
       "Hyperf\\Support\\": "library/hyperf-support/src/"
     },
     "files": [
-      "library/hyperf-curd/src/helper.php"
+      "library/hyperf-extra/src/helper.php"
     ]
   },
   "autoload-dev": {

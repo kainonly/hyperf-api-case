@@ -18,9 +18,6 @@ Router::addGroup('/system', function () {
         'middleware' => [
             \App\Middleware\System\AuthVerify::class => [
                 'resource', 'information', 'update', 'uploads'
-            ],
-            \App\Middleware\System\RbacVerify::class => [
-                'uploads'
             ]
         ]
     ]);
