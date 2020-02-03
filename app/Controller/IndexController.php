@@ -3,25 +3,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Hyperf\HttpMessage\Cookie\Cookie;
-use Hyperf\HttpServer\Contract\ResponseInterface;
+
+use Hyperf\HttpServer\Contract\RequestInterface;
 
 class IndexController
 {
-    public function index(ResponseInterface $response)
+    public function index(RequestInterface $request)
     {
-        return $response->withCookie(new Cookie(
-            'name',
-            'kain',
-            time() + 3600,
-            '/',
-            '',
-            true,
-            true,
-            false,
-            Cookie::SAMESITE_STRICT
-        ))->json([
-            'version' => 1.0
-        ]);
+        return [
+            'headers' => $request->getHeaders(),
+            'query' => $request->getQueryParams(),
+            'body' => $request->getBody()->getContents()
+        ];
     }
 }
