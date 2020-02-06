@@ -8,12 +8,7 @@ use Hyperf\HttpServer\Contract\ResponseInterface;
 
 class IndexController
 {
-    public function index()
-    {
-        return ['version' => 1.0];
-    }
-
-    public function cookie(UtilsInterface $utils, ResponseInterface $response)
+    public function index(UtilsInterface $utils, ResponseInterface $response)
     {
         return $response->withCookie($utils->cookie('test', 'tester', [
             'expire' => 0,
@@ -23,6 +18,6 @@ class IndexController
             'httponly' => true,
             'raw' => true,
             'samesite' => 'strict',
-        ]));
+        ]))->json(['version' => 1.1]);
     }
 }
