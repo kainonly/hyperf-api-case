@@ -31,8 +31,7 @@ class AclRedis extends RedisModel
         }
 
         $raws = $this->redis->hGet($this->key, $key);
-        $data = !empty($raws) ?
-            json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
+        $data = !empty($raws) ? json_decode($raws, true) : [];
 
         switch ($policy) {
             case 0:
@@ -65,7 +64,7 @@ class AclRedis extends RedisModel
             $lists[$value->key] = json_encode([
                 'write' => $value->write,
                 'read' => $value->read
-            ], JSON_THROW_ON_ERROR, 512);
+            ]);
         }
         $this->redis->hMSet($this->key, $lists);
     }

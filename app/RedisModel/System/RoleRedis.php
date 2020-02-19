@@ -32,7 +32,7 @@ class RoleRedis extends RedisModel
         $raws = $this->redis->hMGet($this->key, $keys);
         $lists = [];
         foreach ($raws as $value) {
-            $data = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($value, true);
             array_push($lists, ...explode(',', $data[$type]));
         }
         return $lists;
@@ -56,7 +56,7 @@ class RoleRedis extends RedisModel
             $lists[$value->key] = json_encode([
                 'acl' => $value->acl,
                 'resource' => $value->resource
-            ], JSON_THROW_ON_ERROR, 512);
+            ]);
         }
 
         $this->redis->hMSet($this->key, $lists);
