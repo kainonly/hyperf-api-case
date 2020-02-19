@@ -30,8 +30,7 @@ class AdminRedis extends RedisModel
         }
 
         $raws = $this->redis->hGet($this->key, $username);
-        return !empty($raws) ?
-            json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
+        return !empty($raws) ? json_decode($raws, true) : [];
     }
 
     /**
@@ -49,7 +48,7 @@ class AdminRedis extends RedisModel
 
         $lists = [];
         foreach ($query->toArray() as $value) {
-            $lists[$value->username] = json_encode($value, JSON_THROW_ON_ERROR, 512);
+            $lists[$value->username] = json_encode($value);
         }
         $this->redis->hMSet($this->key, $lists);
     }

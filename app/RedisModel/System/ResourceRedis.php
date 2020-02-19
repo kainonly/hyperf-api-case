@@ -28,8 +28,7 @@ class ResourceRedis extends RedisModel
             $this->update();
         }
         $raws = $this->redis->get($this->key);
-        return !empty($raws) ?
-            json_decode($raws, true, 512, JSON_THROW_ON_ERROR) : [];
+        return !empty($raws) ? json_decode($raws, true) : [];
     }
 
     /**
@@ -46,9 +45,6 @@ class ResourceRedis extends RedisModel
             return;
         }
 
-        $this->redis->set(
-            $this->key,
-            json_encode($query->toArray(), JSON_THROW_ON_ERROR, 512)
-        );
+        $this->redis->set($this->key, json_encode($query->toArray()));
     }
 }
