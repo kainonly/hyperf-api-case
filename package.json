@@ -1,0 +1,19 @@
+{
+  "name": "hyperf-api-case",
+  "scripts": {
+    "start": "docsify serve ./docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kainonly/think-bit.git"
+  },
+  "keywords": [
+    "thinkphp"
+  ],
+  "author": "kain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kainonly/think-bit/issues"
+  },
+  "homepage": "https://github.com/kainonly/think-bit#readme"
+}
