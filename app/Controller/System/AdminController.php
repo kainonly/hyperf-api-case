@@ -31,6 +31,14 @@ class AdminController extends BaseController
     protected array $get_field = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
     protected array $origin_lists_field = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
     protected array $lists_field = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
+    protected array $add_validate = [
+        'username' => 'required|between:4,20',
+        'password' => 'required|between:8,18',
+        'role' => 'required'
+    ];
+    protected array $edit_validate = [
+        'role' => 'required'
+    ];
     private string $role;
 
     /**
