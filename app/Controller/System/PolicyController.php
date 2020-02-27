@@ -16,6 +16,11 @@ class PolicyController extends BaseController implements AddAfterHooks, DeleteAf
     protected string $model = 'policy';
     protected array $origin_lists_order = [];
     protected bool $add_auto_timestamp = false;
+    protected array $add_validate = [
+        'resource_key' => 'required',
+        'acl_key' => 'required',
+        'policy' => 'required'
+    ];
 
     /**
      * @inheritDoc

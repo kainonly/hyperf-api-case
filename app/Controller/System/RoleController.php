@@ -30,6 +30,16 @@ class RoleController extends BaseController
     protected string $add_model = 'role_basic';
     protected string $edit_model = 'role_basic';
     protected string $delete_model = 'role_basic';
+    protected array $add_validate = [
+        'name' => 'required',
+        'key' => 'required',
+        'resource' => 'required|array'
+    ];
+    protected array $edit_validate = [
+        'name' => 'required',
+        'key' => 'required',
+        'resource' => 'required|array'
+    ];
     private array $resource = [];
 
     /**

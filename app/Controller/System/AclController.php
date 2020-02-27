@@ -20,6 +20,14 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
 {
     use OriginListsModel, ListsModel, AddModel, GetModel, EditModel, DeleteModel;
     protected string $model = 'acl';
+    protected array $add_validate = [
+        'key' => 'required',
+        'name' => 'required|json'
+    ];
+    protected array $edit_validate = [
+        'key' => 'required',
+        'name' => 'required|json'
+    ];
 
     public function addAfterHooks(int $id): bool
     {

@@ -23,6 +23,14 @@ class ResourceController extends BaseController
 {
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
     protected string $model = 'resource';
+    protected array $add_validate = [
+        'key' => 'required',
+        'name' => 'required|json'
+    ];
+    protected array $edit_validate = [
+        'key' => 'required',
+        'name' => 'required|json'
+    ];
     private string $key;
 
     public function addAfterHooks(int $id): bool
@@ -102,13 +110,17 @@ class ResourceController extends BaseController
     public function sort(): array
     {
         $this->post = $this->request->post();
-        if (empty($this->post['data'])) {
+        $validator = $this->validation->make($this->post, [
+            'data' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
             return [
                 'error' => 1,
-                'msg' => 'error'
+                'msg' => $validator->errors()
             ];
         }
-
+        
         return Db::transaction(function () {
             foreach ($this->post['data'] as $value) {
                 Db::table($this->model)->update($value);
