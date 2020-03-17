@@ -16,13 +16,22 @@ use Hyperf\Curd\Lifecycle\DeleteBeforeHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\Database\Exception\QueryException;
+use Hyperf\Database\Query\Builder;
 use Hyperf\DbConnection\Db;
+use Hyperf\Extra\Hash\HashInterface;
+use Hyperf\Extra\Token\TokenInterface;
+use Hyperf\Extra\Utils\UtilsInterface;
+use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
+use Hyperf\Validation\Contract\ValidatorFactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class ResourceController extends BaseController
     implements AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
     use OriginListsModel, GetModel, AddModel, DeleteModel, EditModel;
     protected string $model = 'resource';
+    protected array $origin_lists_order = ['sort', 'asc'];
     protected array $add_validate = [
         'key' => 'required',
         'name' => 'required|json'
@@ -123,7 +132,11 @@ class ResourceController extends BaseController
         
         return Db::transaction(function () {
             foreach ($this->post['data'] as $value) {
-                Db::table($this->model)->update($value);
+                Db::table($this->model)
+                    ->where('id', '=', $value['id'])
+                    ->update([
+                        'sort' => $value['sort']
+                    ]);
             }
             $this->clearRedis();
             return true;

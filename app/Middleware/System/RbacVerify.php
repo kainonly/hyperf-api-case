@@ -8,4 +8,7 @@ use Hyperf\Support\Middleware\RbacVerify as BaseRbacVerify;
 class RbacVerify extends BaseRbacVerify
 {
     protected string $prefix = 'system';
+    protected array $ignore = [
+        'valided*'
+    ];
 }

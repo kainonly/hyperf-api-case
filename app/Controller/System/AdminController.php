@@ -47,12 +47,12 @@ class AdminController extends BaseController
     public function getCustomReturn(array $data): array
     {
         $username = Context::get('auth')->user;
-        $rows = Db::table('admin_basic')
+        $result = Db::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
 
-        if (!empty($rows) && $rows->id === $this->post['id']) {
+        if (!empty($result) && $result->id === (int)$this->post['id']) {
             $data['self'] = true;
         }
 
