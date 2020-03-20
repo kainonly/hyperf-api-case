@@ -11,8 +11,9 @@ declare(strict_types=1);
  */
 
 return [
-    \Hyperf\Extra\Hash\HashInterface::class => \Hyperf\Extra\Hash\HashService::class,
-    \Hyperf\Extra\Token\TokenInterface::class => \Hyperf\Extra\Token\TokenService::class,
-    \Hyperf\Extra\Utils\UtilsInterface::class => \Hyperf\Extra\Utils\UtilsService::class,
-    \Hyperf\Extra\Cors\CorsInterface::class => \Hyperf\Extra\Cors\CorsService::class
+    Hyperf\Extra\Cipher\CipherInterface::class => Hyperf\Extra\Cipher\CipherService::class,
+    Hyperf\Extra\Hash\HashInterface::class => Hyperf\Extra\Hash\HashService::class,
+    Hyperf\Extra\Token\TokenInterface::class => Hyperf\Extra\Token\TokenService::class,
+    Hyperf\Extra\Utils\UtilsInterface::class => Hyperf\Extra\Utils\UtilsService::class,
+    Hyperf\Extra\Cors\CorsInterface::class => Hyperf\Extra\Cors\CorsService::class
 ];
