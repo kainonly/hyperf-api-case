@@ -30,7 +30,9 @@
     "hyperf/validation": "^1.1",
     "ramsey/uuid": "^3.9",
     "lcobucci/jwt": "^3.3",
-    "qcloud/cos-sdk-v5": ">=2.0"
+    "qcloud/cos-sdk-v5": ">=2.0",
+    "phpseclib/phpseclib": "^2.0",
+    "danielstjules/stringy": "^3.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
