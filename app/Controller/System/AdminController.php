@@ -18,6 +18,7 @@ use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\Curd\Lifecycle\GetCustom;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
 
 class AdminController extends BaseController
@@ -40,6 +41,11 @@ class AdminController extends BaseController
         'role' => 'required'
     ];
     private string $role;
+    /**
+     * @Inject()
+     * @var AdminRedis
+     */
+    private AdminRedis $adminRedis;
 
     /**
      * @inheritDoc
@@ -182,7 +188,7 @@ class AdminController extends BaseController
      */
     private function clearRedis(): void
     {
-        AdminRedis::create($this->container)->clear();
+        $this->adminRedis->clear();
     }
 
     /**

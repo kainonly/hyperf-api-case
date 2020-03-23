@@ -15,6 +15,7 @@ use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
 
 class AclController extends BaseController implements AddAfterHooks, EditAfterHooks, DeleteAfterHooks
 {
@@ -28,6 +29,16 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
         'key' => 'required',
         'name' => 'required|json'
     ];
+    /**
+     * @Inject()
+     * @var AclRedis
+     */
+    private AclRedis $aclRedis;
+    /**
+     * @Inject()
+     * @var RoleRedis
+     */
+    private RoleRedis $roleRedis;
 
     public function addAfterHooks(int $id): bool
     {
@@ -49,8 +60,8 @@ class AclController extends BaseController implements AddAfterHooks, EditAfterHo
 
     private function clearRedis(): void
     {
-        AclRedis::create($this->container)->clear();
-        RoleRedis::create($this->container)->clear();
+        $this->aclRedis->clear();
+        $this->roleRedis->clear();
     }
 
     /**
