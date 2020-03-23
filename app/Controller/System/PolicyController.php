@@ -9,6 +9,7 @@ use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\Curd\Lifecycle\AddAfterHooks;
 use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
+use Hyperf\Di\Annotation\Inject;
 
 class PolicyController extends BaseController implements AddAfterHooks, DeleteAfterHooks
 {
@@ -21,6 +22,11 @@ class PolicyController extends BaseController implements AddAfterHooks, DeleteAf
         'acl_key' => 'required',
         'policy' => 'required'
     ];
+    /**
+     * @Inject()
+     * @var RoleRedis
+     */
+    private RoleRedis $roleRedis;
 
     /**
      * @inheritDoc
@@ -45,6 +51,6 @@ class PolicyController extends BaseController implements AddAfterHooks, DeleteAf
      */
     private function clearRedis(): void
     {
-        RoleRedis::create($this->container)->clear();
+        $this->roleRedis->clear();
     }
 }

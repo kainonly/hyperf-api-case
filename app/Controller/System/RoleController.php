@@ -17,6 +17,7 @@ use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Curd\Lifecycle\EditAfterHooks;
 use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
 
 /**
  * Class RoleController
@@ -41,6 +42,16 @@ class RoleController extends BaseController
         'resource' => 'required|array'
     ];
     private array $resource = [];
+    /**
+     * @Inject()
+     * @var RoleRedis
+     */
+    private RoleRedis $roleRedis;
+    /**
+     * @Inject()
+     * @var AdminRedis
+     */
+    private AdminRedis $adminRedis;
 
     /**
      * @inheritDoc
@@ -125,8 +136,8 @@ class RoleController extends BaseController
      */
     private function clearRedis(): void
     {
-        RoleRedis::create($this->container)->clear();
-        AdminRedis::create($this->container)->clear();
+        $this->roleRedis->clear();
+        $this->adminRedis->clear();
     }
 
     /**

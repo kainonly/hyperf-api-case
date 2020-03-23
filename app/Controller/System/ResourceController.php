@@ -18,6 +18,7 @@ use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\Database\Exception\QueryException;
 use Hyperf\Database\Query\Builder;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Extra\Hash\HashInterface;
 use Hyperf\Extra\Token\TokenInterface;
 use Hyperf\Extra\Utils\UtilsInterface;
@@ -41,6 +42,16 @@ class ResourceController extends BaseController
         'name' => 'required|json'
     ];
     private string $key;
+    /**
+     * @Inject()
+     * @var ResourceRedis
+     */
+    private ResourceRedis $resourceRedis;
+    /**
+     * @Inject()
+     * @var RoleRedis
+     */
+    private RoleRedis $roleRedis;
 
     public function addAfterHooks(int $id): bool
     {
@@ -151,8 +162,8 @@ class ResourceController extends BaseController
 
     private function clearRedis(): void
     {
-        ResourceRedis::create($this->container)->clear();
-        RoleRedis::create($this->container)->clear();
+        $this->resourceRedis->clear();
+        $this->roleRedis->clear();
     }
 
     /**
