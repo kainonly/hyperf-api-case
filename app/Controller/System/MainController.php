@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\Client\CosClient;
+use Hyperf\Di\Annotation\Inject;
+use Hyperf\Support\RedisModel\RefreshToken;
 use stdClass;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -19,6 +21,26 @@ use RuntimeException;
 class MainController extends BaseController
 {
     use Auth;
+    /**
+     * @Inject()
+     * @var RefreshToken
+     */
+    private RefreshToken $refreshToken;
+    /**
+     * @Inject()
+     * @var AdminRedis
+     */
+    private AdminRedis $adminRedis;
+    /**
+     * @Inject()
+     * @var ResourceRedis
+     */
+    private ResourceRedis $resourceRedis;
+    /**
+     * @Inject()
+     * @var RoleRedis
+     */
+    private RoleRedis $roleRedis;
 
     /**
      * User login
@@ -39,8 +61,7 @@ class MainController extends BaseController
                 ]);
             }
 
-            $data = AdminRedis::create($this->container)
-                ->get($this->post['username']);
+            $data = $this->adminRedis->get($this->post['username']);
 
             if (empty($data)) {
                 throw new RuntimeException('username not exists');
@@ -99,10 +120,8 @@ class MainController extends BaseController
     public function resource(): array
     {
         $this->post = $this->request->post();
-        $router = ResourceRedis::create($this->container)
-            ->get();
-        $role = RoleRedis::create($this->container)
-            ->get(Context::get('auth')->role, 'resource');
+        $router = $this->resourceRedis->get();
+        $role = $this->roleRedis->get(Context::get('auth')->role, 'resource');
         $routerRole = array_unique($role);
         $lists = Arr::where($router, static function ($value) use ($routerRole) {
             $data = (array)$value;
@@ -153,6 +172,13 @@ class MainController extends BaseController
             ->where('username', '=', $username)
             ->first();
 
+        if (empty($data)) {
+            return [
+                'error' => 1,
+                'msg' => 'not exists'
+            ];
+        }
+
         if (!empty($this->post['old_password'])) {
             if (!$this->hash->check($this->post['old_password'], $data->password)) {
                 throw new RuntimeException('password verification failed');
@@ -165,7 +191,7 @@ class MainController extends BaseController
             ->where('username', '=', $username)
             ->update($this->post);
 
-        AdminRedis::create($this->container)->clear();
+        $this->adminRedis->clear();
         return [
             'error' => 0,
             'msg' => 'ok'
