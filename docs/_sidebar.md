@@ -8,10 +8,11 @@
   - [DeleteModel 删除数据](curd/delete)
 
 - Extra 扩展
-  - [Helper 助手](extra/helper)
   - [Hash 密码](extra/hash)
+  - [Cipher 数据加密](extra/cipher)
   - [Token 令牌](extra/token)
   - [Utils 工具集](extra/utils)
+  - [Helper 助手](extra/helper)
 
 - Middleware 中间件
   - [CORS 跨站设置](middleware/cors)
