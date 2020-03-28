@@ -11,20 +11,15 @@ class CosClient
     private Client $client;
     private array $options;
 
-    static public function create(): CosClient
+    public function __construct()
     {
-        return new CosClient(config('qcloud'));
-    }
-
-    public function __construct(array $options)
-    {
-        $this->options = $options;
+        $this->options = config('qcloud');
         $this->client = new Client([
-            'region' => $options['cos']['region'],
+            'region' => $this->options['cos']['region'],
             'schema' => 'https',
             'credentials' => [
-                'secretId' => $options['credentials']['secret_id'],
-                'secretKey' => $options['credentials']['secret_key']
+                'secretId' => $this->options['credentials']['secret_id'],
+                'secretKey' => $this->options['credentials']['secret_key']
             ]
         ]);
     }
