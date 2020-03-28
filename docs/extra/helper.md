@@ -40,6 +40,18 @@ return [
 ];
 ```
 
+可以通过数组集合来限定需要运行中间件的路由
+
+```php
+AutoController(App\Controller\System\MainController::class, [
+    'middleware' => [
+        App\Middleware\System\AuthVerify::class => [
+            'resource', 'information', 'update', 'uploads'
+        ]
+    ]
+]);
+```
+
 #### uuid()
 
 生成 uuid v4

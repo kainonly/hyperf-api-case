@@ -1,6 +1,12 @@
 ## Utils 工具集
 
-Utils 常用工具集合，此服务必须安装 `kain/hyperf-extra`
+Utils 常用工具集合，此服务必须安装 `kain/hyperf-extra`，在 `config/autoload/dependencies.php` 内完成关系配置
+
+```php
+return [
+    Hyperf\Extra\Utils\UtilsInterface::class => Hyperf\Extra\Utils\UtilsService::class,
+];
+```
 
 #### cookie(string $name, string $value, array $options = []): Cookie
 
