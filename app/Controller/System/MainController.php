@@ -41,6 +41,11 @@ class MainController extends BaseController
      * @var RoleRedis
      */
     private RoleRedis $roleRedis;
+    /**
+     * @Inject()
+     * @var CosClient
+     */
+    private CosClient $cosClient;
 
     /**
      * User login
@@ -215,7 +220,7 @@ class MainController extends BaseController
             uuid()->toString() . '.' .
             $file->getExtension();
         $body = fopen($file->getRealPath(), 'rb');
-        $result = CosClient::create()->uploads(
+        $result = $this->cosClient->uploads(
             $fileName,
             $body
         );
