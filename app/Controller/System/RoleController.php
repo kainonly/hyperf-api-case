@@ -89,7 +89,7 @@ class RoleController extends BaseController
      */
     public function editBeforeHooks(): bool
     {
-        if (!$this->edit_model) {
+        if (!$this->edit_switch) {
             $this->resource = $this->post['resource'];
             unset($this->post['resource']);
         }
@@ -101,7 +101,7 @@ class RoleController extends BaseController
      */
     public function editAfterHooks(): bool
     {
-        if (!$this->edit_model) {
+        if (!$this->edit_switch) {
             $resourceLists = [];
             foreach ($this->resource as $key => $value) {
                 $resourceLists[] = [
