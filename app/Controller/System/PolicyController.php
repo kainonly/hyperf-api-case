@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\AddAfterParams;
+use Hyperf\Curd\Common\DeleteAfterParams;
 use Hyperf\Di\Annotation\Inject;
 
 class PolicyController extends BaseController
@@ -38,8 +40,9 @@ class PolicyController extends BaseController
         return $this->curd
             ->addModel('policy')
             ->setAutoTimestamp(false)
-            ->onAfterEvent(function () {
+            ->afterHook(function (AddAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
@@ -52,8 +55,9 @@ class PolicyController extends BaseController
         }
         return $this->curd
             ->deleteModel('policy')
-            ->onAfterEvent(function () {
+            ->afterHook(function (DeleteAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }

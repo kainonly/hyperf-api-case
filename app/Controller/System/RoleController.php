@@ -5,9 +5,10 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\DeleteAfterParams;
+use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
-use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\Utils\Context;
 
 /**
@@ -77,7 +78,7 @@ class RoleController extends BaseController
         unset($body['resource']);
         return $this->curd
             ->addModel('role_basic', $body)
-            ->onAfterEvent(function () use ($body, $resource) {
+            ->afterHook(function () use ($body, $resource) {
                 $resourceLists = [];
                 foreach ($resource as $key => $value) {
                     $resourceLists[] = [
@@ -88,10 +89,14 @@ class RoleController extends BaseController
                 $result = Db::table('role_resource')
                     ->insert($resourceLists);
                 if (!$result) {
-                    return 'install resource failed';
+                    Context::set('error', [
+                        'error' => 1,
+                        'msg' => 'insert resource failed'
+                    ]);
+                    return false;
                 }
                 $this->clearRedis();
-                return null;
+                return true;
             })
             ->result();
     }
@@ -111,11 +116,10 @@ class RoleController extends BaseController
         if (!$body['switch']) {
             $resource = $body['resource'];
             unset($body['resource']);
-            Context::set(RequestInterface::class, $this->request);
         }
         return $this->curd
             ->editModel('resource', $body)
-            ->onAfterEvent(function (int $id, bool $switch) use ($body, $resource) {
+            ->afterHook(function (EditAfterParams $params) use ($body, $resource) {
                 $resourceLists = [];
                 foreach ($resource as $key => $value) {
                     $resourceLists[] = [
@@ -129,10 +133,13 @@ class RoleController extends BaseController
                 $result = Db::table('role_resource')
                     ->insert($resourceLists);
                 if (!$result) {
-                    return 'install resource failed';
+                    Context::set('error', [
+                        'error' => 1,
+                        'msg' => 'insert resource failed'
+                    ]);
+                    return false;
                 }
-                $this->clearRedis();
-                return null;
+                return true;
             })
             ->result();
     }
@@ -146,8 +153,9 @@ class RoleController extends BaseController
 
         return $this->curd
             ->deleteModel('role_basic')
-            ->onAfterEvent(function () {
+            ->afterHook(function (DeleteAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
