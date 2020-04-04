@@ -5,6 +5,9 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AclRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\AddAfterParams;
+use Hyperf\Curd\Common\DeleteAfterParams;
+use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 
@@ -68,8 +71,9 @@ class AclController extends BaseController
 
         return $this->curd
             ->addModel('acl')
-            ->onAfterEvent(function () {
+            ->afterHook(function (AddAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
@@ -86,8 +90,9 @@ class AclController extends BaseController
 
         return $this->curd
             ->editModel('acl')
-            ->onAfterEvent(function () {
+            ->afterHook(function (EditAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
@@ -101,8 +106,9 @@ class AclController extends BaseController
 
         return $this->curd
             ->deleteModel('acl')
-            ->onAfterEvent(function () {
+            ->afterHook(function (DeleteAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }

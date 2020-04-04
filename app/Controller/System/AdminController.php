@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
+use Hyperf\Curd\Common\AddAfterParams;
+use Hyperf\Curd\Common\DeleteAfterParams;
+use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
@@ -84,16 +87,20 @@ class AdminController extends BaseController
         unset($body['role']);
         return $this->curd
             ->addModel('admin_basic', $body)
-            ->onAfterEvent(function (int $id) use ($role) {
+            ->afterHook(function (AddAfterParams $params) use ($role) {
                 $data = Db::table('admin_role')->insert([
-                    'admin_id' => $id,
+                    'admin_id' => $params->getId(),
                     'role_key' => $role
                 ]);
                 if (!$data) {
-                    return 'role assoc wrong';
+                    Context::set('error', [
+                        'error' => 1,
+                        'msg' => 'role assoc wrong'
+                    ]);
+                    return false;
                 }
                 $this->clearRedis();
-                return null;
+                return true;
             })
             ->result();
     }
@@ -140,15 +147,16 @@ class AdminController extends BaseController
 
         return $this->curd
             ->editModel('admin_basic', $body)
-            ->onAfterEvent(function (int $id, bool $switch) use ($role) {
-                if (!$switch) {
+            ->afterHook(function (EditAfterParams $params) use ($role) {
+                if (!$params->isSwitch()) {
                     Db::table('admin_role')
-                        ->where('admin_id', '=', $id)
+                        ->where('admin_id', '=', $params->getId())
                         ->update([
                             'role_key' => $role
                         ]);
                 }
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
@@ -173,8 +181,9 @@ class AdminController extends BaseController
         }
         return $this->curd
             ->deleteModel('admin_basic', $body)
-            ->onAfterEvent(function () {
+            ->afterHook(function (DeleteAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }

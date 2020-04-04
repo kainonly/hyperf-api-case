@@ -5,6 +5,9 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\AddAfterParams;
+use Hyperf\Curd\Common\DeleteAfterParams;
+use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 
@@ -33,6 +36,17 @@ class ResourceController extends BaseController
             ->result();
     }
 
+    public function get(): array
+    {
+        $validate = $this->curd->getValidation();
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->getModel('resource')
+            ->result();
+    }
+
     public function add(): array
     {
         $validate = $this->curd->addValidation([
@@ -44,8 +58,9 @@ class ResourceController extends BaseController
         }
         return $this->curd
             ->addModel('resource')
-            ->onAfterEvent(function () {
+            ->afterHook(function (AddAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
@@ -72,8 +87,8 @@ class ResourceController extends BaseController
         }
         return $this->curd
             ->editModel('resource', $body)
-            ->onAfterEvent(function (int $id, bool $switch) use ($body, $key) {
-                if (!$switch && $body['key'] !== $key) {
+            ->afterHook(function (EditAfterParams $params) use ($body, $key) {
+                if (!$this->switch && $body['key'] !== $key) {
                     Db::table('resource')
                         ->where('parent', '=', $key)
                         ->update([
@@ -81,6 +96,7 @@ class ResourceController extends BaseController
                         ]);
                 }
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }
@@ -116,8 +132,9 @@ class ResourceController extends BaseController
 
         return $this->curd
             ->deleteModel('resource', $body)
-            ->onAfterEvent(function () {
+            ->afterHook(function (DeleteAfterParams $params) {
                 $this->clearRedis();
+                return true;
             })
             ->result();
     }

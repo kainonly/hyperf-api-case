@@ -12,6 +12,12 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
+/**
+ * Class BaseController
+ * @package App\Controller\System
+ * @property array $body
+ * @property bool $switch
+ */
 class BaseController
 {
     /**
