@@ -5,9 +5,6 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\AddAfterParams;
-use Hyperf\Curd\Common\DeleteAfterParams;
-use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 
@@ -26,7 +23,7 @@ class ResourceController extends BaseController
 
     public function originLists(): array
     {
-        $validate = $this->curd->originListsValidation([]);
+        $validate = $this->curd->originListsValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -58,7 +55,7 @@ class ResourceController extends BaseController
         }
         return $this->curd
             ->addModel('resource')
-            ->afterHook(function (AddAfterParams $params) {
+            ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
@@ -87,7 +84,7 @@ class ResourceController extends BaseController
         }
         return $this->curd
             ->editModel('resource', $body)
-            ->afterHook(function (EditAfterParams $params) use ($body, $key) {
+            ->afterHook(function () use ($body, $key) {
                 if (!$this->switch && $body['key'] !== $key) {
                     Db::table('resource')
                         ->where('parent', '=', $key)
@@ -104,7 +101,7 @@ class ResourceController extends BaseController
     public function delete(): array
     {
         $body = $this->request->post();
-        $validate = $this->curd->deleteValidation([]);
+        $validate = $this->curd->deleteValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -132,7 +129,7 @@ class ResourceController extends BaseController
 
         return $this->curd
             ->deleteModel('resource', $body)
-            ->afterHook(function (DeleteAfterParams $params) {
+            ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
@@ -192,7 +189,7 @@ class ResourceController extends BaseController
         if (empty($body['key'])) {
             return [
                 'error' => 1,
-                'msg' => 'error:require_key'
+                'msg' => 'require key'
             ];
         }
 
