@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\AddAfterParams;
-use Hyperf\Curd\Common\DeleteAfterParams;
 use Hyperf\Di\Annotation\Inject;
 
 class PolicyController extends BaseController
@@ -18,7 +16,7 @@ class PolicyController extends BaseController
 
     public function originLists(): array
     {
-        $validate = $this->curd->originListsValidation([]);
+        $validate = $this->curd->originListsValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -40,7 +38,7 @@ class PolicyController extends BaseController
         return $this->curd
             ->addModel('policy')
             ->setAutoTimestamp(false)
-            ->afterHook(function (AddAfterParams $params) {
+            ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
@@ -49,13 +47,13 @@ class PolicyController extends BaseController
 
     public function delete(): array
     {
-        $validate = $this->curd->deleteValidation([]);
+        $validate = $this->curd->deleteValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
         return $this->curd
             ->deleteModel('policy')
-            ->afterHook(function (DeleteAfterParams $params) {
+            ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })

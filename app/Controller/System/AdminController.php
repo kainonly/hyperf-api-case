@@ -5,7 +5,6 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use Hyperf\Curd\Common\AddAfterParams;
-use Hyperf\Curd\Common\DeleteAfterParams;
 use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
@@ -21,7 +20,7 @@ class AdminController extends BaseController
 
     public function originLists(): array
     {
-        $validate = $this->curd->originListsValidation([]);
+        $validate = $this->curd->originListsValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -34,7 +33,7 @@ class AdminController extends BaseController
 
     public function lists(): array
     {
-        $validate = $this->curd->listsValidation([]);
+        $validate = $this->curd->listsValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -48,7 +47,7 @@ class AdminController extends BaseController
     public function get(): array
     {
         $body = $this->request->post();
-        $validate = $this->curd->getValidation([]);
+        $validate = $this->curd->getValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -164,7 +163,7 @@ class AdminController extends BaseController
     public function delete(): array
     {
         $body = $this->request->post();
-        $validate = $this->curd->deleteValidation([]);
+        $validate = $this->curd->deleteValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -181,7 +180,7 @@ class AdminController extends BaseController
         }
         return $this->curd
             ->deleteModel('admin_basic', $body)
-            ->afterHook(function (DeleteAfterParams $params) {
+            ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
@@ -206,7 +205,7 @@ class AdminController extends BaseController
         if (empty($body['username'])) {
             return [
                 'error' => 1,
-                'msg' => 'error:require_username'
+                'msg' => 'require username'
             ];
         }
 

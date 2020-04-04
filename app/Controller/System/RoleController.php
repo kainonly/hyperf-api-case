@@ -5,8 +5,6 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\DeleteAfterParams;
-use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
@@ -30,7 +28,7 @@ class RoleController extends BaseController
 
     public function originLists(): array
     {
-        $validate = $this->curd->originListsValidation([]);
+        $validate = $this->curd->originListsValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -42,7 +40,7 @@ class RoleController extends BaseController
 
     public function lists(): array
     {
-        $validate = $this->curd->listsValidation([]);
+        $validate = $this->curd->listsValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -54,7 +52,7 @@ class RoleController extends BaseController
 
     public function get(): array
     {
-        $validate = $this->curd->getValidation([]);
+        $validate = $this->curd->getValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
@@ -119,7 +117,7 @@ class RoleController extends BaseController
         }
         return $this->curd
             ->editModel('resource', $body)
-            ->afterHook(function (EditAfterParams $params) use ($body, $resource) {
+            ->afterHook(static function () use ($body, $resource) {
                 $resourceLists = [];
                 foreach ($resource as $key => $value) {
                     $resourceLists[] = [
@@ -146,14 +144,14 @@ class RoleController extends BaseController
 
     public function delete(): array
     {
-        $validate = $this->curd->deleteValidation([]);
+        $validate = $this->curd->deleteValidation();
         if ($validate['error'] === 1) {
             return $validate;
         }
 
         return $this->curd
             ->deleteModel('role_basic')
-            ->afterHook(function (DeleteAfterParams $params) {
+            ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
@@ -179,7 +177,7 @@ class RoleController extends BaseController
         if (empty($body['key'])) {
             return [
                 'error' => 1,
-                'msg' => 'error:require_key'
+                'msg' => 'require key'
             ];
         }
 
