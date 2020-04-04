@@ -4,46 +4,58 @@ declare (strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\AddModel;
-use Hyperf\Curd\Common\DeleteModel;
-use Hyperf\Curd\Common\OriginListsModel;
-use Hyperf\Curd\Lifecycle\AddAfterHooks;
-use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
 use Hyperf\Di\Annotation\Inject;
 
-class PolicyController extends BaseController implements AddAfterHooks, DeleteAfterHooks
+class PolicyController extends BaseController
 {
-    use OriginListsModel, AddModel, DeleteModel;
-    protected string $model = 'policy';
-    protected array $origin_lists_order = [];
-    protected bool $add_auto_timestamp = false;
-    protected array $add_validate = [
-        'resource_key' => 'required',
-        'acl_key' => 'required',
-        'policy' => 'required'
-    ];
     /**
      * @Inject()
      * @var RoleRedis
      */
     private RoleRedis $roleRedis;
 
-    /**
-     * @inheritDoc
-     */
-    public function addAfterHooks(int $id): bool
+    public function originLists(): array
     {
-        $this->clearRedis();
-        return true;
+        $validate = $this->curd->originListsValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->originListsModel('policy')
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function deleteAfterHooks(): bool
+    public function add(): array
     {
-        $this->clearRedis();
-        return true;
+        $validate = $this->curd->addValidation([
+            'resource_key' => 'required',
+            'acl_key' => 'required',
+            'policy' => 'required'
+        ]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->addModel('policy')
+            ->setAutoTimestamp(false)
+            ->onAfterEvent(function () {
+                $this->clearRedis();
+            })
+            ->result();
+    }
+
+    public function delete(): array
+    {
+        $validate = $this->curd->deleteValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->deleteModel('policy')
+            ->onAfterEvent(function () {
+                $this->clearRedis();
+            })
+            ->result();
     }
 
     /**

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
-use Hyperf\Curd\CurdController;
+use Hyperf\Curd\CurdInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Extra\Hash\HashInterface;
 use Hyperf\Extra\Token\TokenInterface;
@@ -11,11 +11,29 @@ use Hyperf\Extra\Utils\UtilsInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
-use Psr\Container\ContainerInterface;
 
-class BaseController extends CurdController
+class BaseController
 {
-    protected array $middleware = [];
+    /**
+     * @Inject()
+     * @var RequestInterface
+     */
+    protected RequestInterface $request;
+    /**
+     * @Inject()
+     * @var ResponseInterface
+     */
+    protected ResponseInterface $response;
+    /**
+     * @Inject()
+     * @var ValidatorFactoryInterface
+     */
+    protected ValidatorFactoryInterface $validation;
+    /**
+     * @Inject()
+     * @var CurdInterface
+     */
+    protected CurdInterface $curd;
     /**
      * @Inject()
      * @var HashInterface

@@ -4,184 +4,180 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
-use Hyperf\Curd\Common\AddModel;
-use Hyperf\Curd\Common\DeleteModel;
-use Hyperf\Curd\Common\EditModel;
-use Hyperf\Curd\Common\GetModel;
-use Hyperf\Curd\Common\ListsModel;
-use Hyperf\Curd\Common\OriginListsModel;
-use Hyperf\Curd\Lifecycle\AddAfterHooks;
-use Hyperf\Curd\Lifecycle\AddBeforeHooks;
-use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
-use Hyperf\Curd\Lifecycle\DeleteBeforeHooks;
-use Hyperf\Curd\Lifecycle\EditAfterHooks;
-use Hyperf\Curd\Lifecycle\EditBeforeHooks;
-use Hyperf\Curd\Lifecycle\GetCustom;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
 
 class AdminController extends BaseController
-    implements GetCustom, AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteBeforeHooks, DeleteAfterHooks
 {
-    use GetModel, OriginListsModel, ListsModel, AddModel, EditModel, DeleteModel;
-    protected string $model = 'admin';
-    protected string $add_model = 'admin_basic';
-    protected string $edit_model = 'admin_basic';
-    protected string $delete_model = 'admin_basic';
-    protected array $get_field = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected array $origin_lists_field = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected array $lists_field = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected array $add_validate = [
-        'username' => 'required|between:4,20',
-        'password' => 'required|between:8,18',
-        'role' => 'required'
-    ];
-    protected array $edit_validate = [
-        'role' => 'required'
-    ];
-    private string $role;
     /**
      * @Inject()
      * @var AdminRedis
      */
     private AdminRedis $adminRedis;
 
-    /**
-     * @inheritDoc
-     */
-    public function getCustomReturn(array $data): array
+    public function originLists(): array
     {
+        $validate = $this->curd->originListsValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->originListsModel('admin')
+            ->setOrder('create_time', 'desc')
+            ->setField(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
+            ->result();
+    }
+
+    public function lists(): array
+    {
+        $validate = $this->curd->listsValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->listsModel('admin')
+            ->setOrder('create_time', 'desc')
+            ->setField(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
+            ->result();
+    }
+
+    public function get(): array
+    {
+        $body = $this->request->post();
+        $validate = $this->curd->getValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+
+        $result = $this->curd
+            ->getModel('admin', $body)
+            ->setField(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
+            ->result();
+
         $username = Context::get('auth')->user;
-        $result = Db::table('admin_basic')
+        $data = Db::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
 
-        if (!empty($result) && $result->id === (int)$this->post['id']) {
-            $data['self'] = true;
+        if (!empty($data) && $data->id === (int)$body['id']) {
+            $result['data']['self'] = true;
         }
 
-        return [
-            'error' => 0,
-            'data' => $data
-        ];
+        return $result;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function addBeforeHooks(): bool
+    public function add(): array
     {
-        $this->role = $this->post['role'];
-        $this->post['password'] = $this->hash->create($this->post['password']);
-        unset($this->post['role']);
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function addAfterHooks(int $id): bool
-    {
-        $result = Db::table('admin_role')->insert([
-            'admin_id' => $id,
-            'role_key' => $this->role
+        $body = $this->request->post();
+        $validate = $this->curd->addValidation([
+            'username' => 'required|between:4,20',
+            'password' => 'required|between:8,18',
+            'role' => 'required'
         ]);
-        if (!$result) {
-            $this->add_after_result = [
-                'error' => 1,
-                'msg' => 'role assoc wrong'
-            ];
-            return false;
+        if ($validate['error'] === 1) {
+            return $validate;
         }
-        return true;
+        $role = $body['role'];
+        $body['password'] = $this->hash->create($body['password']);
+        unset($body['role']);
+        return $this->curd
+            ->addModel('admin_basic', $body)
+            ->onAfterEvent(function (int $id) use ($role) {
+                $data = Db::table('admin_role')->insert([
+                    'admin_id' => $id,
+                    'role_key' => $role
+                ]);
+                if (!$data) {
+                    return 'role assoc wrong';
+                }
+                $this->clearRedis();
+                return null;
+            })
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function editBeforeHooks(): bool
+    public function edit(): array
     {
+        $body = $this->request->post();
+        $validate = $this->curd->addValidation([
+            'role' => 'required'
+        ]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
         $username = Context::get('auth')->user;
-        $rows = Db::table('admin_basic')
+        $data = Db::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
-        if (!empty($rows) && $rows->id === $this->post['id']) {
-            $this->edit_before_result = [
+        if (!empty($data) && $data->id === $body['id']) {
+            return [
                 'error' => 1,
-                'msg' => 'error:self'
+                'msg' => 'is self'
             ];
-            return false;
         }
-        if (!$this->edit_switch) {
-            $this->role = $this->post['role'];
-            unset($this->post['role']);
-            if (!empty($this->post['password'])) {
-                $validator = $this->validation->make($this->post, [
+        $role = null;
+        if (!$body['switch']) {
+            $role = $body['role'];
+            unset($body['role']);
+            if (!empty($body['password'])) {
+                $validator = $this->validation->make($body, [
                     'password' => 'between:8,18'
                 ]);
 
                 if ($validator->fails()) {
-                    $this->edit_before_result = [
+                    return [
                         'error' => 1,
                         'msg' => $validator->errors()
                     ];
-                    return false;
                 }
             } else {
-                unset($this->post['password']);
+                unset($body['password']);
             }
         }
-        return true;
+
+        return $this->curd
+            ->editModel('admin_basic', $body)
+            ->onAfterEvent(function (int $id, bool $switch) use ($role) {
+                if (!$switch) {
+                    Db::table('admin_role')
+                        ->where('admin_id', '=', $id)
+                        ->update([
+                            'role_key' => $role
+                        ]);
+                }
+                $this->clearRedis();
+            })
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function editAfterHooks(): bool
+    public function delete(): array
     {
-        if (!$this->edit_switch) {
-            Db::table('admin_role')
-                ->where('admin_id', '=', $this->post['id'])
-                ->update([
-                    'role_key' => $this->role
-                ]);
+        $body = $this->request->post();
+        $validate = $this->curd->deleteValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
         }
-        $this->clearRedis();
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function deleteBeforeHooks(): bool
-    {
         $username = Context::get('auth')->user;
-        $rows = Db::table('admin_basic')
+        $data = Db::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
-        if (!empty($rows) && in_array($rows->id, $this->post['id'], true)) {
-            $this->delete_before_result = [
+        if (!empty($data) && in_array($data->id, $body['id'], true)) {
+            return [
                 'error' => 1,
-                'msg' => 'error:self'
+                'msg' => 'is self'
             ];
-            return false;
         }
-        return true;
+        return $this->curd
+            ->deleteModel('admin_basic', $body)
+            ->onAfterEvent(function () {
+                $this->clearRedis();
+            })
+            ->result();
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function deleteAfterHooks(): bool
-    {
-        $this->clearRedis();
-        return true;
-    }
-
 
     /**
      * Clear Redis
@@ -197,8 +193,8 @@ class AdminController extends BaseController
      */
     public function validedUsername(): array
     {
-        $this->post = $this->request->post();
-        if (empty($this->post['username'])) {
+        $body = $this->request->post();
+        if (empty($body['username'])) {
             return [
                 'error' => 1,
                 'msg' => 'error:require_username'
@@ -206,7 +202,7 @@ class AdminController extends BaseController
         }
 
         $exists = Db::table('admin_basic')
-            ->where('username', '=', $this->post['username'])
+            ->where('username', '=', $body['username'])
             ->exists();
 
         return [

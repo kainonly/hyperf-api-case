@@ -53,8 +53,8 @@ class MainController extends BaseController
     public function login(): ResponseInterface
     {
         try {
-            $this->post = $this->request->post();
-            $validator = $this->validation->make($this->post, [
+            $body = $this->request->post();
+            $validator = $this->validation->make($body, [
                 'username' => 'required|between:4,20',
                 'password' => 'required|between:8,18',
             ]);
@@ -66,13 +66,13 @@ class MainController extends BaseController
                 ]);
             }
 
-            $data = $this->adminRedis->get($this->post['username']);
+            $data = $this->adminRedis->get($body['username']);
 
             if (empty($data)) {
                 throw new RuntimeException('username not exists');
             }
 
-            if (!$this->hash->check($this->post['password'], $data['password'])) {
+            if (!$this->hash->check($body['password'], $data['password'])) {
                 throw new RuntimeException('password incorrect');
             }
             $symbol = new stdClass();
@@ -93,7 +93,6 @@ class MainController extends BaseController
     public function verify(): ResponseInterface
     {
         try {
-            $this->post = $this->request->post();
             return $this->authVerify('system');
         } catch (Exception $e) {
             return $this->response->json([
@@ -109,7 +108,6 @@ class MainController extends BaseController
     public function logout(): ResponseInterface
     {
         try {
-            $this->post = $this->request->post();
             return $this->destory('system');
         } catch (Exception $e) {
             return $this->response->json([
@@ -124,7 +122,6 @@ class MainController extends BaseController
      */
     public function resource(): array
     {
-        $this->post = $this->request->post();
         $router = $this->resourceRedis->get();
         $role = $this->roleRedis->get(Context::get('auth')->role, 'resource');
         $routerRole = array_unique($role);
@@ -143,7 +140,6 @@ class MainController extends BaseController
      */
     public function information(): array
     {
-        $this->post = $this->request->post();
         $data = Db::table('admin_basic')
             ->where('username', '=', Context::get('auth')->user)
             ->first(['email', 'phone', 'call', 'avatar']);
@@ -159,8 +155,8 @@ class MainController extends BaseController
      */
     public function update(): array
     {
-        $this->post = $this->request->post();
-        $validator = $this->validation->make($this->post, [
+        $body = $this->request->post();
+        $validator = $this->validation->make($body, [
             'old_password' => 'between:8,18',
             'new_password' => 'required_with:old_password|between:8,18',
         ]);
@@ -184,17 +180,17 @@ class MainController extends BaseController
             ];
         }
 
-        if (!empty($this->post['old_password'])) {
-            if (!$this->hash->check($this->post['old_password'], $data->password)) {
+        if (!empty($body['old_password'])) {
+            if (!$this->hash->check($body['old_password'], $data->password)) {
                 throw new RuntimeException('password verification failed');
             }
-            $this->post['password'] = $this->hash->create($this->post['new_password']);
+            $body['password'] = $this->hash->create($body['new_password']);
         }
 
-        unset($this->post['old_password'], $this->post['new_password']);
+        unset($body['old_password'], $body['new_password']);
         Db::table('admin_basic')
             ->where('username', '=', $username)
-            ->update($this->post);
+            ->update($body);
 
         $this->adminRedis->clear();
         return [
