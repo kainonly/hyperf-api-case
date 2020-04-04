@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 
 return [
+    Hyperf\Curd\CurdInterface::class => Hyperf\Curd\CurdService::class,
     Hyperf\Extra\Cipher\CipherInterface::class => Hyperf\Extra\Cipher\CipherService::class,
     Hyperf\Extra\Hash\HashInterface::class => Hyperf\Extra\Hash\HashService::class,
     Hyperf\Extra\Token\TokenInterface::class => Hyperf\Extra\Token\TokenService::class,

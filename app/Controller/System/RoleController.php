@@ -5,43 +5,17 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\AddModel;
-use Hyperf\Curd\Common\DeleteModel;
-use Hyperf\Curd\Common\EditModel;
-use Hyperf\Curd\Common\GetModel;
-use Hyperf\Curd\Common\ListsModel;
-use Hyperf\Curd\Common\OriginListsModel;
-use Hyperf\Curd\Lifecycle\AddAfterHooks;
-use Hyperf\Curd\Lifecycle\AddBeforeHooks;
-use Hyperf\Curd\Lifecycle\DeleteAfterHooks;
-use Hyperf\Curd\Lifecycle\EditAfterHooks;
-use Hyperf\Curd\Lifecycle\EditBeforeHooks;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\Utils\Context;
 
 /**
  * Class RoleController
  * @package App\Controller\System
  */
 class RoleController extends BaseController
-    implements AddBeforeHooks, AddAfterHooks, EditBeforeHooks, EditAfterHooks, DeleteAfterHooks
 {
-    use GetModel, OriginListsModel, ListsModel, AddModel, EditModel, DeleteModel;
-    protected string $model = 'role';
-    protected string $add_model = 'role_basic';
-    protected string $edit_model = 'role_basic';
-    protected string $delete_model = 'role_basic';
-    protected array $add_validate = [
-        'name' => 'required',
-        'key' => 'required',
-        'resource' => 'required|array'
-    ];
-    protected array $edit_validate = [
-        'name' => 'required',
-        'key' => 'required',
-        'resource' => 'required|array'
-    ];
-    private array $resource = [];
     /**
      * @Inject()
      * @var RoleRedis
@@ -53,82 +27,129 @@ class RoleController extends BaseController
      */
     private AdminRedis $adminRedis;
 
-    /**
-     * @inheritDoc
-     */
-    public function addBeforeHooks(): bool
+    public function originLists(): array
     {
-        $this->resource = $this->post['resource'];
-        unset($this->post['resource']);
-        return true;
+        $validate = $this->curd->originListsValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        return $this->curd
+            ->originListsModel('role')
+            ->setOrder('create_time', 'desc')
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function addAfterHooks(int $id): bool
+    public function lists(): array
     {
-        $resourceLists = [];
-        foreach ($this->resource as $key => $value) {
-            $resourceLists[] = [
-                'role_key' => $this->post['key'],
-                'resource_key' => $value
-            ];
+        $validate = $this->curd->listsValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
         }
-        $result = Db::table('role_resource')
-            ->insert($resourceLists);
-        if (!$result) {
-            return false;
-        }
-        $this->clearRedis();
-        return true;
+        return $this->curd
+            ->listsModel('role')
+            ->setOrder('create_time', 'desc')
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function editBeforeHooks(): bool
+    public function get(): array
     {
-        if (!$this->edit_switch) {
-            $this->resource = $this->post['resource'];
-            unset($this->post['resource']);
+        $validate = $this->curd->getValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
         }
-        return true;
+        return $this->curd
+            ->getModel('role')
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function editAfterHooks(): bool
+    public function add(): array
     {
-        if (!$this->edit_switch) {
-            $resourceLists = [];
-            foreach ($this->resource as $key => $value) {
-                $resourceLists[] = [
-                    'role_key' => $this->post['key'],
-                    'resource_key' => $value
-                ];
-            }
-            Db::table('role_resource')
-                ->where('role_key', '=', $this->post['key'])
-                ->delete();
-            $result = Db::table('role_resource')
-                ->insert($resourceLists);
-            if (!$result) {
-                return false;
-            }
+        $body = $this->request->post();
+        $validate = $this->curd->addValidation([
+            'name' => 'required',
+            'key' => 'required',
+            'resource' => 'required|array'
+        ]);
+        if ($validate['error'] === 1) {
+            return $validate;
         }
-        $this->clearRedis();
-        return true;
+        $resource = $body['resource'];
+        unset($body['resource']);
+        return $this->curd
+            ->addModel('role_basic', $body)
+            ->onAfterEvent(function () use ($body, $resource) {
+                $resourceLists = [];
+                foreach ($resource as $key => $value) {
+                    $resourceLists[] = [
+                        'role_key' => $body['key'],
+                        'resource_key' => $value
+                    ];
+                }
+                $result = Db::table('role_resource')
+                    ->insert($resourceLists);
+                if (!$result) {
+                    return 'install resource failed';
+                }
+                $this->clearRedis();
+                return null;
+            })
+            ->result();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function deleteAfterHooks(): bool
+    public function edit(): array
     {
-        $this->clearRedis();
-        return true;
+        $body = $this->request->post();
+        $validate = $this->curd->editValidation([
+            'name' => 'required',
+            'key' => 'required',
+            'resource' => 'required|array'
+        ]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+        $resource = null;
+        if (!$body['switch']) {
+            $resource = $body['resource'];
+            unset($body['resource']);
+            Context::set(RequestInterface::class, $this->request);
+        }
+        return $this->curd
+            ->editModel('resource', $body)
+            ->onAfterEvent(function (int $id, bool $switch) use ($body, $resource) {
+                $resourceLists = [];
+                foreach ($resource as $key => $value) {
+                    $resourceLists[] = [
+                        'role_key' => $body['key'],
+                        'resource_key' => $value
+                    ];
+                }
+                Db::table('role_resource')
+                    ->where('role_key', '=', $body['key'])
+                    ->delete();
+                $result = Db::table('role_resource')
+                    ->insert($resourceLists);
+                if (!$result) {
+                    return 'install resource failed';
+                }
+                $this->clearRedis();
+                return null;
+            })
+            ->result();
+    }
+
+    public function delete(): array
+    {
+        $validate = $this->curd->deleteValidation([]);
+        if ($validate['error'] === 1) {
+            return $validate;
+        }
+
+        return $this->curd
+            ->deleteModel('role_basic')
+            ->onAfterEvent(function () {
+                $this->clearRedis();
+            })
+            ->result();
     }
 
     /**
@@ -146,16 +167,16 @@ class RoleController extends BaseController
      */
     public function validedKey(): array
     {
-        $this->post = $this->request->post();
-        if (empty($this->post['key'])) {
+        $body = $this->request->post();
+        if (empty($body['key'])) {
             return [
                 'error' => 1,
                 'msg' => 'error:require_key'
             ];
         }
 
-        $exists = Db::table($this->model)
-            ->where('key', '=', $this->post['key'])
+        $exists = Db::table('resource')
+            ->where('key', '=', $body['key'])
             ->exists();
 
         return [
