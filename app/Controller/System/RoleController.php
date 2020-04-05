@@ -29,9 +29,13 @@ class RoleController extends BaseController
     public function originLists(): array
     {
         $validate = $this->curd->originListsValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->originListsModel('role')
             ->setOrder('create_time', 'desc')
@@ -41,9 +45,13 @@ class RoleController extends BaseController
     public function lists(): array
     {
         $validate = $this->curd->listsValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->listsModel('role')
             ->setOrder('create_time', 'desc')
@@ -53,9 +61,13 @@ class RoleController extends BaseController
     public function get(): array
     {
         $validate = $this->curd->getValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->getModel('role')
             ->result();
@@ -69,9 +81,13 @@ class RoleController extends BaseController
             'key' => 'required',
             'resource' => 'required|array'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $resource = $body['resource'];
         unset($body['resource']);
         return $this->curd
@@ -107,16 +123,20 @@ class RoleController extends BaseController
             'key' => 'required',
             'resource' => 'required|array'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $resource = null;
         if (!$body['switch']) {
             $resource = $body['resource'];
             unset($body['resource']);
         }
         return $this->curd
-            ->editModel('resource', $body)
+            ->editModel('role_basic', $body)
             ->afterHook(static function () use ($body, $resource) {
                 $resourceLists = [];
                 foreach ($resource as $key => $value) {
@@ -145,8 +165,11 @@ class RoleController extends BaseController
     public function delete(): array
     {
         $validate = $this->curd->deleteValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
 
         return $this->curd

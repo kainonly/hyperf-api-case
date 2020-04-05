@@ -23,10 +23,14 @@ class AclController extends BaseController
 
     public function originLists(): array
     {
-        $validate = $this->curd->originListsValidation([]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        $validate = $this->curd->originListsValidation();
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->originListsModel('acl')
             ->setOrder('create_time', 'desc')
@@ -35,10 +39,14 @@ class AclController extends BaseController
 
     public function lists(): array
     {
-        $validate = $this->curd->listsValidation([]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        $validate = $this->curd->listsValidation();
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->listsModel('acl')
             ->setOrder('create_time', 'desc')
@@ -47,10 +55,14 @@ class AclController extends BaseController
 
     public function get(): array
     {
-        $validate = $this->curd->getValidation([]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        $validate = $this->curd->getValidation();
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->getModel('acl')
             ->result();
@@ -62,8 +74,11 @@ class AclController extends BaseController
             'key' => 'required',
             'name' => 'required|json'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
 
         return $this->curd
@@ -78,11 +93,14 @@ class AclController extends BaseController
     public function edit(): array
     {
         $validate = $this->curd->editValidation([
-            'key' => 'required',
-            'name' => 'required|json'
+            'key' => 'required_if:switch,false',
+            'name' => 'required_if:switch,false|json'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
 
         return $this->curd
@@ -96,9 +114,12 @@ class AclController extends BaseController
 
     public function delete(): array
     {
-        $validate = $this->curd->deleteValidation([]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        $validate = $this->curd->deleteValidation();
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
 
         return $this->curd

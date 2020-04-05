@@ -24,9 +24,13 @@ class ResourceController extends BaseController
     public function originLists(): array
     {
         $validate = $this->curd->originListsValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->originListsModel('resource')
             ->setOrder('sort', 'asc')
@@ -36,9 +40,13 @@ class ResourceController extends BaseController
     public function get(): array
     {
         $validate = $this->curd->getValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->getModel('resource')
             ->result();
@@ -50,9 +58,13 @@ class ResourceController extends BaseController
             'key' => 'required',
             'name' => 'required|json'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->addModel('resource')
             ->afterHook(function () {
@@ -69,9 +81,13 @@ class ResourceController extends BaseController
             'key' => 'required',
             'name' => 'required|json'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $key = null;
         if (!$body['switch']) {
             $data = Db::table('resource')
@@ -102,9 +118,13 @@ class ResourceController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->deleteValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $data = Db::table('resource')
             ->whereIn('id', $body['id'])
             ->first();
@@ -146,7 +166,6 @@ class ResourceController extends BaseController
         $validator = $this->validation->make($body, [
             'data' => 'required|array',
         ]);
-
         if ($validator->fails()) {
             return [
                 'error' => 1,
