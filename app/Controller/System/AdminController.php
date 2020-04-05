@@ -21,9 +21,13 @@ class AdminController extends BaseController
     public function originLists(): array
     {
         $validate = $this->curd->originListsValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->originListsModel('admin')
             ->setOrder('create_time', 'desc')
@@ -34,9 +38,13 @@ class AdminController extends BaseController
     public function lists(): array
     {
         $validate = $this->curd->listsValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->listsModel('admin')
             ->setOrder('create_time', 'desc')
@@ -48,8 +56,11 @@ class AdminController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->getValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
 
         $result = $this->curd
@@ -64,7 +75,7 @@ class AdminController extends BaseController
             ->first();
 
         if (!empty($data) && $data->id === (int)$body['id']) {
-            $result['data']['self'] = true;
+            $result['data']->self = true;
         }
 
         return $result;
@@ -78,9 +89,13 @@ class AdminController extends BaseController
             'password' => 'required|between:8,18',
             'role' => 'required'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $role = $body['role'];
         $body['password'] = $this->hash->create($body['password']);
         unset($body['role']);
@@ -110,9 +125,13 @@ class AdminController extends BaseController
         $validate = $this->curd->addValidation([
             'role' => 'required'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $username = Context::get('auth')->user;
         $data = Db::table('admin_basic')
             ->where('username', '=', $username)
@@ -164,9 +183,13 @@ class AdminController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->deleteValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         $username = Context::get('auth')->user;
         $data = Db::table('admin_basic')
             ->where('username', '=', $username)

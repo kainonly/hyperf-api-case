@@ -17,9 +17,13 @@ class PolicyController extends BaseController
     public function originLists(): array
     {
         $validate = $this->curd->originListsValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->originListsModel('policy')
             ->result();
@@ -32,9 +36,13 @@ class PolicyController extends BaseController
             'acl_key' => 'required',
             'policy' => 'required'
         ]);
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->addModel('policy')
             ->setAutoTimestamp(false)
@@ -48,9 +56,13 @@ class PolicyController extends BaseController
     public function delete(): array
     {
         $validate = $this->curd->deleteValidation();
-        if ($validate['error'] === 1) {
-            return $validate;
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->fails()
+            ];
         }
+
         return $this->curd
             ->deleteModel('policy')
             ->afterHook(function () {
