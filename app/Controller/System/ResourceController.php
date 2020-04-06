@@ -27,7 +27,7 @@ class ResourceController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -43,7 +43,7 @@ class ResourceController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -61,7 +61,7 @@ class ResourceController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -84,7 +84,7 @@ class ResourceController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -121,7 +121,7 @@ class ResourceController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 

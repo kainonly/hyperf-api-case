@@ -27,7 +27,7 @@ class AclController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -43,7 +43,7 @@ class AclController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -59,7 +59,7 @@ class AclController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -77,7 +77,7 @@ class AclController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -99,7 +99,7 @@ class AclController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -118,7 +118,7 @@ class AclController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 

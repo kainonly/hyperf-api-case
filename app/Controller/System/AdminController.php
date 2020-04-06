@@ -24,7 +24,7 @@ class AdminController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -41,7 +41,7 @@ class AdminController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -59,7 +59,7 @@ class AdminController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -92,7 +92,7 @@ class AdminController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -122,13 +122,13 @@ class AdminController extends BaseController
     public function edit(): array
     {
         $body = $this->request->post();
-        $validate = $this->curd->addValidation([
+        $validate = $this->curd->editValidation([
             'role' => 'required'
         ]);
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
@@ -186,7 +186,7 @@ class AdminController extends BaseController
         if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->fails()
+                'msg' => $validate->errors()
             ];
         }
 
