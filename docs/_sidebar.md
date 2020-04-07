@@ -1,11 +1,10 @@
 - CURD 模型库
-  - [CurdController 模型控制器](curd/controller)
-  - [GetModel 获取单个数据](curd/get)
-  - [OriginListsModel 获取列表数据](curd/origin-lists)
-  - [ListsModel 获取分页数据](curd/lists)
-  - [AddModel 新增数据](curd/add)
-  - [EditModel 编辑数据](curd/edit)
-  - [DeleteModel 删除数据](curd/delete)
+  - [Get 获取单个数据](curd/get)
+  - [OriginLists 获取列表数据](curd/origin-lists)
+  - [Lists 获取分页数据](curd/lists)
+  - [Add 新增数据](curd/add)
+  - [Edit 编辑数据](curd/edit)
+  - [Delete 删除数据](curd/delete)
 
 - Extra 扩展
   - [Hash 密码](extra/hash)
