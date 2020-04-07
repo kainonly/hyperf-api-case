@@ -58,7 +58,7 @@ class ExampleController
 
 请求 `body` 可使用 **id** 或 **where** 字段进行查询，二者选一
 
-- **id** `int|string` 主键
+- **id** `int` 主键
 - **where** `array` 查询条件，必须使用数组查询方式来定义，例如
 
 ```json
