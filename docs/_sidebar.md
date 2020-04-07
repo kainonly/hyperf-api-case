@@ -1,4 +1,5 @@
 - CURD 模型库
+  - [安装使用](curd/setup)
   - [Get 获取单个数据](curd/get)
   - [OriginLists 获取列表数据](curd/origin-lists)
   - [Lists 获取分页数据](curd/lists)

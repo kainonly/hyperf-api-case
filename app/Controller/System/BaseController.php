@@ -15,10 +15,8 @@ use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 /**
  * Class BaseController
  * @package App\Controller\System
- * @property array $body
- * @property bool $switch
  */
-class BaseController
+abstract class BaseController
 {
     /**
      * @Inject()
