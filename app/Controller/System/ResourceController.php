@@ -5,6 +5,7 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 
@@ -78,8 +79,8 @@ class ResourceController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->editValidation([
-            'key' => 'required',
-            'name' => 'required|json'
+            'key' => 'required_if:switch,false',
+            'name' => 'required_if:switch,false|json'
         ]);
         if ($validate->fails()) {
             return [
@@ -100,8 +101,8 @@ class ResourceController extends BaseController
         }
         return $this->curd
             ->editModel('resource', $body)
-            ->afterHook(function () use ($body, $key) {
-                if (!$this->switch && $body['key'] !== $key) {
+            ->afterHook(function (EditAfterParams $params) use ($body, $key) {
+                if (!$params->isSwitch() && $body['key'] !== $key) {
                     Db::table('resource')
                         ->where('parent', '=', $key)
                         ->update([

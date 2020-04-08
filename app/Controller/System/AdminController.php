@@ -123,7 +123,7 @@ class AdminController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->editValidation([
-            'role' => 'required'
+            'role' => 'required_if:switch,false'
         ]);
         if ($validate->fails()) {
             return [

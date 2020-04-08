@@ -119,9 +119,9 @@ class RoleController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->editValidation([
-            'name' => 'required',
-            'key' => 'required',
-            'resource' => 'required|array'
+            'name' => 'required_if:switch,false',
+            'key' => 'required_if:switch,false',
+            'resource' => 'required_if:switch,false|array'
         ]);
         if ($validate->fails()) {
             return [
@@ -157,6 +157,7 @@ class RoleController extends BaseController
                     ]);
                     return false;
                 }
+                $this->clearRedis();
                 return true;
             })
             ->result();
