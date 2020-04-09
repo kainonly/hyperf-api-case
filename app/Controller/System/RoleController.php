@@ -137,7 +137,7 @@ class RoleController extends BaseController
         }
         return $this->curd
             ->editModel('role_basic', $body)
-            ->afterHook(static function () use ($body, $resource) {
+            ->afterHook(function () use ($body, $resource) {
                 $resourceLists = [];
                 foreach ($resource as $key => $value) {
                     $resourceLists[] = [
