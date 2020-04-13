@@ -138,6 +138,30 @@ class AclController extends BaseController
     }
 
     /**
+     * Exists Acl Name
+     * @return array
+     */
+    public function validedName(): array
+    {
+        $body = $this->request->post();
+        if (empty($body['name'])) {
+            return [
+                'error' => 1,
+                'msg' => 'require name'
+            ];
+        }
+
+        $exists = Db::table('acl')
+            ->where('name->zh_cn', '=', $body['name'])
+            ->exists();
+
+        return [
+            'error' => 0,
+            'data' => $exists
+        ];
+    }
+
+    /**
      * Exists Acl Key
      * @return array
      */
