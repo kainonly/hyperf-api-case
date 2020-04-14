@@ -1,5 +1,8 @@
 <?php
 return [
+    'clients' => [
+        'default'
+    ],
     'default' => [
         'host' => env('AMQP_HOST', 'localhost'),
         'port' => 5672,
