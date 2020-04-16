@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use Hyperf\AMQPClient\AMQPClientInterface;
 use Hyperf\Di\Annotation\Inject;
-use simplify\amqp\AMQPManager;
 
 class IndexController
 {
@@ -17,8 +16,6 @@ class IndexController
 
     public function index()
     {
-        $this->amqp->channel(function (AMQPManager $manager) {
-        });
         return [
             'version' => 1.0,
             'unixtime' => time()
