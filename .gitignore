@@ -12,3 +12,4 @@ vendor/
 *.lock
 .phpunit*
 /package-lock.json
+/public
