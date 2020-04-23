@@ -70,9 +70,12 @@ class AclController extends BaseController
 
     public function add(): array
     {
+        $body = $this->request->post();
         $validate = $this->curd->addValidation([
+            'name' => 'required|array',
             'key' => 'required',
-            'name' => 'required|json'
+            'write' => 'required|array',
+            'read' => 'required|array'
         ]);
         if ($validate->fails()) {
             return [
@@ -80,9 +83,9 @@ class AclController extends BaseController
                 'msg' => $validate->errors()
             ];
         }
-
+        $this->before($body);
         return $this->curd
-            ->addModel('acl')
+            ->addModel('acl', $body)
             ->afterHook(function () {
                 $this->clearRedis();
                 return true;
@@ -92,9 +95,12 @@ class AclController extends BaseController
 
     public function edit(): array
     {
+        $body = $this->request->post();
         $validate = $this->curd->editValidation([
+            'name' => 'required_if:switch,false|array',
             'key' => 'required_if:switch,false',
-            'name' => 'required_if:switch,false|json'
+            'write' => 'required_if:switch,false|array',
+            'read' => 'required_if:switch,false|array'
         ]);
         if ($validate->fails()) {
             return [
@@ -102,14 +108,21 @@ class AclController extends BaseController
                 'msg' => $validate->errors()
             ];
         }
-
+        $this->before($body);
         return $this->curd
-            ->editModel('acl')
+            ->editModel('acl', $body)
             ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
             ->result();
+    }
+
+    private function before(array &$body): void
+    {
+        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
+        $body['write'] = implode(',', (array)$body['write']);
+        $body['read'] = implode(',', (array)$body['read']);
     }
 
     public function delete(): array
