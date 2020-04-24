@@ -74,8 +74,8 @@ class AclController extends BaseController
         $validate = $this->curd->addValidation([
             'name' => 'required|array',
             'key' => 'required',
-            'write' => 'required|array',
-            'read' => 'required|array'
+            'write' => 'sometimes|array',
+            'read' => 'sometimes|array'
         ]);
         if ($validate->fails()) {
             return [
@@ -99,8 +99,8 @@ class AclController extends BaseController
         $validate = $this->curd->editValidation([
             'name' => 'required_if:switch,false|array',
             'key' => 'required_if:switch,false',
-            'write' => 'required_if:switch,false|array',
-            'read' => 'required_if:switch,false|array'
+            'write' => 'sometimes|array',
+            'read' => 'sometimes|array'
         ]);
         if ($validate->fails()) {
             return [
