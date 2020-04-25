@@ -1,0 +1,70 @@
+syntax = "proto3";
+package AMQPSubscriber;
+service Router {
+    rpc Put (PutParameter) returns (Response) {
+    }
+
+    rpc Delete (DeleteParameter) returns (Response) {
+    }
+
+    rpc Get (GetParameter) returns (GetResponse) {
+    }
+
+    rpc Lists (ListsParameter) returns (ListsResponse) {
+    }
+
+    rpc All (NoParameter) returns (AllResponse) {
+    }
+}
+
+message NoParameter {
+}
+
+message Response {
+    uint32 error = 1;
+    string msg = 2;
+}
+
+message Option {
+    string identity = 1;
+    string queue = 2;
+    string url = 3;
+    string secret = 4;
+}
+
+message PutParameter {
+    string identity = 1;
+    string queue = 2;
+    string url = 3;
+    string secret = 4;
+}
+
+message DeleteParameter {
+    string identity = 1;
+}
+
+message GetParameter {
+    string identity = 1;
+}
+
+message GetResponse {
+    uint32 error = 1;
+    string msg = 2;
+    Option data = 3;
+}
+
+message ListsParameter {
+    repeated string identity = 1;
+}
+
+message ListsResponse {
+    uint32 error = 1;
+    string msg = 2;
+    repeated Option data = 3;
+}
+
+message AllResponse {
+    uint32 error = 1;
+    string msg = 2;
+    repeated string data = 3;
+}

@@ -27,7 +27,9 @@
     "hyperf/process": "~1.1.0",
     "hyperf/redis": "~1.1.0",
     "hyperf/utils": "~1.1.0",
-    "hyperf/validation": "^1.1",
+    "hyperf/validation": "~1.1.0",
+    "hyperf/grpc": "~1.1.0",
+    "hyperf/grpc-client": "~1.1.0",
     "ramsey/uuid": "^3.9",
     "lcobucci/jwt": "^3.3",
     "qcloud/cos-sdk-v5": ">=2.0",
@@ -51,7 +53,11 @@
       "Hyperf\\Curd\\": "library/hyperf-curd/src/",
       "Hyperf\\Extra\\": "library/hyperf-extra/src/",
       "Hyperf\\Support\\": "library/hyperf-support/src/",
-      "Hyperf\\AMQPClient\\": "library/hyperf-amqp/src/"
+      "Hyperf\\AMQPClient\\": "library/hyperf-amqp/src/",
+      "GPBMetadata\\": "microservice/GPBMetadata",
+      "AMQPSubscriber\\": "microservice/AMQPSubscriber",
+      "ScheduleMicroservice\\": "microservice/ScheduleMicroservice",
+      "SSHMicroservice\\": "microservice/SSHMicroservice"
     },
     "files": [
       "library/hyperf-extra/src/helper.php"
