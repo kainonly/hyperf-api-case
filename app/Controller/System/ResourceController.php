@@ -55,9 +55,10 @@ class ResourceController extends BaseController
 
     public function add(): array
     {
+        $body = $this->request->post();
         $validate = $this->curd->addValidation([
             'key' => 'required',
-            'name' => 'required|json'
+            'name' => 'required|array'
         ]);
         if ($validate->fails()) {
             return [
@@ -66,8 +67,9 @@ class ResourceController extends BaseController
             ];
         }
 
+        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
         return $this->curd
-            ->addModel('resource')
+            ->addModel('resource', $body)
             ->afterHook(function () {
                 $this->clearRedis();
                 return true;
@@ -88,7 +90,7 @@ class ResourceController extends BaseController
                 'msg' => $validate->errors()
             ];
         }
-
+        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
         $key = null;
         if (!$body['switch']) {
             $data = Db::table('resource')
