@@ -4,7 +4,7 @@
 
 - 前端 `https://console.kainonly.com`
   - 用户名 `kain`
-  - 密码 `password`
+  - 密码 `pass@VAN1234`
 - 后端 `https://api.kainonly.com`
 
 > 前端对应开源项目 https://github.com/kainonly/angularx-utils
