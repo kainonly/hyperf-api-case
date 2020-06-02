@@ -30,7 +30,8 @@ class RoleRedis extends RedisModel
             $this->update();
         }
         $raws = $this->redis->hMGet($this->key, $keys);
-        if (empty($raws)) {
+        var_dump($raws);
+        if (!$raws) {
             return [];
         }
         $lists = [];
@@ -49,6 +50,7 @@ class RoleRedis extends RedisModel
         $query = Db::table('role')
             ->where('status', '=', 1)
             ->get(['key', 'acl', 'resource']);
+        var_dump($query);
 
         if ($query->isEmpty()) {
             return;
