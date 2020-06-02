@@ -129,7 +129,8 @@ class MainController extends BaseController
     public function resource(): array
     {
         $router = $this->resourceRedis->get();
-        $role = $this->roleRedis->get(Context::get('auth')->role, 'resource');
+        $roleKey = Context::get('auth')->role;
+        $role = $this->roleRedis->get($roleKey, 'resource');
         $routerRole = array_unique($role);
         $lists = Arr::where(
             $router,

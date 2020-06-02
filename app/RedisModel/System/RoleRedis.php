@@ -30,6 +30,9 @@ class RoleRedis extends RedisModel
             $this->update();
         }
         $raws = $this->redis->hMGet($this->key, $keys);
+        if (empty($raws)) {
+            return [];
+        }
         $lists = [];
         foreach ($raws as $value) {
             $data = json_decode($value, true);
