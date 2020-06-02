@@ -55,8 +55,14 @@ class MainController extends BaseController
         try {
             $body = $this->request->post();
             $validator = $this->validation->make($body, [
-                'username' => 'required|between:4,20',
-                'password' => 'required|between:8,18',
+                'username' => [
+                    'required',
+                    'between:4,20'
+                ],
+                'password' => [
+                    'required',
+                    'between:12,20'
+                ],
             ]);
 
             if ($validator->fails()) {
@@ -157,8 +163,16 @@ class MainController extends BaseController
     {
         $body = $this->request->post();
         $validator = $this->validation->make($body, [
-            'old_password' => 'between:8,18',
-            'new_password' => 'required_with:old_password|between:8,18',
+            'old_password' => [
+                'sometimes',
+                'between:12,20',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
+            ],
+            'new_password' => [
+                'required_with:old_password',
+                'between:12,20',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
+            ],
         ]);
 
         if ($validator->fails()) {
