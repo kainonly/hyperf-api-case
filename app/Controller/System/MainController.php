@@ -131,10 +131,10 @@ class MainController extends BaseController
         $router = $this->resourceRedis->get();
         $role = $this->roleRedis->get(Context::get('auth')->role, 'resource');
         $routerRole = array_unique($role);
-        $lists = Arr::where($router, static function ($value) use ($routerRole) {
-            $data = (array)$value;
-            return in_array($data['key'], $routerRole, true);
-        });
+        $lists = Arr::where(
+            $router,
+            fn($v) => in_array($v['key'], $routerRole, true)
+        );
         return [
             'error' => 0,
             'data' => array_values($lists)
