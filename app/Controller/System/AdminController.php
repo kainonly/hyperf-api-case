@@ -85,9 +85,16 @@ class AdminController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->addValidation([
-            'username' => 'required|between:4,20',
-            'password' => 'required|between:8,18',
-            'role' => 'required'
+            'username' => [
+                'required',
+                'between:4,20'
+            ],
+            'password' => [
+                'required',
+                'between:12,20',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
+            ],
+            'role' => ['required']
         ]);
         if ($validate->fails()) {
             return [
@@ -123,7 +130,7 @@ class AdminController extends BaseController
     {
         $body = $this->request->post();
         $validate = $this->curd->editValidation([
-            'role' => 'required_if:switch,false'
+            'role' => ['required_if:switch,false']
         ]);
         if ($validate->fails()) {
             return [
@@ -149,7 +156,10 @@ class AdminController extends BaseController
             unset($body['role']);
             if (!empty($body['password'])) {
                 $validator = $this->validation->make($body, [
-                    'password' => 'between:8,18'
+                    'password' => [
+                        'between:12,20',
+                        'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
+                    ],
                 ]);
 
                 if ($validator->fails()) {
