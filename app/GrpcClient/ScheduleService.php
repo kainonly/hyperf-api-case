@@ -25,7 +25,7 @@ class ScheduleService extends BaseClient implements ScheduleServiceInterface
     public function all(): AllResponse
     {
         $param = new NoParameter();
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/ScheduleMicroservice.Router/All',
             $param,
             [AllResponse::class, 'decode']
@@ -71,7 +71,7 @@ class ScheduleService extends BaseClient implements ScheduleServiceInterface
             $v['body']
         ), $entry);
         $param->setEntries($enties);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/ScheduleMicroservice.Router/Put',
             $param,
             [Response::class, 'decode']
@@ -88,7 +88,7 @@ class ScheduleService extends BaseClient implements ScheduleServiceInterface
     {
         $param = new GetParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/ScheduleMicroservice.Router/Get',
             $param,
             [GetResponse::class, 'decode']
@@ -105,7 +105,7 @@ class ScheduleService extends BaseClient implements ScheduleServiceInterface
     {
         $param = new ListsParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/ScheduleMicroservice.Router/Lists',
             $param,
             [ListsResponse::class, 'decode']
@@ -124,7 +124,7 @@ class ScheduleService extends BaseClient implements ScheduleServiceInterface
         $param = new RunningParameter();
         $param->setIdentity($identity);
         $param->setRunning($running);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/ScheduleMicroservice.Router/Running',
             $param,
             [Response::class, 'decode']
@@ -141,7 +141,7 @@ class ScheduleService extends BaseClient implements ScheduleServiceInterface
     {
         $param = new DeleteParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/ScheduleMicroservice.Router/Delete',
             $param,
             [Response::class, 'decode']
