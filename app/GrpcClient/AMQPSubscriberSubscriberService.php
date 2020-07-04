@@ -31,7 +31,7 @@ class AMQPSubscriberSubscriberService extends BaseClient implements AMQPSubscrib
         $param->setQueue($queue);
         $param->setUrl($url);
         $param->setSecret($secret ?? '');
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/AMQPSubscriber.Router/Put',
             $param,
             [Response::class, 'decode']
@@ -46,7 +46,7 @@ class AMQPSubscriberSubscriberService extends BaseClient implements AMQPSubscrib
     public function all(): AllResponse
     {
         $param = new NoParameter();
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/AMQPSubscriber.Router/All',
             $param,
             [AllResponse::class, 'decode']
@@ -63,7 +63,7 @@ class AMQPSubscriberSubscriberService extends BaseClient implements AMQPSubscrib
     {
         $param = new GetParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/AMQPSubscriber.Router/Get',
             $param,
             [GetResponse::class, 'decode']
@@ -80,7 +80,7 @@ class AMQPSubscriberSubscriberService extends BaseClient implements AMQPSubscrib
     {
         $param = new ListsParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/AMQPSubscriber.Router/Lists',
             $param,
             [ListsResponse::class, 'decode']
@@ -97,7 +97,7 @@ class AMQPSubscriberSubscriberService extends BaseClient implements AMQPSubscrib
     {
         $param = new DeleteParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/AMQPSubscriber.Router/Delete',
             $param,
             [Response::class, 'decode']

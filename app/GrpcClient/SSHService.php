@@ -47,7 +47,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
         $param->setPassword($password ?? '');
         $param->setPrivateKey($private_key ?? '');
         $param->setPassphrase($passphrase ?? '');
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Testing',
             $param,
             [Response::class, 'decode']
@@ -62,7 +62,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
     public function all(): AllResponse
     {
         $param = new NoParameter();
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/All',
             $param,
             [AllResponse::class, 'decode']
@@ -99,7 +99,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
         $param->setPassword($password ?? '');
         $param->setPrivateKey($private_key ?? '');
         $param->setPassphrase($passphrase ?? '');
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Put',
             $param,
             [Response::class, 'decode']
@@ -118,7 +118,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
         $param = new ExecParameter();
         $param->setIdentity($identity);
         $param->setBash($bash);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Exec',
             $param,
             [ExecResponse::class, 'decode']
@@ -135,7 +135,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
     {
         $param = new DeleteParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Delete',
             $param,
             [Response::class, 'decode']
@@ -152,7 +152,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
     {
         $param = new GetParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Get',
             $param,
             [GetResponse::class, 'decode']
@@ -169,7 +169,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
     {
         $param = new ListsParameter();
         $param->setIdentity($identity);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Lists',
             $param,
             [ListsResponse::class, 'decode']
@@ -216,7 +216,7 @@ class SSHService extends BaseClient implements SSHServiceInterface
             $v['dst_port']
         ), $tunnels);
         $param->setTunnels($tunnelOptions);
-        list($response) = $this->simpleRequest(
+        list($response) = $this->_simpleRequest(
             '/SSHMicroservice.Router/Tunnels',
             $param,
             [Response::class, 'decode']

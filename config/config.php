@@ -17,6 +17,8 @@ use Psr\Log\LogLevel;
 return [
     'app_name' => env('APP_NAME', 'skeleton'),
     'app_key' => env('APP_KEY', '123456'),
+    'app_env' => env('APP_ENV', 'dev'),
+    'scan_cacheable' => env('SCAN_CACHEABLE', false),
     StdoutLoggerInterface::class => [
         'log_level' => [
             LogLevel::ALERT,
