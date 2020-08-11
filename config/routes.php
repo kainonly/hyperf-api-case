@@ -22,11 +22,7 @@ Router::addGroup('/sys/', function () {
     });
 });
 Router::addGroup('/system', function () {
-    Router::get('/test', function () {
-        return [
-            'status' => 'ok'
-        ];
-    });
+    AutoController(App\Controller\System\TestController::class);
     AutoController(App\Controller\System\MainController::class, [
         'middleware' => [
             App\Middleware\System\AuthVerify::class => [
