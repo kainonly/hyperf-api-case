@@ -7,7 +7,7 @@
   - 密码 `pass@VAN1234`
 - 后端 `https://api.kainonly.com`
 
-> 前端对应开源项目 https://github.com/kainonly/angularx-utils
+> 前端对应开源项目 https://github.com/kainonly/ngx-bit
 
 #### 安装
 
