@@ -24,8 +24,6 @@
     "hyperf/redis": "~2.0.0",
     "hyperf/utils": "~2.0.0",
     "hyperf/validation": "~2.0.0",
-    "hyperf/grpc": "~2.0.0",
-    "hyperf/grpc-client": "~2.0.0",
     "hyperf/tracer": "~2.0.0",
     "ramsey/uuid": "^3.9",
     "lcobucci/jwt": "^3.3",
@@ -52,11 +50,7 @@
       "Hyperf\\Curd\\": "library/hyperf-curd/src/",
       "Hyperf\\Extra\\": "library/hyperf-extra/src/",
       "Hyperf\\Support\\": "library/hyperf-support/src/",
-      "Hyperf\\AMQPClient\\": "library/hyperf-amqp/src/",
-      "GPBMetadata\\": "microservice/GPBMetadata",
-      "AMQPSubscriber\\": "microservice/AMQPSubscriber",
-      "ScheduleMicroservice\\": "microservice/ScheduleMicroservice",
-      "SSHMicroservice\\": "microservice/SSHMicroservice"
+      "Hyperf\\AMQPClient\\": "library/hyperf-amqp/src/"
     },
     "files": [
       "library/hyperf-extra/src/helper.php"
