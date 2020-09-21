@@ -5,8 +5,9 @@ namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Common\RedisModel;
+use Hyperf\Support\RedisModel\RoleInterface;
 
-class RoleRedis extends RedisModel
+class RoleRedis extends RedisModel implements RoleInterface
 {
     protected string $key = 'system:role';
 

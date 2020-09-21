@@ -5,8 +5,9 @@ namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Common\RedisModel;
+use Hyperf\Support\RedisModel\AclInterface;
 
-class AclRedis extends RedisModel
+class AclRedis extends RedisModel implements AclInterface
 {
     protected string $key = 'system:acl';
 
