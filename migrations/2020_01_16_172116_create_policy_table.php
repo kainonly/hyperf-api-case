@@ -12,7 +12,7 @@ class CreatePolicyTable extends Migration
     public function up(): void
     {
         Schema::create('policy', function (Blueprint $table) {
-            $table->increments('id')
+            $table->bigIncrements('id')
                 ->comment('primary key');
             $table->string('resource_key', 50)
                 ->comment('resource manage key');

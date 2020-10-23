@@ -12,7 +12,7 @@ class CreateRoleResourceTable extends Migration
     public function up(): void
     {
         Schema::create('role_resource', function (Blueprint $table) {
-            $table->increments('id')
+            $table->bigIncrements('id')
                 ->comment('primary key');
             $table->string('role_key', 50)
                 ->comment('role key');

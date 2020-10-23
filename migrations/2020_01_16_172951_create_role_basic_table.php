@@ -12,7 +12,7 @@ class CreateRoleBasicTable extends Migration
     public function up(): void
     {
         Schema::create('role_basic', function (Blueprint $table) {
-            $table->increments('id')
+            $table->bigIncrements('id')
                 ->comment('primary key');
             $table->string('key', 50)
                 ->unique()
@@ -26,11 +26,11 @@ class CreateRoleBasicTable extends Migration
                 ->default(1)
                 ->unsigned()
                 ->comment('status');
-            $table->integer('create_time')
+            $table->bigIncrements('create_time')
                 ->default(0)
                 ->unsigned()
                 ->comment('create time');
-            $table->integer('update_time')
+            $table->bigIncrements('update_time')
                 ->default(0)
                 ->unsigned()
                 ->comment('update time');

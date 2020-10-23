@@ -12,7 +12,7 @@ class CreateAdminBasicTable extends Migration
     public function up(): void
     {
         Schema::create('admin_basic', function (Blueprint $table) {
-            $table->increments('id')
+            $table->bigIncrements('id')
                 ->comment('primary key');
             $table->string('username', 30)
                 ->unique()
@@ -35,11 +35,11 @@ class CreateAdminBasicTable extends Migration
                 ->default(1)
                 ->unsigned()
                 ->comment('status');
-            $table->integer('create_time')
+            $table->bigIncrements('create_time')
                 ->default(0)
                 ->unsigned()
                 ->comment('create time');
-            $table->integer('update_time')
+            $table->bigIncrements('update_time')
                 ->default(0)
                 ->unsigned()
                 ->comment('update time');
