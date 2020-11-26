@@ -22,13 +22,13 @@ class N5Admin extends Seeder
         Db::transaction(function () {
             $resultId = Db::table('admin_basic')->insertGetId([
                 'username' => 'kain',
-                'password' => $this->hash->create('password'),
+                'password' => $this->hash->create('kain@VAN1234'),
                 'call' => 'kain',
                 'create_time' => time(),
                 'update_time' => time()
             ]);
 
-            Db::table('admin_role')->insertOrIgnore([
+            Db::table('admin_role_rel')->insertOrIgnore([
                 'admin_id' => $resultId,
                 'role_key' => '*'
             ]);

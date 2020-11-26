@@ -12,16 +12,15 @@ class CreatePolicyTable extends Migration
     public function up(): void
     {
         Schema::create('policy', function (Blueprint $table) {
-            $table->bigIncrements('id')
-                ->comment('primary key');
-            $table->string('resource_key', 50)
-                ->comment('resource manage key');
-            $table->string('acl_key', 50)
-                ->comment('access control key');
+            $table->bigIncrements('id');
+            $table->string('resource_key', 200)
+                ->comment('资源键关联');
+            $table->string('acl_key', 200)
+                ->comment('访问键关联');
             $table->boolean('policy')
                 ->default(0)
                 ->unsigned()
-                ->comment('policy,0:readonly,1:read & write');
+                ->comment('读写策略（0为只读,1为读写）');
             $table->foreign('resource_key')
                 ->references('key')
                 ->on('resource')
@@ -34,7 +33,7 @@ class CreatePolicyTable extends Migration
                 ->onDelete('cascade');
             $table->unique(['resource_key', 'acl_key']);
         });
-        $this->comment('policy', 'Access Control Policy For Associated Resource Key Table');
+        $this->comment('policy', '策略设定表');
     }
 
     /**

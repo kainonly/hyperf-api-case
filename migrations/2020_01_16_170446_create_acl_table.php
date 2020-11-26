@@ -12,33 +12,27 @@ class CreateAclTable extends Migration
     public function up(): void
     {
         Schema::create('acl', function (Blueprint $table) {
-            $table->bigIncrements('id')
-                ->comment('primary key');
-            $table->string('key', 50)
+            $table->bigIncrements('id');
+            $table->string('key', 200)
                 ->unique()
-                ->comment('access control list key');
+                ->comment('访问控制键');
             $table->json('name')
-                ->comment('access control list name');
+                ->comment('访问控制键名称');
             $table->longText('write')
                 ->nullable()
-                ->comment('write list');
+                ->comment('写入控制项');
             $table->longText('read')
                 ->nullable()
-                ->comment('read list');
+                ->comment('读取控制项');
             $table->boolean('status')
                 ->default(1)
-                ->unsigned()
-                ->comment('status');
-            $table->bigIncrements('create_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('create time');
-            $table->bigIncrements('update_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('update time');
+                ->unsigned();
+            $table->unsignedBigInteger('create_time')
+                ->default(0);
+            $table->unsignedBigInteger('update_time')
+                ->default(0);
         });
-        $this->comment('acl', 'Access Control List Table');
+        $this->comment('acl', '访问控制表');
     }
 
     /**

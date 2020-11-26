@@ -33,7 +33,7 @@ class N4Role extends Seeder
                     ];
                 });
 
-            Db::table('role_resource')
+            Db::table('role_resource_rel')
                 ->insertOrIgnore($resource->toArray());
         });
     }

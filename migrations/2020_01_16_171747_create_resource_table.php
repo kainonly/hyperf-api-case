@@ -12,49 +12,42 @@ class CreateResourceTable extends Migration
     public function up(): void
     {
         Schema::create('resource', function (Blueprint $table) {
-            $table->bigIncrements('id')
-                ->comment('primary key');
-            $table->string('key', 50)
+            $table->bigIncrements('id');
+            $table->string('key', 200)
                 ->unique()
-                ->comment('resource manage key');
-            $table->string('parent', 50)
+                ->comment('资源控制键');
+            $table->string('parent', 200)
                 ->default('origin')
-                ->comment('resource key parent');
+                ->comment('资源键父节点');
             $table->json('name')
-                ->comment('resource name');
+                ->comment('资源控制名称');
             $table->boolean('nav')
                 ->default(0)
                 ->unsigned()
-                ->comment('is nav');
+                ->comment('是否为导航（中后台菜单显示）');
             $table->boolean('router')
                 ->default(0)
                 ->unsigned()
-                ->comment('is router');
+                ->comment('是否为路由（映射前端路由地址）');
             $table->boolean('policy')
                 ->default(0)
                 ->unsigned()
-                ->comment('is policy node');
-            $table->string('icon', 50)
+                ->comment('是否为策略节点（可关联访问控制）');
+            $table->string('icon', 200)
                 ->nullable()
-                ->comment('icon font');
-            $table->tinyInteger('sort')
+                ->comment('字体图标');
+            $table->unsignedTinyInteger('sort')
                 ->default(0)
-                ->unsigned()
-                ->comment('sort');
+                ->comment('排序');
             $table->boolean('status')
                 ->default(1)
-                ->unsigned()
-                ->comment('status');
-            $table->bigIncrements('create_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('create time');
-            $table->bigIncrements('update_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('update time');
+                ->unsigned();
+            $table->unsignedBigInteger('create_time')
+                ->default(0);
+            $table->unsignedBigInteger('update_time')
+                ->default(0);
         });
-        $this->comment('resource', 'Resource Manager Table');
+        $this->comment('resource', '资源控制表');
     }
 
     /**

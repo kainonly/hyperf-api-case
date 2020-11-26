@@ -11,16 +11,12 @@ class CreateRolePolicyView extends Migration
     public function up(): void
     {
         $this->down();
-        Db::statement(
-            "CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `{$this->prefix}role_policy` AS
-                    select `{$this->prefix}role_resource`.`role_key` AS `role_key`,
-                           `{$this->prefix}policy`.`acl_key`         AS `acl_key`,
-                           max(`{$this->prefix}policy`.`policy`)     AS `policy`
-                    from (`{$this->prefix}role_resource`
-                             join `{$this->prefix}policy` on (`{$this->prefix}role_resource`.`resource_key` = `{$this->prefix}policy`.`resource_key` and
-                                                 `{$this->prefix}role_resource`.`resource_key` = `{$this->prefix}policy`.`resource_key`))
-                    group by `{$this->prefix}role_resource`.`role_key`, `{$this->prefix}policy`.`acl_key`;"
-        );
+        $sql = "create view {$this->prefix}role_policy as ";
+        $sql .= "select rrr.role_key, p.acl_key, max(p.policy) as policy ";
+        $sql .= "from {$this->prefix}role_resource_rel rrr ";
+        $sql .= "join {$this->prefix}policy p on rrr.resource_key = p.resource_key ";
+        $sql .= "group by rrr.role_key, p.acl_key";
+        Db::statement($sql);
     }
 
     /**
@@ -28,6 +24,6 @@ class CreateRolePolicyView extends Migration
      */
     public function down(): void
     {
-        Db::statement("DROP VIEW IF EXISTS `{$this->prefix}role_policy`;");
+        Db::statement("drop view if exists {$this->prefix}role_policy");
     }
 }

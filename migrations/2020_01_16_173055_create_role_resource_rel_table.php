@@ -4,20 +4,19 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Extra\Common\Migration;
 
-class CreateRoleResourceTable extends Migration
+class CreateRoleResourceRelTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('role_resource', function (Blueprint $table) {
-            $table->bigIncrements('id')
-                ->comment('primary key');
-            $table->string('role_key', 50)
-                ->comment('role key');
-            $table->string('resource_key', 50)
-                ->comment('resource manage key');
+        Schema::create('role_resource_rel', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('role_key', 200)
+                ->comment('权限组键关联');
+            $table->string('resource_key', 200)
+                ->comment('资源键关联');
             $table->foreign('role_key')
                 ->references('key')
                 ->on('role_basic')
@@ -30,7 +29,7 @@ class CreateRoleResourceTable extends Migration
                 ->onDelete('cascade');
             $table->unique(['role_key', 'resource_key']);
         });
-        $this->comment('role_resource', 'Resource Manage For Associated Role Table');
+        $this->comment('role_resource_rel', '权限组资源关联表');
     }
 
     /**
@@ -38,6 +37,6 @@ class CreateRoleResourceTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_resource');
+        Schema::dropIfExists('role_resource_rel');
     }
 }

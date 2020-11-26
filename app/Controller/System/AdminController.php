@@ -109,7 +109,7 @@ class AdminController extends BaseController
         return $this->curd
             ->addModel('admin_basic', $body)
             ->afterHook(function (AddAfterParams $params) use ($role) {
-                $data = Db::table('admin_role')->insert([
+                $data = Db::table('admin_role_rel')->insert([
                     'admin_id' => $params->getId(),
                     'role_key' => $role
                 ]);
@@ -177,7 +177,7 @@ class AdminController extends BaseController
             ->editModel('admin_basic', $body)
             ->afterHook(function (EditAfterParams $params) use ($role) {
                 if (!$params->isSwitch()) {
-                    Db::table('admin_role')
+                    Db::table('admin_role_rel')
                         ->where('admin_id', '=', $params->getId())
                         ->update([
                             'role_key' => $role
