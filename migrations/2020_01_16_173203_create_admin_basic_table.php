@@ -12,39 +12,33 @@ class CreateAdminBasicTable extends Migration
     public function up(): void
     {
         Schema::create('admin_basic', function (Blueprint $table) {
-            $table->bigIncrements('id')
-                ->comment('primary key');
-            $table->string('username', 30)
+            $table->bigIncrements('id');
+            $table->string('username', 50)
                 ->unique()
-                ->comment('username');
+                ->comment('用户名');
             $table->text('password')
-                ->comment('password');
-            $table->string('email', 100)
+                ->comment('用户密码');
+            $table->string('email', 200)
                 ->nullable()
-                ->comment('email');
+                ->comment('电子邮件');
             $table->string('phone', 20)
                 ->nullable()
-                ->comment('phone');
-            $table->string('call', 30)
+                ->comment('联系电话');
+            $table->string('call', 20)
                 ->nullable()
-                ->comment('call');
+                ->comment('称呼');
             $table->text('avatar')
                 ->nullable()
-                ->comment('avatar');
+                ->comment('头像');
             $table->boolean('status')
                 ->default(1)
-                ->unsigned()
-                ->comment('status');
-            $table->bigIncrements('create_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('create time');
-            $table->bigIncrements('update_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('update time');
+                ->unsigned();
+            $table->unsignedBigInteger('create_time')
+                ->default(0);
+            $table->unsignedBigInteger('update_time')
+                ->default(0);
         });
-        $this->comment('admin_basic', 'Admin Table');
+        $this->comment('admin_basic', '管理员表');
     }
 
     /**

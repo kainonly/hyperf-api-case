@@ -100,8 +100,7 @@ class RoleController extends BaseController
                         'resource_key' => $value
                     ];
                 }
-                $result = Db::table('role_resource')
-                    ->insert($resourceLists);
+                $result = Db::table('role_resource_rel')->insert($resourceLists);
                 if (!$result) {
                     Context::set('error', [
                         'error' => 1,
@@ -145,10 +144,10 @@ class RoleController extends BaseController
                         'resource_key' => $value
                     ];
                 }
-                Db::table('role_resource')
+                Db::table('role_resource_rel')
                     ->where('role_key', '=', $body['key'])
                     ->delete();
-                $result = Db::table('role_resource')
+                $result = Db::table('role_resource_rel')
                     ->insert($resourceLists);
                 if (!$result) {
                     Context::set('error', [

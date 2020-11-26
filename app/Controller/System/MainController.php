@@ -52,45 +52,45 @@ class MainController extends BaseController
      */
     public function login(): ResponseInterface
     {
-        try {
-            $body = $this->request->post();
-            $validator = $this->validation->make($body, [
-                'username' => [
-                    'required',
-                    'between:4,20'
-                ],
-                'password' => [
-                    'required',
-                    'between:12,20'
-                ],
-            ]);
+        $body = $this->request->post();
+        $validator = $this->validation->make($body, [
+            'username' => [
+                'required',
+                'between:4,20'
+            ],
+            'password' => [
+                'required',
+                'between:12,20'
+            ],
+        ]);
 
-            if ($validator->fails()) {
-                return $this->response->json([
-                    'error' => 1,
-                    'msg' => $validator->errors()
-                ]);
-            }
-
-            $data = $this->adminRedis->get($body['username']);
-
-            if (empty($data)) {
-                throw new RuntimeException('username not exists');
-            }
-
-            if (!$this->hash->check($body['password'], $data['password'])) {
-                throw new RuntimeException('password incorrect');
-            }
-            $symbol = new stdClass();
-            $symbol->user = $data['username'];
-            $symbol->role = explode(',', $data['role']);
-            return $this->create('system', $symbol);
-        } catch (Exception $e) {
+        if ($validator->fails()) {
             return $this->response->json([
                 'error' => 1,
-                'msg' => $e->getMessage()
+                'msg' => $validator->errors()
             ]);
         }
+
+        $data = $this->adminRedis->get($body['username']);
+
+        if (empty($data)) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => 'username not exists'
+            ]);
+        }
+
+        if (!$this->hash->check($body['password'], $data['password'])) {
+            return $this->response->json([
+                'error' => 1,
+                'msg' => 'password incorrect'
+            ]);
+        }
+
+        return $this->create('system', [
+            'user' => $data['username'],
+            'role' => explode(',', $data['role'])
+        ]);
     }
 
     /**
@@ -129,7 +129,7 @@ class MainController extends BaseController
     public function resource(): array
     {
         $router = $this->resourceRedis->get();
-        $roleKey = Context::get('auth')->role;
+        $roleKey = Context::get('auth')['role'];
         $role = $this->roleRedis->get($roleKey, 'resource');
         $routerRole = array_unique($role);
         $lists = Arr::where(

@@ -12,30 +12,24 @@ class CreateRoleBasicTable extends Migration
     public function up(): void
     {
         Schema::create('role_basic', function (Blueprint $table) {
-            $table->bigIncrements('id')
-                ->comment('primary key');
-            $table->string('key', 50)
+            $table->bigIncrements('id');
+            $table->string('key', 200)
                 ->unique()
-                ->comment('role key');
+                ->comment('权限组键名');
             $table->json('name')
-                ->comment('role name');
+                ->comment('权限组名称');
             $table->text('note')
                 ->nullable()
-                ->comment('mark');
+                ->comment('备注');
             $table->boolean('status')
                 ->default(1)
-                ->unsigned()
-                ->comment('status');
-            $table->bigIncrements('create_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('create time');
-            $table->bigIncrements('update_time')
-                ->default(0)
-                ->unsigned()
-                ->comment('update time');
+                ->unsigned();
+            $table->unsignedBigInteger('create_time')
+                ->default(0);
+            $table->unsignedBigInteger('update_time')
+                ->default(0);
         });
-        $this->comment('role_basic', 'Role Table');
+        $this->comment('role_basic', '权限组表');
     }
 
     /**

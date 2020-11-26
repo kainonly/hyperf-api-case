@@ -11,25 +11,14 @@ class CreateAdminView extends Migration
     public function up(): void
     {
         $this->down();
-        Db::statement(
-            "CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `{$this->prefix}admin` AS
-                    select `{$this->prefix}admin_basic`.`id`                                           AS `id`,
-                           `{$this->prefix}admin_basic`.`username`                                     AS `username`,
-                           `{$this->prefix}admin_basic`.`password`                                     AS `password`,
-                           group_concat(distinct `{$this->prefix}admin_role`.`role_key` separator ',') AS `role`,
-                           `{$this->prefix}admin_basic`.`call`                                         AS `call`,
-                           `{$this->prefix}admin_basic`.`email`                                        AS `email`,
-                           `{$this->prefix}admin_basic`.`phone`                                        AS `phone`,
-                           `{$this->prefix}admin_basic`.`avatar`                                       AS `avatar`,
-                           `{$this->prefix}admin_basic`.`status`                                       AS `status`,
-                           `{$this->prefix}admin_basic`.`create_time`                                  AS `create_time`,
-                           `{$this->prefix}admin_basic`.`update_time`                                  AS `update_time`
-                    from (`{$this->prefix}admin_basic`
-                             join `{$this->prefix}admin_role` on (`{$this->prefix}admin_role`.`admin_id` = `{$this->prefix}admin_basic`.`id`))
-                    group by `{$this->prefix}admin_basic`.`id`, `{$this->prefix}admin_basic`.`username`, `{$this->prefix}admin_basic`.`password`, `{$this->prefix}admin_basic`.`call`,
-                             `{$this->prefix}admin_basic`.`email`, `{$this->prefix}admin_basic`.`phone`, `{$this->prefix}admin_basic`.`avatar`, `{$this->prefix}admin_basic`.`status`,
-                             `{$this->prefix}admin_basic`.`create_time`, `{$this->prefix}admin_basic`.`update_time`;"
-        );
+        $sql = "create view {$this->prefix}admin as ";
+        $sql .= "select ab.id,ab.username,ab.password,";
+        $sql .= "group_concat(distinct arr.role_key separator ',') as role,";
+        $sql .= "ab.`call`,ab.email, ab.phone,ab.avatar,ab.status,ab.create_time,ab.update_time ";
+        $sql .= "from {$this->prefix}admin_basic ab ";
+        $sql .= "join {$this->prefix}admin_role_rel arr on ab.id = arr.admin_id ";
+        $sql .= "group by ab.id, ab.username, ab.password, ab.`call`, ab.email, ab.phone, ab.avatar, ab.status, ab.create_time, ab.update_time";
+        Db::statement($sql);
     }
 
     /**
@@ -37,6 +26,6 @@ class CreateAdminView extends Migration
      */
     public function down(): void
     {
-        Db::statement("DROP VIEW IF EXISTS `{$this->prefix}admin`;");
+        Db::statement("drop view if exists {$this->prefix}admin");
     }
 }
