@@ -27,11 +27,11 @@ class AclRedis extends RedisModel implements AclInterface
      */
     public function get(string $key, int $policy): array
     {
-        if (!$this->redis->exists($this->key)) {
+        if (!$this->redis->exists($this->getKey())) {
             $this->update();
         }
 
-        $raws = $this->redis->hGet($this->key, $key);
+        $raws = $this->redis->hGet($this->getKey(), $key);
         $data = !empty($raws) ? json_decode($raws, true) : [];
 
         switch ($policy) {
@@ -67,6 +67,6 @@ class AclRedis extends RedisModel implements AclInterface
                 'read' => $value->read
             ]);
         }
-        $this->redis->hMSet($this->key, $lists);
+        $this->redis->hMSet($this->getKey(), $lists);
     }
 }

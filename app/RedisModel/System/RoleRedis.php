@@ -16,7 +16,7 @@ class RoleRedis extends RedisModel implements RoleInterface
      */
     public function clear(): void
     {
-        $this->redis->del($this->key);
+        $this->redis->del($this->getKey());
     }
 
     /**
@@ -27,10 +27,10 @@ class RoleRedis extends RedisModel implements RoleInterface
      */
     public function get(array $keys, string $type): array
     {
-        if (!$this->redis->exists($this->key)) {
+        if (!$this->redis->exists($this->getKey())) {
             $this->update();
         }
-        $raws = $this->redis->hMGet($this->key, $keys);
+        $raws = $this->redis->hMGet($this->getKey(), $keys);
         if (!$raws) {
             return [];
         }
@@ -62,6 +62,6 @@ class RoleRedis extends RedisModel implements RoleInterface
             ]);
         }
 
-        $this->redis->hMSet($this->key, $lists);
+        $this->redis->hMSet($this->getKey(), $lists);
     }
 }

@@ -15,7 +15,7 @@ class AdminRedis extends RedisModel
      */
     public function clear(): void
     {
-        $this->redis->del($this->key);
+        $this->redis->del($this->getKey());
     }
 
     /**
@@ -25,11 +25,11 @@ class AdminRedis extends RedisModel
      */
     public function get(string $username): array
     {
-        if (!$this->redis->exists($this->key)) {
+        if (!$this->redis->exists($this->getKey())) {
             $this->update();
         }
 
-        $raws = $this->redis->hGet($this->key, $username);
+        $raws = $this->redis->hGet($this->getKey(), $username);
         return !empty($raws) ? json_decode($raws, true) : [];
     }
 
@@ -50,6 +50,6 @@ class AdminRedis extends RedisModel
         foreach ($query->toArray() as $value) {
             $lists[$value->username] = json_encode($value);
         }
-        $this->redis->hMSet($this->key, $lists);
+        $this->redis->hMSet($this->getKey(), $lists);
     }
 }
