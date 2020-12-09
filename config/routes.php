@@ -61,6 +61,6 @@ Router::addGroup('/system', function () {
     ]);
 }, [
     'middleware' => [
-        Hyperf\Extra\Cors\Cors::class
+        Hyperf\Extra\Cors\CorsMiddleware::class
     ]
 ]);
