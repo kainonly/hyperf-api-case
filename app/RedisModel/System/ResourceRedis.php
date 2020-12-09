@@ -15,7 +15,7 @@ class ResourceRedis extends RedisModel
      */
     public function clear(): void
     {
-        $this->redis->del($this->key);
+        $this->redis->del($this->getKey());
     }
 
     /**
@@ -24,10 +24,10 @@ class ResourceRedis extends RedisModel
      */
     public function get(): array
     {
-        if (!$this->redis->exists($this->key)) {
+        if (!$this->redis->exists($this->getKey())) {
             $this->update();
         }
-        $raws = $this->redis->get($this->key);
+        $raws = $this->redis->get($this->getKey());
         return !empty($raws) ? json_decode($raws, true) : [];
     }
 
@@ -45,6 +45,6 @@ class ResourceRedis extends RedisModel
             return;
         }
 
-        $this->redis->set($this->key, json_encode($query->toArray()));
+        $this->redis->set($this->getKey(), json_encode($query->toArray()));
     }
 }
