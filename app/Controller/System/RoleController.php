@@ -204,7 +204,7 @@ class RoleController extends BaseController
             ];
         }
 
-        $exists = Db::table('resource')
+        $exists = Db::table('role')
             ->where('key', '=', $body['key'])
             ->exists();
 
