@@ -2,35 +2,36 @@
   "type": "project",
   "require": {
     "php": ">=7.4.0",
-    "ext-swoole": ">=4.5",
-    "ext-redis": "*",
     "ext-json": "*",
-    "hyperf/cache": "~2.0.0",
-    "hyperf/command": "~2.0.0",
-    "hyperf/config": "~2.0.0",
-    "hyperf/db-connection": "~2.0.0",
-    "hyperf/framework": "~2.0.0",
-    "hyperf/guzzle": "~2.0.0",
-    "hyperf/http-server": "~2.0.0",
-    "hyperf/logger": "~2.0.0",
-    "hyperf/pool": "~2.0.0",
-    "hyperf/redis": "~2.0.0",
-    "hyperf/validation": "~2.0.0",
+    "ext-redis": "*",
+    "ext-swoole": ">=4.5",
+    "danielstjules/stringy": "^3.1",
+    "hyperf/cache": "2.1.*",
+    "hyperf/command": "2.1.*",
+    "hyperf/config": "2.1.*",
+    "hyperf/db-connection": "2.1.*",
+    "hyperf/framework": "2.1.*",
+    "hyperf/guzzle": "2.1.*",
+    "hyperf/http-server": "2.1.*",
+    "hyperf/logger": "2.1.*",
+    "hyperf/paginator": "2.1.*",
+    "hyperf/pool": "2.1.*",
+    "hyperf/redis": "2.1.*",
+    "hyperf/validation": "2.1.*",
     "kain/simplify-amqp": "^2.0",
-    "ramsey/uuid": "^3.9",
     "lcobucci/jwt": "^4.0",
-    "qcloud/cos-sdk-v5": ">=2.0",
+    "overtrue/qcloud-cos-client": "^1.0",
     "phpseclib/phpseclib": "^2.0",
-    "danielstjules/stringy": "^3.1"
+    "ramsey/uuid": "^3.9"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "swoole/ide-helper": "^4.5",
+    "swoole/ide-helper": "dev-master",
     "friendsofphp/php-cs-fixer": "^2.14",
     "mockery/mockery": "^1.0",
-    "phpstan/phpstan": "^0.12",
-    "hyperf/devtool": "~2.0.0",
-    "hyperf/testing": "~2.0.0"
+    "phpstan/phpstan": "^0.12.18",
+    "hyperf/devtool": "2.1.*",
+    "hyperf/testing": "2.1.*"
   },
   "autoload": {
     "psr-4": {
@@ -64,6 +65,10 @@
     "cs-fix": "php-cs-fixer fix $1",
     "start": "php ./bin/hyperf.php start",
     "test": "co-phpunit -c phpunit.xml --colors=always"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
   },
   "repositories": {
     "packagist": {

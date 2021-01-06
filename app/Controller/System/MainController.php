@@ -227,19 +227,23 @@ class MainController extends BaseController
             ];
         }
         $file = $this->request->file('image');
-        $fileName = date('Ymd') . '/' .
-            uuid()->toString() . '.' .
-            $file->getExtension();
-        $body = fopen($file->getRealPath(), 'rb');
-        $result = $this->cosClient->uploads(
-            $fileName,
-            $body
-        );
+        $fileName = $this->cosClient->put($file);
         return [
             'error' => 0,
             'data' => [
-                'savename' => $result->toArray()['Key']
+                'savename' => $fileName
             ]
         ];
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function cosPresigned(): array
+    {
+        return $this->cosClient->generatePostPresigned([
+            ['content-length-range', 0, 52428800]
+        ]);
     }
 }
