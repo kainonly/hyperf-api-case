@@ -11,7 +11,7 @@ class N3Policy extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Db::table('policy')->insertOrIgnore([
             [
@@ -53,6 +53,11 @@ class N3Policy extends Seeder
                 'resource_key' => 'admin-index',
                 'acl_key' => 'role',
                 'policy' => 0
+            ],
+            [
+                'resource_key' => 'gallery',
+                'acl_key' => 'gallery',
+                'policy' => 1
             ]
         ]);
     }

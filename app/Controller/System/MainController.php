@@ -148,7 +148,7 @@ class MainController extends BaseController
     public function information(): array
     {
         $data = Db::table('admin_basic')
-            ->where('username', '=', Context::get('auth')->user)
+            ->where('username', '=', Context::get('auth')['user'])
             ->first(['email', 'phone', 'call', 'avatar']);
 
         return [

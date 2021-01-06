@@ -15,14 +15,14 @@ class N5Admin extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $container = ApplicationContext::getContainer();
         $this->hash = $container->get(HashInterface::class);
         Db::transaction(function () {
             $resultId = Db::table('admin_basic')->insertGetId([
                 'username' => 'kain',
-                'password' => $this->hash->create('kain@VAN1234'),
+                'password' => $this->hash->create('pass@VAN1234'),
                 'call' => 'kain',
                 'create_time' => time(),
                 'update_time' => time()

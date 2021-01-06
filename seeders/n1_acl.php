@@ -79,6 +79,17 @@ class N1Acl extends Seeder
                 'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
+            ],
+            [
+                'key' => 'gallery',
+                'name' => json_encode([
+                    'zh_cn' => '图库模块',
+                    'en_us' => 'Gallery Module'
+                ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
+                'create_time' => time(),
+                'update_time' => time()
             ]
         ]);
     }
