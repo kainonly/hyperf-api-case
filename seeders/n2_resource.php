@@ -11,7 +11,7 @@ class N2Resource extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Db::table('resource')->insertOrIgnore([
             [
@@ -223,7 +223,21 @@ class N2Resource extends Seeder
                 'icon' => null,
                 'create_time' => time(),
                 'update_time' => time()
-            ]
+            ],
+            [
+                'key' => 'gallery',
+                'parent' => 'origin',
+                'name' => json_encode([
+                    'zh_cn' => '图库',
+                    'en_us' => 'Gallery'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 1,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => 'picture',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
         ]);
     }
 }

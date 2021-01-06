@@ -11,7 +11,7 @@ class N4Role extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Db::transaction(function () {
             Db::table('role_basic')->insertOrIgnore([
