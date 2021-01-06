@@ -25,7 +25,7 @@ Router::addGroup('/system', function () {
     AutoController(App\Controller\System\MainController::class, [
         'middleware' => [
             App\Middleware\System\AuthVerify::class => [
-                'resource', 'information', 'update', 'uploads'
+                'resource', 'information', 'update', 'uploads', 'cosPresigned'
             ]
         ]
     ]);

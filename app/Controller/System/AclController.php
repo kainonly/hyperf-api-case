@@ -102,13 +102,18 @@ class AclController extends BaseController
             'write' => 'sometimes|array',
             'read' => 'sometimes|array'
         ]);
+
         if ($validate->fails()) {
             return [
                 'error' => 1,
                 'msg' => $validate->errors()
             ];
         }
-        $this->before($body);
+
+        if (!$body['switch']) {
+            $this->before($body);
+        }
+
         return $this->curd
             ->editModel('acl', $body)
             ->afterHook(function () {

@@ -5,6 +5,7 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\EditAfterParams;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
@@ -128,33 +129,35 @@ class RoleController extends BaseController
                 'msg' => $validate->errors()
             ];
         }
-        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
-        $resource = null;
+        $resource = [];
         if (!$body['switch']) {
+            $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
             $resource = $body['resource'];
             unset($body['resource']);
         }
         return $this->curd
             ->editModel('role_basic', $body)
-            ->afterHook(function () use ($body, $resource) {
-                $resourceLists = [];
-                foreach ($resource as $key => $value) {
-                    $resourceLists[] = [
-                        'role_key' => $body['key'],
-                        'resource_key' => $value
-                    ];
-                }
-                Db::table('role_resource_rel')
-                    ->where('role_key', '=', $body['key'])
-                    ->delete();
-                $result = Db::table('role_resource_rel')
-                    ->insert($resourceLists);
-                if (!$result) {
-                    Context::set('error', [
-                        'error' => 1,
-                        'msg' => 'insert resource failed'
-                    ]);
-                    return false;
+            ->afterHook(function (EditAfterParams $params) use ($body, $resource) {
+                if (!$params->isSwitch()) {
+                    $resourceLists = [];
+                    foreach ($resource as $key => $value) {
+                        $resourceLists[] = [
+                            'role_key' => $body['key'],
+                            'resource_key' => $value
+                        ];
+                    }
+                    Db::table('role_resource_rel')
+                        ->where('role_key', '=', $body['key'])
+                        ->delete();
+                    $result = Db::table('role_resource_rel')
+                        ->insert($resourceLists);
+                    if (!$result) {
+                        Context::set('error', [
+                            'error' => 1,
+                            'msg' => 'insert resource failed'
+                        ]);
+                        return false;
+                    }
                 }
                 $this->clearRedis();
                 return true;

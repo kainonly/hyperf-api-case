@@ -139,7 +139,7 @@ class AdminController extends BaseController
             ];
         }
 
-        $username = Context::get('auth')->user;
+        $username = Context::get('auth')['user'];
         $data = Db::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
