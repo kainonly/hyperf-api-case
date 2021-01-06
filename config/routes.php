@@ -59,6 +59,18 @@ Router::addGroup('/system', function () {
             App\Middleware\System\RbacVerify::class
         ]
     ]);
+    AutoController(App\Controller\System\GalleryTypeController::class, [
+        'middleware' => [
+            App\Middleware\System\AuthVerify::class,
+            App\Middleware\System\RbacVerify::class
+        ]
+    ]);
+    AutoController(App\Controller\System\GalleryController::class, [
+        'middleware' => [
+            App\Middleware\System\AuthVerify::class,
+            App\Middleware\System\RbacVerify::class
+        ]
+    ]);
 }, [
     'middleware' => [
         Hyperf\Extra\Cors\CorsMiddleware::class

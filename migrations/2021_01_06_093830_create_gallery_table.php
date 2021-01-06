@@ -19,9 +19,6 @@ class CreateGalleryTable extends Migration
                 ->comment('元素名称');
             $table->text('url')
                 ->comment('元素路径');
-            $table->boolean('status')
-                ->default(1)
-                ->unsigned();
             $table->unsignedBigInteger('create_time')
                 ->default(0);
             $table->unsignedBigInteger('update_time')
