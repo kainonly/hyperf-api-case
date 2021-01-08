@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use Hyperf\DbConnection\Db;
+
 class GalleryController extends BaseController
 {
     public function originLists(): array
@@ -37,22 +39,37 @@ class GalleryController extends BaseController
             ->result();
     }
 
-    public function add(): array
+    public function bulkInsert(): array
     {
-        $validate = $this->curd->addValidation([
+        $body = $this->request->post();
+        $validator = $this->validation->make($body, [
             'type_id' => 'required',
-            'name' => 'required',
-            'url' => 'required',
+            'data' => 'required|array',
+            'data.*.name' => 'required',
+            'data.*.url' => 'required'
         ]);
-        if ($validate->fails()) {
+        if ($validator->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validate->errors()
+                'msg' => $validator->errors()
             ];
         }
-        return $this->curd
-            ->addModel('gallery')
-            ->result();
+        $data = [];
+        $now = time();
+        foreach ($body['data'] as $value) {
+            $data[] = [
+                'type_id' => $body['type_id'],
+                'name' => $value['name'],
+                'url' => $value['url'],
+                'create_time' => $now,
+                'update_time' => $now
+            ];
+        }
+        Db::table('gallery')->insert($data);
+        return [
+            'error' => 0,
+            'msg' => 'ok'
+        ];
     }
 
     public function edit(): array
