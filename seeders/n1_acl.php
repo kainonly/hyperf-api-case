@@ -97,7 +97,7 @@ class N1Acl extends Seeder
                     'zh_cn' => '图库模块',
                     'en_us' => 'Gallery Module'
                 ], JSON_UNESCAPED_UNICODE),
-                'write' => 'add,edit,delete',
+                'write' => 'bulkInsert,edit,delete',
                 'read' => 'originLists,lists',
                 'create_time' => time(),
                 'update_time' => time()

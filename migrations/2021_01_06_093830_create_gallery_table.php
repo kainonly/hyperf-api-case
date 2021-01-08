@@ -14,8 +14,9 @@ class CreateGalleryTable extends Migration
         Schema::create('gallery', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('type_id')
-                ->comment('分类外键');
-            $table->string('name', 50)
+                ->default(0)
+                ->comment('分类关联(0为未分类)');
+            $table->text('name')
                 ->comment('元素名称');
             $table->text('url')
                 ->comment('元素路径');
@@ -23,11 +24,6 @@ class CreateGalleryTable extends Migration
                 ->default(0);
             $table->unsignedBigInteger('update_time')
                 ->default(0);
-            $table->foreign('type_id')
-                ->references('id')
-                ->on('gallery_type')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
         });
         $this->comment('gallery', '图库表');
     }

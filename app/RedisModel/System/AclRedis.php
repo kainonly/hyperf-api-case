@@ -16,7 +16,7 @@ class AclRedis extends RedisModel implements AclInterface
      */
     public function clear(): void
     {
-        $this->redis->del($this->key);
+        $this->redis->del($this->getKey());
     }
 
     /**
