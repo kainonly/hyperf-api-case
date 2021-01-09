@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
-use Hyperf\Extra\Common\RedisModel;
+use Hyperf\Extra\Redis\RedisModel;
 
 class ResourceRedis extends RedisModel
 {

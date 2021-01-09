@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
-use Hyperf\Extra\Common\RedisModel;
-use Hyperf\Support\RedisModel\AclInterface;
+use Hyperf\Extra\Redis\Library\AclLibrary;
+use Hyperf\Extra\Redis\RedisModel;
 
-class AclRedis extends RedisModel implements AclInterface
+class AclRedis extends RedisModel implements AclLibrary
 {
     protected string $key = 'system:acl';
 
