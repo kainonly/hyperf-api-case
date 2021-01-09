@@ -5,6 +5,7 @@ namespace App\Client;
 
 use Carbon\Carbon;
 use Exception;
+use GuzzleHttp\Psr7\Response;
 use Overtrue\CosClient\ObjectClient;
 
 class CosClient
@@ -38,6 +39,23 @@ class CosClient
             file_get_contents($file->getRealPath())
         );
         return $fileName;
+    }
+
+    /**
+     * @param array $keys
+     * @return Response
+     * @throws Exception
+     */
+    public function delete(array $keys): Response
+    {
+        $object = new ObjectClient([
+            'app_id' => $this->option['app_id'],
+            'secret_id' => $this->option['secret_id'],
+            'secret_key' => $this->option['secret_key'],
+            'bucket' => $this->option['cos']['bucket'],
+            'region' => $this->option['cos']['region'],
+        ]);
+        return $object->deleteObjects($keys);
     }
 
     /**
