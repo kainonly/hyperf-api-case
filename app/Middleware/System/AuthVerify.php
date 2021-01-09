@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Middleware\System;
 
-use Hyperf\Support\Middleware\AuthVerify as BaseAuthVerify;
+use Hyperf\Extra\Auth\AuthMiddleware;
 
-class AuthVerify extends BaseAuthVerify
+class AuthVerify extends AuthMiddleware
 {
     protected string $scene = 'system';
 }

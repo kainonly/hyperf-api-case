@@ -14,13 +14,6 @@ use Hyperf\HttpServer\Router\Router;
 
 Router::get('/', [App\Controller\IndexController::class, 'index']);
 Router::post('/', [App\Controller\IndexController::class, 'index']);
-Router::addGroup('/sys/', function () {
-    Router::get('test', function () {
-        return [
-            'status' => 1
-        ];
-    });
-});
 Router::addGroup('/system', function () {
     AutoController(App\Controller\System\MainController::class, [
         'middleware' => [

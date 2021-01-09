@@ -5,14 +5,13 @@ namespace App\Controller\System;
 
 use App\Client\CosClient;
 use Hyperf\Di\Annotation\Inject;
-use Hyperf\Support\RedisModel\RefreshToken;
-use stdClass;
 use Exception;
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
 use Hyperf\DbConnection\Db;
-use Hyperf\Support\Func\Auth;
+use Hyperf\Extra\Auth\Auth;
+use Hyperf\Extra\Redis\RefreshToken;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
@@ -21,6 +20,7 @@ use RuntimeException;
 class MainController extends BaseController
 {
     use Auth;
+
     /**
      * @Inject()
      * @var RefreshToken

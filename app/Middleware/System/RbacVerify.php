@@ -5,9 +5,9 @@ namespace App\Middleware\System;
 
 use App\RedisModel\System\AclRedis;
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Support\Middleware\RbacVerify as BaseRbacVerify;
+use Hyperf\Extra\Rbac\RbacMiddleware;
 
-class RbacVerify extends BaseRbacVerify
+class RbacVerify extends RbacMiddleware
 {
     protected string $prefix = 'system';
     protected array $ignore = [

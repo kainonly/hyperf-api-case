@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
-use Hyperf\Extra\Common\RedisModel;
-use Hyperf\Support\RedisModel\RoleInterface;
+use Hyperf\Extra\Redis\Library\RoleLibrary;
+use Hyperf\Extra\Redis\RedisModel;
 
-class RoleRedis extends RedisModel implements RoleInterface
+class RoleRedis extends RedisModel implements RoleLibrary
 {
     protected string $key = 'system:role';
 

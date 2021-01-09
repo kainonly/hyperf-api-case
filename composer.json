@@ -38,8 +38,6 @@
       "App\\": "app/",
       "Hyperf\\Curd\\": "library/hyperf-curd/src/",
       "Hyperf\\Extra\\": "library/hyperf-extra/src/",
-      "Hyperf\\Support\\": "library/hyperf-support/src/",
-      "Hyperf\\AMQPClient\\": "library/hyperf-amqp/src/"
     },
     "files": [
       "library/hyperf-extra/src/helper.php"

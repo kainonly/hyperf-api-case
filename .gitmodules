@@ -1,12 +1,6 @@
-[submodule "library/hyperf-extra"]
-	path = library/hyperf-extra
-	url = git@github.com:kainonly/hyperf-extra.git
 [submodule "library/hyperf-curd"]
 	path = library/hyperf-curd
 	url = git@github.com:kainonly/hyperf-curd.git
-[submodule "library/hyperf-support"]
-	path = library/hyperf-support
-	url = git@github.com:kainonly/hyperf-support.git
-[submodule "library/hyperf-amqp"]
-	path = library/hyperf-amqp
-	url = git@github.com:kainonly/hyperf-amqp.git
+[submodule "library/hyperf-extra"]
+	path = library/hyperf-extra
+	url = git@github.com:kainonly/hyperf-extra.git
