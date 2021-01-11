@@ -23,9 +23,3 @@ composer require kain/hyperf-curd
 ```shell script
 composer require kain/hyperf-extra
 ```
-
-`kain/hyperf-support` 辅助 Hyperf 的特性功能支持库
-
-```shell script
-composer require kain/hyperf-support
-```
