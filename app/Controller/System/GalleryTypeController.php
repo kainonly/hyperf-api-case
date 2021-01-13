@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use Hyperf\DbConnection\Db;
+
 class GalleryTypeController extends BaseController
 {
     public function originLists(): array
@@ -17,16 +19,14 @@ class GalleryTypeController extends BaseController
 
         return $this->curd
             ->originListsModel('gallery_type')
-            ->setOrder('create_time', 'desc')
+            ->setOrder('sort', 'asc')
             ->result();
     }
 
     public function add(): array
     {
         $validate = $this->curd->addValidation([
-            'type_id' => 'required',
             'name' => 'required',
-            'url' => 'required',
         ]);
         if ($validate->fails()) {
             return [
@@ -42,9 +42,7 @@ class GalleryTypeController extends BaseController
     public function edit(): array
     {
         $validate = $this->curd->editValidation([
-            'type_id' => 'required',
             'name' => 'required',
-            'url' => 'required',
         ]);
         if ($validate->fails()) {
             return [
@@ -70,5 +68,32 @@ class GalleryTypeController extends BaseController
         return $this->curd
             ->deleteModel('gallery_type')
             ->result();
+    }
+
+    public function sort(): array
+    {
+        $body = $this->request->post();
+        $validate = $this->validation->make($body, [
+            'data' => 'required|array',
+            'data.*.id' => 'required',
+            'data.*.sort' => 'required'
+        ]);
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->errors()
+            ];
+        }
+        Db::transaction(function () use ($body) {
+            foreach ($body['data'] as $value) {
+                Db::table('gallery_type')
+                    ->where('id', '=', $value['id'])
+                    ->update(['sort' => $value['sort']]);
+            }
+        });
+        return [
+            'error' => 0,
+            'msg' => 'ok'
+        ];
     }
 }

@@ -15,6 +15,9 @@ class CreateGalleryTypeTable extends Migration
             $table->bigIncrements('id');
             $table->string('name', 50)
                 ->comment('类型名称');
+            $table->unsignedBigInteger('sort')
+                ->default(0)
+                ->comment('排序');
             $table->unsignedBigInteger('create_time')
                 ->default(0);
             $table->unsignedBigInteger('update_time')

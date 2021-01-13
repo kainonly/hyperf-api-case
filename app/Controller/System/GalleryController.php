@@ -39,19 +39,19 @@ class GalleryController extends BaseController
             ->result();
     }
 
-    public function bulkInsert(): array
+    public function bulkAdd(): array
     {
         $body = $this->request->post();
-        $validator = $this->validation->make($body, [
+        $validate = $this->validation->make($body, [
             'type_id' => 'required',
             'data' => 'required|array',
             'data.*.name' => 'required',
             'data.*.url' => 'required'
         ]);
-        if ($validator->fails()) {
+        if ($validate->fails()) {
             return [
                 'error' => 1,
-                'msg' => $validator->errors()
+                'msg' => $validate->errors()
             ];
         }
         $data = [];
@@ -74,11 +74,7 @@ class GalleryController extends BaseController
 
     public function edit(): array
     {
-        $validate = $this->curd->editValidation([
-            'type_id' => 'required',
-            'name' => 'required',
-            'url' => 'required',
-        ]);
+        $validate = $this->curd->editValidation();
         if ($validate->fails()) {
             return [
                 'error' => 1,
@@ -88,6 +84,32 @@ class GalleryController extends BaseController
         return $this->curd
             ->editModel('gallery')
             ->result();
+    }
+
+    public function bulkEdit(): array
+    {
+        $body = $this->request->post();
+        $validate = $this->validation->make($body, [
+            'type_id' => 'required',
+            'ids' => 'required|array',
+        ]);
+        if ($validate->fails()) {
+            return [
+                'error' => 1,
+                'msg' => $validate->errors()
+            ];
+        }
+        Db::transaction(function () use ($body) {
+            foreach ($body['ids'] as $value) {
+                Db::table('gallery')
+                    ->where('id', '=', $value)
+                    ->update(['type_id' => $body['type_id']]);
+            }
+        });
+        return [
+            'error' => 0,
+            'msg' => 'ok'
+        ];
     }
 
     public function delete(): array
@@ -103,5 +125,21 @@ class GalleryController extends BaseController
         return $this->curd
             ->deleteModel('gallery')
             ->result();
+    }
+
+    public function count(): array
+    {
+        $total = Db::table('gallery')->count();
+        $values = Db::table('gallery')
+            ->groupBy(['type_id'])
+            ->get(['type_id', Db::raw('count(*) as size')]);
+
+        return [
+            'error' => 0,
+            'data' => [
+                'total' => $total,
+                'values' => $values
+            ]
+        ];
     }
 }

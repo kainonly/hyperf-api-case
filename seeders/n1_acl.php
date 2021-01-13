@@ -86,7 +86,7 @@ class N1Acl extends Seeder
                     'zh_cn' => '图库分类模块',
                     'en_us' => 'Gallery Type Module'
                 ], JSON_UNESCAPED_UNICODE),
-                'write' => 'add,edit,delete',
+                'write' => 'add,edit,delete,sort',
                 'read' => 'originLists',
                 'create_time' => time(),
                 'update_time' => time()
@@ -97,8 +97,8 @@ class N1Acl extends Seeder
                     'zh_cn' => '图库模块',
                     'en_us' => 'Gallery Module'
                 ], JSON_UNESCAPED_UNICODE),
-                'write' => 'bulkInsert,edit,delete',
-                'read' => 'originLists,lists',
+                'write' => 'bulkAdd,edit,bulkEdit,delete',
+                'read' => 'lists,count',
                 'create_time' => time(),
                 'update_time' => time()
             ]
