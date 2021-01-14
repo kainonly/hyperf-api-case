@@ -42,11 +42,11 @@ class CosClient
     }
 
     /**
-     * @param array $keys
+     * @param array $objects
      * @return Response
      * @throws Exception
      */
-    public function delete(array $keys): Response
+    public function delete(array $objects): Response
     {
         $object = new ObjectClient([
             'app_id' => $this->option['app_id'],
@@ -55,7 +55,12 @@ class CosClient
             'bucket' => $this->option['cos']['bucket'],
             'region' => $this->option['cos']['region'],
         ]);
-        return $object->deleteObjects($keys);
+        return $object->deleteObjects([
+            'Delete' => [
+                'Quiet' => true,
+                'Object' => [...$objects]
+            ]
+        ]);
     }
 
     /**
