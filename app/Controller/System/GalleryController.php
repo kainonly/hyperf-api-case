@@ -3,10 +3,18 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use App\Client\CosClient;
 use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
 
 class GalleryController extends BaseController
 {
+    /**
+     * @Inject()
+     * @var CosClient
+     */
+    private CosClient $cosClient;
+
     public function originLists(): array
     {
         $validate = $this->curd->originListsValidation();
@@ -114,6 +122,7 @@ class GalleryController extends BaseController
 
     public function delete(): array
     {
+        $body = $this->request->post();
         $validate = $this->curd->deleteValidation();
         if ($validate->fails()) {
             return [
@@ -121,9 +130,20 @@ class GalleryController extends BaseController
                 'msg' => $validate->errors()
             ];
         }
+        $objects = Db::table('gallery')
+            ->whereIn('id', $body['id'])
+            ->get()
+            ->map(fn($v) => [
+                'Key' => $v->url
+            ])
+            ->toArray();
 
         return $this->curd
             ->deleteModel('gallery')
+            ->afterHook(function () use ($objects) {
+                $response = $this->cosClient->delete($objects);
+                return $response->getStatusCode() === 200;
+            })
             ->result();
     }
 
