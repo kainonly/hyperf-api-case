@@ -23,22 +23,22 @@ class AppExceptionHandler extends ExceptionHandler
     /**
      * @var StdoutLoggerInterface
      */
-    protected $logger;
+    protected StdoutLoggerInterface $logger;
 
     public function __construct(StdoutLoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-    public function handle(Throwable $throwable, ResponseInterface $response)
+    public function handle(Throwable $throwable, ResponseInterface $response): ResponseInterface
     {
         $this->logger->error($throwable->getTraceAsString());
         return $response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus(500)
+            ->withStatus(200)
             ->withBody(new SwooleStream(json_encode([
                 'error' => 1,
-                'msg' => $throwable->getMessage()
+                'msg' => $throwable->getMessage(),
             ])));
     }
 
