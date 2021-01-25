@@ -8,7 +8,7 @@ class IndexController
     public function index(): array
     {
         return [
-            'version' => 1.7,
+            'version' => 1.0,
             'unixtime' => time()
         ];
     }
