@@ -81,10 +81,10 @@ class N1Acl extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'gallery_type',
+                'key' => 'picture_type',
                 'name' => json_encode([
-                    'zh_cn' => '图库分类模块',
-                    'en_us' => 'Gallery Type Module'
+                    'zh_cn' => '图片素材分类模块',
+                    'en_us' => 'Picture Type Module'
                 ], JSON_UNESCAPED_UNICODE),
                 'write' => 'add,edit,delete,sort',
                 'read' => 'originLists',
@@ -92,10 +92,33 @@ class N1Acl extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'gallery',
+                'key' => 'picture',
                 'name' => json_encode([
-                    'zh_cn' => '图库模块',
-                    'en_us' => 'Gallery Module'
+                    'zh_cn' => '图片素材模块',
+                    'en_us' => 'Picture Module'
+                ], JSON_UNESCAPED_UNICODE),
+                'write' => 'bulkAdd,edit,bulkEdit,delete',
+                'read' => 'lists,count',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'video_type',
+                'name' => json_encode([
+                    'zh_cn' => '视频素材分类模块',
+                    'en_us' => 'Video Type Module'
+                ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete,sort',
+                'read' => 'originLists',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'video',
+                'name' => json_encode([
+                    'zh_cn' => '视频素材模块',
+                    'en_us' => 'Video
+                     Module'
                 ], JSON_UNESCAPED_UNICODE),
                 'write' => 'bulkAdd,edit,bulkEdit,delete',
                 'read' => 'lists,count',

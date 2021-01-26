@@ -43,13 +43,13 @@ Router::addGroup('/system', function () {
             App\Middleware\System\RbacVerify::class
         ]
     ]);
-    AutoController(App\Controller\System\GalleryTypeController::class, [
+    AutoController(App\Controller\System\PictureController::class, [
         'middleware' => [
             App\Middleware\System\AuthVerify::class,
             App\Middleware\System\RbacVerify::class
         ]
     ]);
-    AutoController(App\Controller\System\GalleryController::class, [
+    AutoController(App\Controller\System\PictureTypeController::class, [
         'middleware' => [
             App\Middleware\System\AuthVerify::class,
             App\Middleware\System\RbacVerify::class
