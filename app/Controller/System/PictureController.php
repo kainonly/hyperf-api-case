@@ -7,7 +7,7 @@ use App\Client\CosClient;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 
-class GalleryController extends BaseController
+class PictureController extends BaseController
 {
     /**
      * @Inject()
@@ -26,7 +26,7 @@ class GalleryController extends BaseController
         }
 
         return $this->curd
-            ->originListsModel('gallery')
+            ->originListsModel('picture')
             ->setOrder('create_time', 'desc')
             ->result();
     }
@@ -42,7 +42,7 @@ class GalleryController extends BaseController
         }
 
         return $this->curd
-            ->listsModel('gallery')
+            ->listsModel('picture')
             ->setOrder('create_time', 'desc')
             ->result();
     }
@@ -73,7 +73,7 @@ class GalleryController extends BaseController
                 'update_time' => $now
             ];
         }
-        Db::table('gallery')->insert($data);
+        Db::table('picture')->insert($data);
         return [
             'error' => 0,
             'msg' => 'ok'
@@ -90,7 +90,7 @@ class GalleryController extends BaseController
             ];
         }
         return $this->curd
-            ->editModel('gallery')
+            ->editModel('picture')
             ->result();
     }
 
@@ -109,7 +109,7 @@ class GalleryController extends BaseController
         }
         Db::transaction(function () use ($body) {
             foreach ($body['ids'] as $value) {
-                Db::table('gallery')
+                Db::table('picture')
                     ->where('id', '=', $value)
                     ->update(['type_id' => $body['type_id']]);
             }
@@ -130,7 +130,7 @@ class GalleryController extends BaseController
                 'msg' => $validate->errors()
             ];
         }
-        $objects = Db::table('gallery')
+        $objects = Db::table('picture')
             ->whereIn('id', $body['id'])
             ->get()
             ->map(fn($v) => [
@@ -139,7 +139,7 @@ class GalleryController extends BaseController
             ->toArray();
 
         return $this->curd
-            ->deleteModel('gallery')
+            ->deleteModel('picture')
             ->afterHook(function () use ($objects) {
                 $response = $this->cosClient->delete($objects);
                 return $response->getStatusCode() === 200;
@@ -149,8 +149,8 @@ class GalleryController extends BaseController
 
     public function count(): array
     {
-        $total = Db::table('gallery')->count();
-        $values = Db::table('gallery')
+        $total = Db::table('picture')->count();
+        $values = Db::table('picture')
             ->groupBy(['type_id'])
             ->get(['type_id', Db::raw('count(*) as size')]);
 

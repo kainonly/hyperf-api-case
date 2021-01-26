@@ -225,16 +225,44 @@ class N2Resource extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'gallery',
+                'key' => 'media',
                 'parent' => 'origin',
                 'name' => json_encode([
-                    'zh_cn' => '图库',
-                    'en_us' => 'Gallery'
+                    'zh_cn' => '多媒体管理',
+                    'en_us' => 'Media'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 1,
+                'router' => 0,
+                'policy' => 0,
+                'icon' => 'play-circle',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'picture',
+                'parent' => 'media',
+                'name' => json_encode([
+                    'zh_cn' => '图片素材',
+                    'en_us' => 'Picture'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
                 'router' => 1,
                 'policy' => 1,
-                'icon' => 'picture',
+                'icon' => '',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'video',
+                'parent' => 'media',
+                'name' => json_encode([
+                    'zh_cn' => '视频素材',
+                    'en_us' => 'Video'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 1,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => '',
                 'create_time' => time(),
                 'update_time' => time()
             ],

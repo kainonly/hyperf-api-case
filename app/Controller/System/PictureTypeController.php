@@ -5,7 +5,7 @@ namespace App\Controller\System;
 
 use Hyperf\DbConnection\Db;
 
-class GalleryTypeController extends BaseController
+class PictureTypeController extends BaseController
 {
     public function originLists(): array
     {
@@ -18,7 +18,7 @@ class GalleryTypeController extends BaseController
         }
 
         return $this->curd
-            ->originListsModel('gallery_type')
+            ->originListsModel('picture_type')
             ->setOrder('sort', 'asc')
             ->result();
     }
@@ -35,7 +35,7 @@ class GalleryTypeController extends BaseController
             ];
         }
         return $this->curd
-            ->addModel('gallery_type')
+            ->addModel('picture_type')
             ->result();
     }
 
@@ -51,7 +51,7 @@ class GalleryTypeController extends BaseController
             ];
         }
         return $this->curd
-            ->editModel('gallery_type')
+            ->editModel('picture_type')
             ->result();
     }
 
@@ -66,7 +66,7 @@ class GalleryTypeController extends BaseController
         }
 
         return $this->curd
-            ->deleteModel('gallery_type')
+            ->deleteModel('picture_type')
             ->result();
     }
 
@@ -86,7 +86,7 @@ class GalleryTypeController extends BaseController
         }
         Db::transaction(function () use ($body) {
             foreach ($body['data'] as $value) {
-                Db::table('gallery_type')
+                Db::table('picture_type')
                     ->where('id', '=', $value['id'])
                     ->update(['sort' => $value['sort']]);
             }

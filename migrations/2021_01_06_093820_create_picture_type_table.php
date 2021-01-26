@@ -4,28 +4,26 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Extra\Common\Migration;
 
-class CreateGalleryTable extends Migration
+class CreatePictureTypeTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('gallery', function (Blueprint $table) {
+        Schema::create('picture_type', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('type_id')
+            $table->string('name', 50)
+                ->comment('类型名称');
+            $table->unsignedBigInteger('sort')
                 ->default(0)
-                ->comment('分类关联(0为未分类)');
-            $table->text('name')
-                ->comment('元素名称');
-            $table->text('url')
-                ->comment('元素路径');
+                ->comment('排序');
             $table->unsignedBigInteger('create_time')
                 ->default(0);
             $table->unsignedBigInteger('update_time')
                 ->default(0);
         });
-        $this->comment('gallery', '图库表');
+        $this->comment('picture_type', '图片素材分类表');
     }
 
     /**
@@ -33,6 +31,6 @@ class CreateGalleryTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gallery');
+        Schema::dropIfExists('picture_type');
     }
 }

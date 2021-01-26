@@ -82,7 +82,7 @@ class ResourceController extends BaseController
         $body = $this->request->post();
         $validate = $this->curd->editValidation([
             'key' => 'required_if:switch,false',
-            'name' => 'required_if:switch,false|json'
+            'name' => 'required_if:switch,false|array'
         ]);
         if ($validate->fails()) {
             return [

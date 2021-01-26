@@ -55,13 +55,23 @@ class N3Policy extends Seeder
                 'policy' => 0
             ],
             [
-                'resource_key' => 'gallery',
-                'acl_key' => 'gallery',
+                'resource_key' => 'picture',
+                'acl_key' => 'picture',
                 'policy' => 1
             ],
             [
-                'resource_key' => 'gallery',
-                'acl_key' => 'gallery_type',
+                'resource_key' => 'picture',
+                'acl_key' => 'picture_type',
+                'policy' => 1
+            ],
+            [
+                'resource_key' => 'video',
+                'acl_key' => 'video',
+                'policy' => 1
+            ],
+            [
+                'resource_key' => 'video',
+                'acl_key' => 'video_type',
                 'policy' => 1
             ]
         ]);
