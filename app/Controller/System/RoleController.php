@@ -5,10 +5,16 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\EditAfterParams;
+use Hyperf\Curd\Common\AddModel;
+use Hyperf\Curd\Common\DeleteModel;
+use Hyperf\Curd\Common\EditModel;
+use Hyperf\Curd\Common\GetModel;
+use Hyperf\Curd\Common\ListsModel;
+use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
+use stdClass;
 
 /**
  * Class RoleController
@@ -16,6 +22,23 @@ use Hyperf\Utils\Context;
  */
 class RoleController extends BaseController
 {
+    use OriginListsModel, ListsModel, GetModel, AddModel, EditModel, DeleteModel;
+
+    protected static string $model = 'role';
+    protected static string $addModel = 'role_basic';
+    protected static string $editModel = 'role_basic';
+    protected static string $deleteModel = 'role_basic';
+    protected static array $addValidate = [
+        'name' => 'required|array',
+        'key' => 'required',
+        'resource' => 'required|array'
+    ];
+    protected static array $editValidate = [
+        'name' => 'required_if:switch,false|array',
+        'key' => 'required_if:switch,false',
+        'resource' => 'required_if:switch,false|array'
+    ];
+
     /**
      * @Inject()
      * @var RoleRedis
@@ -27,161 +50,77 @@ class RoleController extends BaseController
      */
     private AdminRedis $adminRedis;
 
-    public function originLists(): array
+    public function addBeforeHook(stdClass $ctx): bool
     {
-        $validate = $this->curd->originListsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->originListsModel('role')
-            ->setOrder('create_time', 'desc')
-            ->result();
+        $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
+        $ctx->resource = $ctx->body['resource'];
+        unset($ctx->body['resource']);
+        return true;
     }
 
-    public function lists(): array
+    public function addAfterHook(stdClass $ctx): bool
     {
-        $validate = $this->curd->listsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->listsModel('role')
-            ->setOrder('create_time', 'desc')
-            ->result();
-    }
-
-    public function get(): array
-    {
-        $validate = $this->curd->getValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->getModel('role')
-            ->result();
-    }
-
-    public function add(): array
-    {
-        $body = $this->request->post();
-        $validate = $this->curd->addValidation([
-            'name' => 'required|array',
-            'key' => 'required',
-            'resource' => 'required|array'
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
-        $resource = $body['resource'];
-        unset($body['resource']);
-        return $this->curd
-            ->addModel('role_basic', $body)
-            ->afterHook(function () use ($body, $resource) {
-                $resourceLists = [];
-                foreach ($resource as $key => $value) {
-                    $resourceLists[] = [
-                        'role_key' => $body['key'],
-                        'resource_key' => $value
-                    ];
-                }
-                $result = Db::table('role_resource_rel')->insert($resourceLists);
-                if (!$result) {
-                    Context::set('error', [
-                        'error' => 1,
-                        'msg' => 'insert resource failed'
-                    ]);
-                    return false;
-                }
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
-    }
-
-    public function edit(): array
-    {
-        $body = $this->request->post();
-        $validate = $this->curd->editValidation([
-            'name' => 'required_if:switch,false|array',
-            'key' => 'required_if:switch,false',
-            'resource' => 'required_if:switch,false|array'
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
         $resource = [];
-        if (!$body['switch']) {
-            $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
-            $resource = $body['resource'];
-            unset($body['resource']);
-        }
-        return $this->curd
-            ->editModel('role_basic', $body)
-            ->afterHook(function (EditAfterParams $params) use ($body, $resource) {
-                if (!$params->isSwitch()) {
-                    $resourceLists = [];
-                    foreach ($resource as $key => $value) {
-                        $resourceLists[] = [
-                            'role_key' => $body['key'],
-                            'resource_key' => $value
-                        ];
-                    }
-                    Db::table('role_resource_rel')
-                        ->where('role_key', '=', $body['key'])
-                        ->delete();
-                    $result = Db::table('role_resource_rel')
-                        ->insert($resourceLists);
-                    if (!$result) {
-                        Context::set('error', [
-                            'error' => 1,
-                            'msg' => 'insert resource failed'
-                        ]);
-                        return false;
-                    }
-                }
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
-    }
-
-    public function delete(): array
-    {
-        $validate = $this->curd->deleteValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
+        foreach ($ctx->resource as $key => $value) {
+            $resource[] = [
+                'role_key' => $ctx->body['key'],
+                'resource_key' => $value
             ];
         }
+        $result = Db::table('role_resource_rel')->insert($resource);
+        if (!$result) {
+            Context::set('error', [
+                'error' => 1,
+                'msg' => 'insert resource failed'
+            ]);
+            return false;
+        }
+        $this->clearRedis();
+        return true;
+    }
 
-        return $this->curd
-            ->deleteModel('role_basic')
-            ->afterHook(function () {
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
+    public function editBeforeHook(stdClass $ctx): bool
+    {
+        $ctx->resource = [];
+        if (!$ctx->switch) {
+            $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
+            $ctx->resource = $ctx->body['resource'];
+            unset($ctx->body['resource']);
+        }
+        return true;
+    }
+
+    public function editAfterHook(stdClass $ctx): bool
+    {
+        if (!$ctx->switch) {
+            $resource = [];
+            foreach ($ctx->$resource as $key => $value) {
+                $resource[] = [
+                    'role_key' => $ctx->body['key'],
+                    'resource_key' => $value
+                ];
+            }
+            Db::table('role_resource_rel')
+                ->where('role_key', '=', $ctx->body['key'])
+                ->delete();
+            $result = Db::table('role_resource_rel')
+                ->insert($resource);
+            if (!$result) {
+                Context::set('error', [
+                    'error' => 1,
+                    'msg' => 'insert resource failed'
+                ]);
+                return false;
+            }
+        }
+        $this->clearRedis();
+        return true;
+    }
+
+    public function deleteAfterHook(stdClass $ctx): bool
+    {
+        $this->clearRedis();
+        return true;
     }
 
     /**
