@@ -8,6 +8,7 @@ use App\RedisModel\System\RoleRedis;
 use Hyperf\Curd\Common\AddModel;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
+use Hyperf\Curd\Common\GetModel;
 use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
@@ -16,7 +17,7 @@ use stdClass;
 
 class ResourceController extends BaseController
 {
-    use OriginListsModel, AddModel, EditModel, DeleteModel;
+    use OriginListsModel, GetModel, AddModel, EditModel, DeleteModel;
 
     protected static string $model = 'resource';
     protected static array $originListsOrders = [

@@ -20,14 +20,14 @@ Router::addGroup('/system', function () {
         ]
     ];
     AutoController(App\Controller\System\AclController::class, $options);
-//    AutoController(App\Controller\System\ResourceController::class, $options);
-//    AutoController(App\Controller\System\PolicyController::class, $options);
-//    AutoController(App\Controller\System\RoleController::class, $options);
-//    AutoController(App\Controller\System\AdminController::class, $options);
-//    AutoController(App\Controller\System\PictureController::class, $options);
-//    AutoController(App\Controller\System\PictureTypeController::class, $options);
-//    AutoController(App\Controller\System\VideoController::class, $options);
-//    AutoController(App\Controller\System\VideoTypeController::class, $options);
+    AutoController(App\Controller\System\ResourceController::class, $options);
+    AutoController(App\Controller\System\PolicyController::class, $options);
+    AutoController(App\Controller\System\RoleController::class, $options);
+    AutoController(App\Controller\System\AdminController::class, $options);
+    AutoController(App\Controller\System\PictureController::class, $options);
+    AutoController(App\Controller\System\PictureTypeController::class, $options);
+    AutoController(App\Controller\System\VideoController::class, $options);
+    AutoController(App\Controller\System\VideoTypeController::class, $options);
 }, [
     'middleware' => [
         Hyperf\Extra\Cors\CorsMiddleware::class
