@@ -243,7 +243,7 @@ class MainController extends BaseController
     public function cosPresigned(): array
     {
         return $this->cosClient->generatePostPresigned([
-            ['content-length-range', 0, 52428800]
+            ['content-length-range', 0, 104857600]
         ]);
     }
 }
