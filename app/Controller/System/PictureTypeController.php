@@ -3,87 +3,34 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use Hyperf\Curd\Common\AddModel;
+use Hyperf\Curd\Common\DeleteModel;
+use Hyperf\Curd\Common\EditModel;
+use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\DbConnection\Db;
 
 class PictureTypeController extends BaseController
 {
-    public function originLists(): array
-    {
-        $validate = $this->curd->originListsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
+    use OriginListsModel, AddModel, EditModel, DeleteModel;
 
-        return $this->curd
-            ->originListsModel('picture_type')
-            ->setOrder('sort', 'asc')
-            ->result();
-    }
-
-    public function add(): array
-    {
-        $validate = $this->curd->addValidation([
-            'name' => 'required',
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-        return $this->curd
-            ->addModel('picture_type')
-            ->result();
-    }
-
-    public function edit(): array
-    {
-        $validate = $this->curd->editValidation([
-            'name' => 'required',
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-        return $this->curd
-            ->editModel('picture_type')
-            ->result();
-    }
-
-    public function delete(): array
-    {
-        $validate = $this->curd->deleteValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->deleteModel('picture_type')
-            ->result();
-    }
+    protected static string $model = 'picture_type';
+    protected static array $originListsOrders = [
+        'sort' => 'asc'
+    ];
+    protected static array $addValidate = [
+        'name' => 'required'
+    ];
+    protected static array $editValidate = [
+        'name' => 'required'
+    ];
 
     public function sort(): array
     {
-        $body = $this->request->post();
-        $validate = $this->validation->make($body, [
+        $body = $this->curd->should([
             'data' => 'required|array',
             'data.*.id' => 'required',
             'data.*.sort' => 'required'
         ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
         Db::transaction(function () use ($body) {
             foreach ($body['data'] as $value) {
                 Db::table('picture_type')
