@@ -5,12 +5,32 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
-use Hyperf\Curd\Common\EditAfterParams;
+use Hyperf\Curd\Common\AddModel;
+use Hyperf\Curd\Common\DeleteModel;
+use Hyperf\Curd\Common\EditModel;
+use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
+use Hyperf\Utils\Context;
+use stdClass;
 
 class ResourceController extends BaseController
 {
+    use OriginListsModel, AddModel, EditModel, DeleteModel;
+
+    protected static string $model = 'resource';
+    protected static array $originListsOrders = [
+        'sort' => 'asc'
+    ];
+    protected static array $addValidate = [
+        'key' => 'required',
+        'name' => 'required|array'
+    ];
+    protected static array $editValidate = [
+        'key' => 'required_if:switch,false',
+        'name' => 'required_if:switch,false|array'
+    ];
+
     /**
      * @Inject()
      * @var ResourceRedis
@@ -22,141 +42,73 @@ class ResourceController extends BaseController
      */
     private RoleRedis $roleRedis;
 
-    public function originLists(): array
+    public function addBeforeHook(stdClass $ctx): bool
     {
-        $validate = $this->curd->originListsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->originListsModel('resource')
-            ->setOrder('sort', 'asc')
-            ->result();
+        $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
+        return true;
     }
 
-    public function get(): array
+    public function addAfterHook(stdClass $ctx): bool
     {
-        $validate = $this->curd->getValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->getModel('resource')
-            ->result();
+        $this->clearRedis();
+        return true;
     }
 
-    public function add(): array
+    public function editBeforeHook(stdClass $ctx): bool
     {
-        $body = $this->request->post();
-        $validate = $this->curd->addValidation([
-            'key' => 'required',
-            'name' => 'required|array'
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
-        return $this->curd
-            ->addModel('resource', $body)
-            ->afterHook(function () {
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
-    }
-
-    public function edit(): array
-    {
-        $body = $this->request->post();
-        $validate = $this->curd->editValidation([
-            'key' => 'required_if:switch,false',
-            'name' => 'required_if:switch,false|array'
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-        $body['name'] = json_encode($body['name'], JSON_UNESCAPED_UNICODE);
-        $key = null;
-        if (!$body['switch']) {
-            $data = Db::table('resource')
-                ->where('id', '=', $body['id'])
-                ->first();
-
-            if (!empty($data)) {
-                $key = $data->key;
-            }
-        }
-        return $this->curd
-            ->editModel('resource', $body)
-            ->afterHook(function (EditAfterParams $params) use ($body, $key) {
-                if (!$params->isSwitch() && $body['key'] !== $key) {
-                    Db::table('resource')
-                        ->where('parent', '=', $key)
-                        ->update([
-                            'parent' => $body['key']
-                        ]);
-                }
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
-    }
-
-    public function delete(): array
-    {
-        $body = $this->request->post();
-        $validate = $this->curd->deleteValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
+        $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
         $data = Db::table('resource')
-            ->whereIn('id', $body['id'])
+            ->where('id', '=', $ctx->body['id'])
             ->first();
 
+        if (!empty($data)) {
+            $ctx->key = $data->key;
+        }
+        return true;
+    }
+
+    public function editAfterHook(stdClass $ctx): bool
+    {
+        if (!empty($ctx->key)) {
+            Db::table('resource')
+                ->where('parent', '=', $ctx->key)
+                ->update([
+                    'parent' => $ctx->body['key']
+                ]);
+        }
+        $this->clearRedis();
+        return true;
+    }
+
+    public function deleteBeforeHook(stdClass $ctx): bool
+    {
+        $data = Db::table('resource')
+            ->whereIn('id', $ctx->body['id'])
+            ->first();
         if (empty($data)) {
-            return [
+            Context::set('error', [
                 'error' => 1,
                 'msg' => 'not exist'
-            ];
+            ]);
+            return false;
         }
-
         $exists = Db::table('resource')
             ->where('parent', '=', $data->key)
             ->exists();
-
         if ($exists) {
-            return [
+            Context::set('error', [
                 'error' => 1,
-                'msg' => 'has child'
-            ];
+                'msg' => 'not exist'
+            ]);
+            return false;
         }
+        return true;
+    }
 
-        return $this->curd
-            ->deleteModel('resource', $body)
-            ->afterHook(function () {
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
+    public function deleteAfterHook(stdClass $ctx): bool
+    {
+        $this->clearRedis();
+        return true;
     }
 
     /**
@@ -165,17 +117,9 @@ class ResourceController extends BaseController
      */
     public function sort(): array
     {
-        $body = $this->request->post();
-        $validator = $this->validation->make($body, [
+        $body = $this->curd->should([
             'data' => 'required|array',
         ]);
-        if ($validator->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validator->errors()
-            ];
-        }
-
         return Db::transaction(function () use ($body) {
             foreach ($body['data'] as $value) {
                 Db::table('resource')
