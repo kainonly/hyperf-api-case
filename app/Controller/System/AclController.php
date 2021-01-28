@@ -5,11 +5,29 @@ namespace App\Controller\System;
 
 use App\RedisModel\System\AclRedis;
 use App\RedisModel\System\RoleRedis;
+use Hyperf\Curd\Common\AddModel;
+use Hyperf\Curd\Common\GetModel;
+use Hyperf\Curd\Common\ListsModel;
+use Hyperf\Curd\Common\OriginListsModel;
+use Hyperf\Curd\Lifecycle\AddAfterHook;
+use Hyperf\Curd\Lifecycle\AddBeforeHook;
+use Hyperf\Curd\Validation;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
+use stdClass;
 
-class AclController extends BaseController
+class AclController extends BaseController implements AddBeforeHook, AddAfterHook
 {
+    use OriginListsModel, ListsModel, GetModel, AddModel;
+
+    protected static string $model = 'acl';
+    protected static array $addValidate = [
+        'name' => 'required|array',
+        'key' => 'required',
+        'write' => 'sometimes|array',
+        'read' => 'sometimes|array'
+    ];
+
     /**
      * @Inject()
      * @var AclRedis
@@ -21,106 +39,36 @@ class AclController extends BaseController
      */
     private RoleRedis $roleRedis;
 
-    public function originLists(): array
+    public function addBeforeHook(array &$body): bool
     {
-        $validate = $this->curd->originListsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->originListsModel('acl')
-            ->setOrder('create_time', 'desc')
-            ->result();
-    }
-
-    public function lists(): array
-    {
-        $validate = $this->curd->listsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->listsModel('acl')
-            ->setOrder('create_time', 'desc')
-            ->result();
-    }
-
-    public function get(): array
-    {
-        $validate = $this->curd->getValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
-        return $this->curd
-            ->getModel('acl')
-            ->result();
-    }
-
-    public function add(): array
-    {
-        $body = $this->request->post();
-        $validate = $this->curd->addValidation([
-            'name' => 'required|array',
-            'key' => 'required',
-            'write' => 'sometimes|array',
-            'read' => 'sometimes|array'
-        ]);
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
         $this->before($body);
-        return $this->curd
-            ->addModel('acl', $body)
-            ->afterHook(function () {
-                $this->clearRedis();
-                return true;
-            })
-            ->result();
+        return true;
+    }
+
+    public function addAfterHook(array &$body, stdClass $param): bool
+    {
+        $this->clearRedis();
+        return true;
     }
 
     public function edit(): array
     {
-        $body = $this->request->post();
-        $validate = $this->curd->editValidation([
+        $body = $this->curd->should(Validation::EDIT, [
             'name' => 'required_if:switch,false|array',
             'key' => 'required_if:switch,false',
             'write' => 'sometimes|array',
             'read' => 'sometimes|array'
         ]);
-
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
         if (!$body['switch']) {
             $this->before($body);
         }
-
         return $this->curd
-            ->editModel('acl', $body)
+            ->model('acl', $body)
             ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
-            ->result();
+            ->edit();
     }
 
     private function before(array &$body): void
@@ -132,21 +80,14 @@ class AclController extends BaseController
 
     public function delete(): array
     {
-        $validate = $this->curd->deleteValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
+        $body = $this->curd->should(Validation::DELETE);
         return $this->curd
-            ->deleteModel('acl')
+            ->model('acl', $body)
             ->afterHook(function () {
                 $this->clearRedis();
                 return true;
             })
-            ->result();
+            ->delete();
     }
 
     private function clearRedis(): void

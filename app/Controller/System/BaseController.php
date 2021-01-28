@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use Hyperf\Curd\CurdController;
 use Hyperf\Curd\CurdInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Extra\Hash\HashInterface;
@@ -16,7 +17,7 @@ use Hyperf\Validation\Contract\ValidatorFactoryInterface;
  * Class BaseController
  * @package App\Controller\System
  */
-abstract class BaseController
+abstract class BaseController extends CurdController
 {
     /**
      * @Inject()

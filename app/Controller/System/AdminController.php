@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\RedisModel\System\AdminRedis;
-use Hyperf\Curd\Common\AddAfterParams;
-use Hyperf\Curd\Common\EditAfterParams;
+use Hyperf\Curd\Validation;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Context;
@@ -20,36 +19,20 @@ class AdminController extends BaseController
 
     public function originLists(): array
     {
-        $validate = $this->curd->originListsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
+        $body = $this->curd->should(Validation::ORIGINLISTS);
         return $this->curd
-            ->originListsModel('admin')
-            ->setOrder('create_time', 'desc')
-            ->setField(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
-            ->result();
+            ->model('admin', $body)
+            ->select(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
+            ->originLists();
     }
 
     public function lists(): array
     {
-        $validate = $this->curd->listsValidation();
-        if ($validate->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validate->errors()
-            ];
-        }
-
+        $body = $this->curd->should(Validation::LISTS);
         return $this->curd
-            ->listsModel('admin')
-            ->setOrder('create_time', 'desc')
-            ->setField(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
-            ->result();
+            ->model('admin', $body)
+            ->select(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
+            ->lists();
     }
 
     public function get(): array

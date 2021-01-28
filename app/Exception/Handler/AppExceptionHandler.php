@@ -1,49 +1,34 @@
 <?php
-
 declare(strict_types=1);
-/**
- * This file is part of Hyperf.
- *
- * @link     https://www.hyperf.io
- * @document https://doc.hyperf.io
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf-cloud/hyperf/blob/master/LICENSE
- */
 
 namespace App\Exception\Handler;
 
-use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
+use Hyperf\Validation\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class AppExceptionHandler extends ExceptionHandler
 {
-    /**
-     * @var StdoutLoggerInterface
-     */
-    protected StdoutLoggerInterface $logger;
-
-    public function __construct(StdoutLoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
     public function handle(Throwable $throwable, ResponseInterface $response): ResponseInterface
     {
-        $this->logger->error($throwable->getTraceAsString());
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(200)
-            ->withBody(new SwooleStream(json_encode([
+        if ($throwable instanceof ValidationException) {
+            $data = json_encode([
                 'error' => 1,
-                'msg' => $throwable->getMessage(),
-            ])));
+                'msg' => $throwable->errors()
+            ], JSON_UNESCAPED_UNICODE);
+            $this->stopPropagation();
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(200)
+                ->withBody(new SwooleStream($data));
+        }
+        return $response;
     }
 
     public function isValid(Throwable $throwable): bool
     {
-        return true;
+        return $throwable instanceof ValidationException;
     }
 }
