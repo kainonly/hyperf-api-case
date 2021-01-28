@@ -6,24 +6,35 @@ namespace App\Controller\System;
 use App\RedisModel\System\AclRedis;
 use App\RedisModel\System\RoleRedis;
 use Hyperf\Curd\Common\AddModel;
+use Hyperf\Curd\Common\DeleteModel;
+use Hyperf\Curd\Common\EditModel;
 use Hyperf\Curd\Common\GetModel;
 use Hyperf\Curd\Common\ListsModel;
 use Hyperf\Curd\Common\OriginListsModel;
 use Hyperf\Curd\Lifecycle\AddAfterHook;
 use Hyperf\Curd\Lifecycle\AddBeforeHook;
-use Hyperf\Curd\Validation;
+use Hyperf\Curd\Lifecycle\DeleteAfterHook;
+use Hyperf\Curd\Lifecycle\EditAfterHook;
+use Hyperf\Curd\Lifecycle\EditBeforeHook;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use stdClass;
 
-class AclController extends BaseController implements AddBeforeHook, AddAfterHook
+class AclController extends BaseController
+    implements AddBeforeHook, AddAfterHook, EditBeforeHook, EditAfterHook, DeleteAfterHook
 {
-    use OriginListsModel, ListsModel, GetModel, AddModel;
+    use OriginListsModel, ListsModel, GetModel, AddModel, EditModel, DeleteModel;
 
     protected static string $model = 'acl';
     protected static array $addValidate = [
         'name' => 'required|array',
         'key' => 'required',
+        'write' => 'sometimes|array',
+        'read' => 'sometimes|array'
+    ];
+    protected static array $editValidate = [
+        'name' => 'required_if:switch,false|array',
+        'key' => 'required_if:switch,false',
         'write' => 'sometimes|array',
         'read' => 'sometimes|array'
     ];
@@ -39,36 +50,30 @@ class AclController extends BaseController implements AddBeforeHook, AddAfterHoo
      */
     private RoleRedis $roleRedis;
 
-    public function addBeforeHook(array &$body): bool
+    public function addBeforeHook(stdClass $ctx): bool
     {
-        $this->before($body);
+        $this->before($ctx->body);
         return true;
     }
 
-    public function addAfterHook(array &$body, stdClass $param): bool
+    public function addAfterHook(stdClass $ctx): bool
     {
         $this->clearRedis();
         return true;
     }
 
-    public function edit(): array
+    public function editBeforeHook(stdClass $ctx): bool
     {
-        $body = $this->curd->should(Validation::EDIT, [
-            'name' => 'required_if:switch,false|array',
-            'key' => 'required_if:switch,false',
-            'write' => 'sometimes|array',
-            'read' => 'sometimes|array'
-        ]);
-        if (!$body['switch']) {
-            $this->before($body);
+        if ($ctx->switch) {
+            $this->before($ctx->body);
         }
-        return $this->curd
-            ->model('acl', $body)
-            ->afterHook(function () {
-                $this->clearRedis();
-                return true;
-            })
-            ->edit();
+        return true;
+    }
+
+    public function editAfterHook(stdClass $ctx): bool
+    {
+        $this->clearRedis();
+        return true;
     }
 
     private function before(array &$body): void
@@ -78,16 +83,10 @@ class AclController extends BaseController implements AddBeforeHook, AddAfterHoo
         $body['read'] = implode(',', (array)$body['read']);
     }
 
-    public function delete(): array
+    public function deleteAfterHook(stdClass $ctx): bool
     {
-        $body = $this->curd->should(Validation::DELETE);
-        return $this->curd
-            ->model('acl', $body)
-            ->afterHook(function () {
-                $this->clearRedis();
-                return true;
-            })
-            ->delete();
+        $this->clearRedis();
+        return true;
     }
 
     private function clearRedis(): void
