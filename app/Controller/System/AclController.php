@@ -11,17 +11,11 @@ use Hyperf\Curd\Common\EditModel;
 use Hyperf\Curd\Common\GetModel;
 use Hyperf\Curd\Common\ListsModel;
 use Hyperf\Curd\Common\OriginListsModel;
-use Hyperf\Curd\Lifecycle\AddAfterHook;
-use Hyperf\Curd\Lifecycle\AddBeforeHook;
-use Hyperf\Curd\Lifecycle\DeleteAfterHook;
-use Hyperf\Curd\Lifecycle\EditAfterHook;
-use Hyperf\Curd\Lifecycle\EditBeforeHook;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use stdClass;
 
 class AclController extends BaseController
-    implements AddBeforeHook, AddAfterHook, EditBeforeHook, EditAfterHook, DeleteAfterHook
 {
     use OriginListsModel, ListsModel, GetModel, AddModel, EditModel, DeleteModel;
 
@@ -64,7 +58,7 @@ class AclController extends BaseController
 
     public function editBeforeHook(stdClass $ctx): bool
     {
-        if ($ctx->switch) {
+        if (!$ctx->switch) {
             $this->before($ctx->body);
         }
         return true;
