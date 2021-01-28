@@ -68,7 +68,7 @@ class AdminController extends BaseController
             ->setField(['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'])
             ->result();
 
-        $username = Context::get('auth')->user;
+        $username = Context::get('auth')['user'];
         $data = Db::table('admin_basic')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
@@ -146,8 +146,8 @@ class AdminController extends BaseController
             ->first();
         if (!empty($data) && $data->id === $body['id']) {
             return [
-                'error' => 1,
-                'msg' => 'is self'
+                'error' => 2,
+                'msg' => 'Detected as currently logged in user'
             ];
         }
         $role = null;
