@@ -47,7 +47,7 @@ class RoleRedis extends RedisModel implements RoleLibrary
      */
     private function update(): void
     {
-        $query = Db::table('role')
+        $query = Db::table('role_mix')
             ->where('status', '=', 1)
             ->get(['key', 'acl', 'resource']);
 

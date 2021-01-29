@@ -20,10 +20,10 @@ class AdminController extends BaseController
 {
     use OriginListsModel, ListsModel, GetModel, AddModel, EditModel, DeleteModel;
 
-    protected static string $model = 'admin';
-    protected static string $addModel = 'admin_basic';
-    protected static string $editModel = 'admin_basic';
-    protected static string $deleteModel = 'admin_basic';
+    protected static string $model = 'admin_mix';
+    protected static string $addModel = 'admin';
+    protected static string $editModel = 'admin';
+    protected static string $deleteModel = 'admin';
     protected static array $originListsField = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
     protected static array $listsField = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
     protected static array $getField = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
@@ -52,7 +52,7 @@ class AdminController extends BaseController
     public function getCustomReturn(array $body, array $result): array
     {
         $username = Context::get('auth')['user'];
-        $data = Db::table('admin_basic')
+        $data = Db::table('admin')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
@@ -90,7 +90,7 @@ class AdminController extends BaseController
     public function editBeforeHook(stdClass $ctx): bool
     {
         $username = Context::get('auth')['user'];
-        $data = Db::table('admin_basic')
+        $data = Db::table('admin')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
@@ -115,6 +115,7 @@ class AdminController extends BaseController
                 if ($validator->fails()) {
                     throw new ValidationException($validator);
                 }
+                $ctx->body['password'] = $this->hash->create($ctx->body['password']);
             } else {
                 unset($ctx->body['password']);
             }
@@ -138,7 +139,7 @@ class AdminController extends BaseController
     public function deleteBeforeHook(stdClass $ctx): bool
     {
         $username = Context::get('auth')->user;
-        $data = Db::table('admin_basic')
+        $data = Db::table('admin')
             ->where('username', '=', $username)
             ->where('status', '=', 1)
             ->first();
@@ -180,7 +181,7 @@ class AdminController extends BaseController
             ];
         }
 
-        $exists = Db::table('admin_basic')
+        $exists = Db::table('admin')
             ->where('username', '=', $body['username'])
             ->exists();
 

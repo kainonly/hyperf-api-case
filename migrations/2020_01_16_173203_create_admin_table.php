@@ -4,14 +4,14 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Extra\Common\Migration;
 
-class CreateAdminBasicTable extends Migration
+class CreateAdminTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('admin_basic', function (Blueprint $table) {
+        Schema::create('admin', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('username', 50)
                 ->unique()
@@ -38,7 +38,7 @@ class CreateAdminBasicTable extends Migration
             $table->unsignedBigInteger('update_time')
                 ->default(0);
         });
-        $this->comment('admin_basic', '管理员表');
+        $this->comment('admin', '管理员表');
     }
 
     /**
@@ -46,6 +46,6 @@ class CreateAdminBasicTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin_basic');
+        Schema::dropIfExists('admin');
     }
 }

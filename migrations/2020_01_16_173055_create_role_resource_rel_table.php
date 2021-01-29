@@ -19,7 +19,7 @@ class CreateRoleResourceRelTable extends Migration
                 ->comment('资源键关联');
             $table->foreign('role_key')
                 ->references('key')
-                ->on('role_basic')
+                ->on('role')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreign('resource_key')

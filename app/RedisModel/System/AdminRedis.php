@@ -38,7 +38,7 @@ class AdminRedis extends RedisModel
      */
     private function update(): void
     {
-        $query = Db::table('admin')
+        $query = Db::table('admin_mix')
             ->where('status', '=', 1)
             ->get(['id', 'role', 'username', 'password']);
 

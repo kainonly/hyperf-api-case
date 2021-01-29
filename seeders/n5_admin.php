@@ -20,7 +20,7 @@ class N5Admin extends Seeder
         $container = ApplicationContext::getContainer();
         $this->hash = $container->get(HashInterface::class);
         Db::transaction(function () {
-            $resultId = Db::table('admin_basic')->insertGetId([
+            $resultId = Db::table('admin')->insertGetId([
                 'username' => 'kain',
                 'password' => $this->hash->create('pass@VAN1234'),
                 'call' => 'kain',

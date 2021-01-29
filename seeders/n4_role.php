@@ -14,7 +14,7 @@ class N4Role extends Seeder
     public function run(): void
     {
         Db::transaction(function () {
-            Db::table('role_basic')->insertOrIgnore([
+            Db::table('role')->insertOrIgnore([
                 'name' => json_encode([
                     'zh_cn' => '超级管理员',
                     'en_us' => 'super'
