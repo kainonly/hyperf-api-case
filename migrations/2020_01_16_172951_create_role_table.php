@@ -4,14 +4,14 @@ use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Extra\Common\Migration;
 
-class CreateRoleBasicTable extends Migration
+class CreateRoleTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('role_basic', function (Blueprint $table) {
+        Schema::create('role', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('key', 200)
                 ->unique()
@@ -29,7 +29,7 @@ class CreateRoleBasicTable extends Migration
             $table->unsignedBigInteger('update_time')
                 ->default(0);
         });
-        $this->comment('role_basic', '权限组表');
+        $this->comment('role', '权限组表');
     }
 
     /**
@@ -37,6 +37,6 @@ class CreateRoleBasicTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_basic');
+        Schema::dropIfExists('role');
     }
 }

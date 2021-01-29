@@ -24,10 +24,10 @@ class RoleController extends BaseController
 {
     use OriginListsModel, ListsModel, GetModel, AddModel, EditModel, DeleteModel;
 
-    protected static string $model = 'role';
-    protected static string $addModel = 'role_basic';
-    protected static string $editModel = 'role_basic';
-    protected static string $deleteModel = 'role_basic';
+    protected static string $model = 'role_mix';
+    protected static string $addModel = 'role';
+    protected static string $editModel = 'role';
+    protected static string $deleteModel = 'role';
     protected static array $addValidate = [
         'name' => 'required|array',
         'key' => 'required',

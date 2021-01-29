@@ -15,7 +15,6 @@ use Hyperf\Extra\Redis\RefreshToken;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 
 class MainController extends BaseController
 {
@@ -52,8 +51,7 @@ class MainController extends BaseController
      */
     public function login(): ResponseInterface
     {
-        $body = $this->request->post();
-        $validator = $this->validation->make($body, [
+        $body = $this->curd->should([
             'username' => [
                 'required',
                 'between:4,20'
@@ -63,16 +61,7 @@ class MainController extends BaseController
                 'between:12,20'
             ],
         ]);
-
-        if ($validator->fails()) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $validator->errors()
-            ]);
-        }
-
         $data = $this->adminRedis->get($body['username']);
-
         if (empty($data)) {
             return $this->response->json([
                 'error' => 1,
@@ -147,7 +136,7 @@ class MainController extends BaseController
      */
     public function information(): array
     {
-        $data = Db::table('admin_basic')
+        $data = Db::table('admin')
             ->where('username', '=', Context::get('auth')['user'])
             ->first(['email', 'phone', 'call', 'avatar']);
 
@@ -162,8 +151,7 @@ class MainController extends BaseController
      */
     public function update(): array
     {
-        $body = $this->request->post();
-        $validator = $this->validation->make($body, [
+        $body = $this->curd->should([
             'old_password' => [
                 'sometimes',
                 'between:12,20',
@@ -175,16 +163,8 @@ class MainController extends BaseController
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
             ],
         ]);
-
-        if ($validator->fails()) {
-            return [
-                'error' => 1,
-                'msg' => $validator->errors()
-            ];
-        }
-
-        $username = Context::get('auth')->user;
-        $data = Db::table('admin_basic')
+        $username = Context::get('auth')['user'];
+        $data = Db::table('admin')
             ->where('username', '=', $username)
             ->first();
 
@@ -197,13 +177,16 @@ class MainController extends BaseController
 
         if (!empty($body['old_password'])) {
             if (!$this->hash->check($body['old_password'], $data->password)) {
-                throw new RuntimeException('password verification failed');
+                return [
+                    'error' => 2,
+                    'msg' => 'password verification failed'
+                ];
             }
             $body['password'] = $this->hash->create($body['new_password']);
         }
 
         unset($body['old_password'], $body['new_password']);
-        Db::table('admin_basic')
+        Db::table('admin')
             ->where('username', '=', $username)
             ->update($body);
 

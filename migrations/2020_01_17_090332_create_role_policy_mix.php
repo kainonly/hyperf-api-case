@@ -3,7 +3,7 @@
 use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Common\Migration;
 
-class CreateRolePolicyView extends Migration
+class CreateRolePolicyMix extends Migration
 {
     /**
      * Run the migrations.
@@ -11,7 +11,7 @@ class CreateRolePolicyView extends Migration
     public function up(): void
     {
         $this->down();
-        $sql = "create view {$this->prefix}role_policy as ";
+        $sql = "create view {$this->prefix}role_policy_mix as ";
         $sql .= "select rrr.role_key, p.acl_key, max(p.policy) as policy ";
         $sql .= "from {$this->prefix}role_resource_rel rrr ";
         $sql .= "join {$this->prefix}policy p on rrr.resource_key = p.resource_key ";
@@ -24,6 +24,6 @@ class CreateRolePolicyView extends Migration
      */
     public function down(): void
     {
-        Db::statement("drop view if exists {$this->prefix}role_policy");
+        Db::statement("drop view if exists {$this->prefix}role_policy_mix");
     }
 }

@@ -19,12 +19,12 @@ class CreateAdminRoleRelTable extends Migration
                 ->comment('权限组键关联');
             $table->foreign('admin_id')
                 ->references('id')
-                ->on('admin_basic')
+                ->on('admin')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->foreign('role_key')
                 ->references('key')
-                ->on('role_basic')
+                ->on('role')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->unique(['admin_id', 'role_key']);
