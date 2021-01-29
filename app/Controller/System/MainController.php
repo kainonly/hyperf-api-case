@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\Client\CosClient;
+use App\RedisModel\System\UserLockRedis;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -25,6 +26,11 @@ class MainController extends BaseController
      * @var RefreshToken
      */
     private RefreshToken $refreshToken;
+    /**
+     * @Inject()
+     * @var UserLockRedis
+     */
+    private UserLockRedis $userLock;
     /**
      * @Inject()
      * @var AdminRedis
@@ -65,17 +71,24 @@ class MainController extends BaseController
         if (empty($data)) {
             return $this->response->json([
                 'error' => 1,
-                'msg' => 'username not exists'
+                'msg' => 'User does not exist or has been frozen'
             ]);
         }
-
+        if (!$this->userLock->check('admin:' . $body['username'])) {
+            $this->userLock->lock('admin:' . $body['username']);
+            return $this->response->json([
+                'error' => 2,
+                'msg' => 'You have failed to log in too many times, please try again later'
+            ]);
+        }
         if (!$this->hash->check($body['password'], $data['password'])) {
+            $this->userLock->inc('admin:' . $body['username']);
             return $this->response->json([
                 'error' => 1,
-                'msg' => 'password incorrect'
+                'msg' => 'User password verification is inconsistent'
             ]);
         }
-
+        $this->userLock->remove('admin:' . $body['username']);
         return $this->create('system', [
             'user' => $data['username'],
             'role' => explode(',', $data['role'])
