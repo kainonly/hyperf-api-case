@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\Client\CosClient;
-use App\RedisModel\System\UserLockRedis;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -13,6 +12,7 @@ use App\RedisModel\System\RoleRedis;
 use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Auth\Auth;
 use Hyperf\Extra\Redis\RefreshToken;
+use Hyperf\Extra\Redis\UserLock;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
@@ -28,9 +28,9 @@ class MainController extends BaseController
     private RefreshToken $refreshToken;
     /**
      * @Inject()
-     * @var UserLockRedis
+     * @var UserLock
      */
-    private UserLockRedis $userLock;
+    private UserLock $userLock;
     /**
      * @Inject()
      * @var AdminRedis
