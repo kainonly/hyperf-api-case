@@ -15,7 +15,7 @@ class CreateAclTable extends Migration
             $table->bigIncrements('id');
             $table->string('key', 200)
                 ->unique()
-                ->comment('访问控制键');
+                ->comment('访问控制代码');
             $table->json('name')
                 ->comment('访问控制键名称');
             $table->longText('write')

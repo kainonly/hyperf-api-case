@@ -15,7 +15,7 @@ class CreateResourceTable extends Migration
             $table->bigIncrements('id');
             $table->string('key', 200)
                 ->unique()
-                ->comment('资源控制键');
+                ->comment('资源控制代码');
             $table->string('parent', 200)
                 ->default('origin')
                 ->comment('资源键父节点');

@@ -21,6 +21,9 @@ class CreateAdminTable extends Migration
             $table->string('email', 200)
                 ->nullable()
                 ->comment('电子邮件');
+            $table->longText('permission')
+                ->nullable()
+                ->comment('特殊授权');
             $table->string('phone', 20)
                 ->nullable()
                 ->comment('联系电话');
