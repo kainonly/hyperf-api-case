@@ -20,13 +20,17 @@ class AdminController extends BaseController
 {
     use OriginListsModel, ListsModel, GetModel, AddModel, EditModel, DeleteModel;
 
+    private const field = [
+        'id', 'username', 'role', 'resource', 'acl', 'permission', 'call', 'email', 'phone', 'avatar', 'status'
+    ];
+
     protected static string $model = 'admin_mix';
     protected static string $addModel = 'admin';
     protected static string $editModel = 'admin';
     protected static string $deleteModel = 'admin';
-    protected static array $originListsField = ['id', 'username', 'role', 'permission', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected static array $listsField = ['id', 'username', 'role', 'permission', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected static array $getField = ['id', 'username', 'role', 'permission', 'call', 'email', 'phone', 'avatar', 'status'];
+    protected static array $originListsField = self::field;
+    protected static array $listsField = self::field;
+    protected static array $getField = self::field;
     protected static array $addValidate = [
         'username' => [
             'required',
@@ -37,10 +41,14 @@ class AdminController extends BaseController
             'between:12,20',
             'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
         ],
-        'role' => ['required', 'array']
+        'role' => ['required', 'array'],
+        'resource' => ['sometimes', 'array'],
+        'permission' => ['sometimes', 'array']
     ];
     protected static array $editValidate = [
-        'role' => ['required_if:switch,false', 'array']
+        'role' => ['required_if:switch,false', 'array'],
+        'resource' => ['sometimes', 'array'],
+        'permission' => ['sometimes', 'array']
     ];
 
     /**
@@ -66,6 +74,8 @@ class AdminController extends BaseController
     {
         $ctx->role = $ctx->body['role'];
         unset($ctx->body['role']);
+        $ctx->resource = $ctx->body['resource'];
+        unset($ctx->body['resource']);
         $ctx->body['password'] = $this->hash->create($ctx->body['password']);
         $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
         return true;
@@ -73,16 +83,15 @@ class AdminController extends BaseController
 
     public function addAfterHook(stdClass $ctx): bool
     {
-        $data = Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
+        Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
             'admin_id' => $ctx->id,
             'role_key' => $v
         ], $ctx->role));
-        if (!$data) {
-            Context::set('error', [
-                'error' => 1,
-                'msg' => 'role assoc wrong'
-            ]);
-            return false;
+        if (!empty($ctx->resource)) {
+            Db::table('admin_resource_rel')->insert(array_map(static fn($v) => [
+                'admin_id' => $ctx->id,
+                'resource_key' => $v
+            ], $ctx->resource));
         }
         $this->clearRedis();
         return true;
@@ -105,6 +114,8 @@ class AdminController extends BaseController
         if (!$ctx->switch) {
             $ctx->role = $ctx->body['role'];
             unset($ctx->body['role']);
+            $ctx->resource = $ctx->body['resource'];
+            unset($ctx->body['resource']);
             if (!empty($ctx->body['password'])) {
                 $validator = $this->validation->make($ctx->body, [
                     'password' => [
@@ -126,14 +137,25 @@ class AdminController extends BaseController
 
     public function editAfterHook(stdClass $ctx): bool
     {
-        if (!$ctx->switch && !empty($ctx->role)) {
-            Db::table('admin_role_rel')
-                ->where('admin_id', '=', $ctx->body['id'])
-                ->delete();
-            Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
-                'admin_id' => $ctx->body['id'],
-                'role_key' => $v
-            ], $ctx->role));
+        if (!$ctx->switch) {
+            if (!empty($ctx->role)) {
+                Db::table('admin_role_rel')
+                    ->where('admin_id', '=', $ctx->body['id'])
+                    ->delete();
+                Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
+                    'admin_id' => $ctx->body['id'],
+                    'role_key' => $v
+                ], $ctx->role));
+            }
+            if (!empty($ctx->resource)) {
+                Db::table('admin_resource_rel')
+                    ->where('admin_id', '=', $ctx->body['id'])
+                    ->delete();
+                Db::table('admin_resource_rel')->insert(array_map(static fn($v) => [
+                    'admin_id' => $ctx->body['id'],
+                    'resource_key' => $v
+                ], $ctx->resource));
+            }
         }
         $this->clearRedis();
         return true;
