@@ -53,7 +53,7 @@ class MainController extends BaseController
     private CosClient $cosClient;
 
     /**
-     * User login
+     * 用户登录
      */
     public function login(): ResponseInterface
     {
@@ -96,7 +96,7 @@ class MainController extends BaseController
     }
 
     /**
-     * User verify
+     * 用户验证
      */
     public function verify(): ResponseInterface
     {
@@ -111,7 +111,7 @@ class MainController extends BaseController
     }
 
     /**
-     * User logout
+     * 用户登出
      */
     public function logout(): ResponseInterface
     {
@@ -126,6 +126,7 @@ class MainController extends BaseController
     }
 
     /**
+     * 获取资源
      * @return array
      */
     public function resource(): array
@@ -145,6 +146,7 @@ class MainController extends BaseController
     }
 
     /**
+     * 个人信息
      * @return array
      */
     public function information(): array
@@ -160,6 +162,7 @@ class MainController extends BaseController
     }
 
     /**
+     * 更新个人信息
      * @return array
      */
     public function update(): array
@@ -211,6 +214,7 @@ class MainController extends BaseController
     }
 
     /**
+     * 上传
      * @return array
      * @throws Exception
      */
@@ -233,6 +237,7 @@ class MainController extends BaseController
     }
 
     /**
+     * 对象存储签名
      * @return array
      * @throws Exception
      */
