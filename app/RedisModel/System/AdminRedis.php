@@ -41,7 +41,7 @@ class AdminRedis extends RedisModel implements UserLibrary
     {
         $query = Db::table('admin_mix')
             ->where('status', '=', 1)
-            ->get(['id', 'role', 'username', 'password', 'permission']);
+            ->get(['id', 'role', 'username', 'password', 'resource', 'acl', 'permission']);
 
         if ($query->isEmpty()) {
             return;
