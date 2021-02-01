@@ -135,7 +135,7 @@ class MainController extends BaseController
         $roleKey = explode(',', $user['role']);
         $resource = [
             ...$this->roleRedis->get($roleKey, 'resource'),
-            ...explode(',', $user['resource'])
+            ...!empty($user['resource']) ? explode(',', $user['resource']) : []
         ];
         $routerRole = array_unique($resource);
         $lists = Arr::where(
