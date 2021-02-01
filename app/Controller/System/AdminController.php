@@ -37,10 +37,10 @@ class AdminController extends BaseController
             'between:12,20',
             'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
         ],
-        'role' => ['required']
+        'role' => ['required', 'array']
     ];
     protected static array $editValidate = [
-        'role' => ['required_if:switch,false']
+        'role' => ['required_if:switch,false', 'array']
     ];
 
     /**
@@ -75,10 +75,10 @@ class AdminController extends BaseController
 
     public function addAfterHook(stdClass $ctx): bool
     {
-        $data = Db::table('admin_role_rel')->insert([
+        $data = Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
             'admin_id' => $ctx->id,
-            'role_key' => $ctx->role
-        ]);
+            'role_key' => $v
+        ], $ctx->role));
         if (!$data) {
             Context::set('error', [
                 'error' => 1,
@@ -134,9 +134,11 @@ class AdminController extends BaseController
         if (!$ctx->switch) {
             Db::table('admin_role_rel')
                 ->where('admin_id', '=', $ctx->body['id'])
-                ->update([
-                    'role_key' => $ctx->role
-                ]);
+                ->delete();
+            Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
+                'admin_id' => $ctx->id,
+                'role_key' => $v
+            ], $ctx->role));
         }
         $this->clearRedis();
         return true;
