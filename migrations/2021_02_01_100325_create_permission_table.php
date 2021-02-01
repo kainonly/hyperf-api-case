@@ -13,10 +13,11 @@ class CreatePermissionTable extends Migration
     {
         Schema::create('permission', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('key', 200)
+                ->unique()
+                ->comment('特殊授权代码');
             $table->text('name')
                 ->comment('特殊授权名称');
-            $table->text('key')
-                ->comment('特殊授权键');
             $table->text('note')
                 ->nullable()
                 ->comment('备注');

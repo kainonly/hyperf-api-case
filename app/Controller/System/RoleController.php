@@ -94,7 +94,7 @@ class RoleController extends BaseController
     {
         if (!$ctx->switch) {
             $resource = [];
-            foreach ($ctx->$resource as $key => $value) {
+            foreach ($ctx->resource as $key => $value) {
                 $resource[] = [
                     'role_key' => $ctx->body['key'],
                     'resource_key' => $value

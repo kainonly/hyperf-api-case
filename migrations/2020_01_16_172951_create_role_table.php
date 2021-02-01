@@ -15,9 +15,12 @@ class CreateRoleTable extends Migration
             $table->bigIncrements('id');
             $table->string('key', 200)
                 ->unique()
-                ->comment('权限组键名');
+                ->comment('权限组代码');
             $table->json('name')
                 ->comment('权限组名称');
+            $table->longText('permission')
+                ->nullable()
+                ->comment('特殊授权');
             $table->text('note')
                 ->nullable()
                 ->comment('备注');
