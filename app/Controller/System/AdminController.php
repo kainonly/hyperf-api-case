@@ -67,9 +67,7 @@ class AdminController extends BaseController
         $ctx->role = $ctx->body['role'];
         unset($ctx->body['role']);
         $ctx->body['password'] = $this->hash->create($ctx->body['password']);
-        if (!empty($ctx->body['permission'])) {
-            $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
-        }
+        $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
         return true;
     }
 
@@ -104,7 +102,6 @@ class AdminController extends BaseController
             ]);
             return false;
         }
-        $ctx->role = null;
         if (!$ctx->switch) {
             $ctx->role = $ctx->body['role'];
             unset($ctx->body['role']);
@@ -122,21 +119,19 @@ class AdminController extends BaseController
             } else {
                 unset($ctx->body['password']);
             }
-            if (!empty($ctx->body['permission'])) {
-                $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
-            }
+            $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
         }
         return true;
     }
 
     public function editAfterHook(stdClass $ctx): bool
     {
-        if (!$ctx->switch) {
+        if (!$ctx->switch && !empty($ctx->role)) {
             Db::table('admin_role_rel')
                 ->where('admin_id', '=', $ctx->body['id'])
                 ->delete();
             Db::table('admin_role_rel')->insert(array_map(static fn($v) => [
-                'admin_id' => $ctx->id,
+                'admin_id' => $ctx->body['id'],
                 'role_key' => $v
             ], $ctx->role));
         }
