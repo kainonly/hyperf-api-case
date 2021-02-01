@@ -27,7 +27,6 @@ class CreateAdminRoleRelTable extends Migration
                 ->on('role')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->unique(['admin_id', 'role_key']);
         });
         $this->comment('admin_role_rel', '管理员权限组关联表');
     }

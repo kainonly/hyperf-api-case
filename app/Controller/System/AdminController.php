@@ -24,9 +24,9 @@ class AdminController extends BaseController
     protected static string $addModel = 'admin';
     protected static string $editModel = 'admin';
     protected static string $deleteModel = 'admin';
-    protected static array $originListsField = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected static array $listsField = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
-    protected static array $getField = ['id', 'username', 'role', 'call', 'email', 'phone', 'avatar', 'status'];
+    protected static array $originListsField = ['id', 'username', 'role', 'permission', 'call', 'email', 'phone', 'avatar', 'status'];
+    protected static array $listsField = ['id', 'username', 'role', 'permission', 'call', 'email', 'phone', 'avatar', 'status'];
+    protected static array $getField = ['id', 'username', 'role', 'permission', 'call', 'email', 'phone', 'avatar', 'status'];
     protected static array $addValidate = [
         'username' => [
             'required',
@@ -65,8 +65,11 @@ class AdminController extends BaseController
     public function addBeforeHook(stdClass $ctx): bool
     {
         $ctx->role = $ctx->body['role'];
-        $ctx->body['password'] = $this->hash->create($ctx->body['password']);
         unset($ctx->body['role']);
+        $ctx->body['password'] = $this->hash->create($ctx->body['password']);
+        if (!empty($ctx->body['permission'])) {
+            $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
+        }
         return true;
     }
 
@@ -118,6 +121,9 @@ class AdminController extends BaseController
                 $ctx->body['password'] = $this->hash->create($ctx->body['password']);
             } else {
                 unset($ctx->body['password']);
+            }
+            if (!empty($ctx->body['permission'])) {
+                $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
             }
         }
         return true;
