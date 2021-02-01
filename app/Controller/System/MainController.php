@@ -91,7 +91,6 @@ class MainController extends BaseController
         $this->userLock->remove('admin:' . $body['username']);
         return $this->create('system', [
             'user' => $data['username'],
-            'role' => explode(',', $data['role'])
         ]);
     }
 
@@ -132,7 +131,8 @@ class MainController extends BaseController
     public function resource(): array
     {
         $router = $this->resourceRedis->get();
-        $roleKey = Context::get('auth')['role'];
+        $user = $this->adminRedis->get(Context::get('auth')['user']);
+        $roleKey = explode(',', $user['role']);
         $role = $this->roleRedis->get($roleKey, 'resource');
         $routerRole = array_unique($role);
         $lists = Arr::where(

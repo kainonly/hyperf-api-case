@@ -4,9 +4,10 @@ declare (strict_types=1);
 namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
+use Hyperf\Extra\Redis\Library\UserLibrary;
 use Hyperf\Extra\Redis\RedisModel;
 
-class AdminRedis extends RedisModel
+class AdminRedis extends RedisModel implements UserLibrary
 {
     protected string $key = 'system:admin';
 
@@ -40,7 +41,7 @@ class AdminRedis extends RedisModel
     {
         $query = Db::table('admin_mix')
             ->where('status', '=', 1)
-            ->get(['id', 'role', 'username', 'password']);
+            ->get(['id', 'role', 'username', 'password', 'permission']);
 
         if ($query->isEmpty()) {
             return;
