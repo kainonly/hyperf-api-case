@@ -14,10 +14,10 @@ class CreateAdminMix extends Migration
         $sql = "create view {$this->prefix}admin_mix as ";
         $sql .= "select a.id,a.username,a.password,";
         $sql .= "group_concat(distinct arr.role_key separator ',') as role,";
-        $sql .= "a.`call`,a.email, a.phone,a.avatar,a.status,a.create_time,a.update_time ";
+        $sql .= "a.permission, a.`call`,a.email, a.phone,a.avatar,a.status,a.create_time,a.update_time ";
         $sql .= "from {$this->prefix}admin a ";
         $sql .= "join {$this->prefix}admin_role_rel arr on a.id = arr.admin_id ";
-        $sql .= "group by a.id, a.username, a.password, a.`call`, a.email, a.phone, a.avatar, a.status, a.create_time, a.update_time";
+        $sql .= "group by a.id, a.username, a.password, a.permission, a.`call`, a.email, a.phone, a.avatar, a.status, a.create_time, a.update_time";
         Db::statement($sql);
     }
 
