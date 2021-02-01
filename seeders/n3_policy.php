@@ -35,6 +35,11 @@ class N3Policy extends Seeder
                 'policy' => 0
             ],
             [
+                'resource_key' => 'permission-index',
+                'acl_key' => 'permission',
+                'policy' => 1
+            ],
+            [
                 'resource_key' => 'role-index',
                 'acl_key' => 'role',
                 'policy' => 1
