@@ -49,7 +49,7 @@ class RoleRedis extends RedisModel implements RoleLibrary
     {
         $query = Db::table('role_mix')
             ->where('status', '=', 1)
-            ->get(['key', 'acl', 'resource']);
+            ->get(['key', 'acl', 'resource', 'permission']);
 
         if ($query->isEmpty()) {
             return;
@@ -58,7 +58,8 @@ class RoleRedis extends RedisModel implements RoleLibrary
         foreach ($query->toArray() as $value) {
             $lists[$value->key] = json_encode([
                 'acl' => $value->acl,
-                'resource' => $value->resource
+                'resource' => $value->resource,
+                'permission' => $value->permission
             ]);
         }
 

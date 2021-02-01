@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Middleware\System;
 
 use App\RedisModel\System\AclRedis;
+use App\RedisModel\System\AdminRedis;
 use App\RedisModel\System\RoleRedis;
 use Hyperf\Extra\Rbac\RbacMiddleware;
 
@@ -14,8 +15,8 @@ class RbacVerify extends RbacMiddleware
         'valided*'
     ];
 
-    public function __construct(RoleRedis $role, AclRedis $acl)
+    public function __construct(RoleRedis $role, AclRedis $acl, AdminRedis $admin)
     {
-        parent::__construct($role, $acl);
+        parent::__construct($role, $acl, $admin);
     }
 }
