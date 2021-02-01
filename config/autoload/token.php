@@ -4,11 +4,11 @@ return [
     'default' => [
         'issuer' => 'api.kainonly.com',
         'audience' => '*',
-        'expires' => 3600
+        'expires' => 900
     ],
     'system' => [
         'issuer' => 'api.kainonly.com',
         'audience' => 'console.kainonly.com',
-        'expires' => 3600
+        'expires' => 300
     ],
 ];

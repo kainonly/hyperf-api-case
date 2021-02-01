@@ -15,17 +15,6 @@ class N1Acl extends Seeder
     {
         Db::table('acl')->insertOrIgnore([
             [
-                'key' => 'main',
-                'name' => json_encode([
-                    'zh_cn' => '公共模块',
-                    'en_us' => 'Common Module'
-                ], JSON_UNESCAPED_UNICODE),
-                'write' => 'uploads',
-                'read' => null,
-                'create_time' => time(),
-                'update_time' => time()
-            ],
-            [
                 'key' => 'resource',
                 'name' => json_encode([
                     'zh_cn' => '资源控制模块',
@@ -55,6 +44,17 @@ class N1Acl extends Seeder
                 ], JSON_UNESCAPED_UNICODE),
                 'write' => 'add,delete',
                 'read' => 'originLists',
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'permission',
+                'name' => json_encode([
+                    'zh_cn' => '特殊授权模块',
+                    'en_us' => 'Policy Module'
+                ], JSON_UNESCAPED_UNICODE),
+                'write' => 'add,edit,delete',
+                'read' => 'originLists,lists,get',
                 'create_time' => time(),
                 'update_time' => time()
             ],

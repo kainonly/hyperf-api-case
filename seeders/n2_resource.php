@@ -29,42 +29,14 @@ class N2Resource extends Seeder
                 'update_time' => time()
             ],
             [
-                'key' => 'resource-index',
+                'key' => 'control',
                 'parent' => 'system',
                 'name' => json_encode([
-                    'zh_cn' => '资源控制管理',
-                    'en_us' => 'Resource'
-                ], JSON_UNESCAPED_UNICODE),
+                    'zh_cn' => '控制授权',
+                    'en_us' => 'Control'
+                ]),
                 'nav' => 1,
-                'router' => 1,
-                'policy' => 1,
-                'icon' => null,
-                'create_time' => time(),
-                'update_time' => time()
-            ],
-            [
-                'key' => 'resource-add',
-                'parent' => 'resource-index',
-                'name' => json_encode([
-                    'zh_cn' => '资源控制新增',
-                    'en_us' => 'Resource Add'
-                ], JSON_UNESCAPED_UNICODE),
-                'nav' => 0,
-                'router' => 1,
-                'policy' => 0,
-                'icon' => null,
-                'create_time' => time(),
-                'update_time' => time()
-            ],
-            [
-                'key' => 'resource-edit',
-                'parent' => 'resource-index',
-                'name' => json_encode([
-                    'zh_cn' => '资源控制修改',
-                    'en_us' => 'Resource Edit'
-                ], JSON_UNESCAPED_UNICODE),
-                'nav' => 0,
-                'router' => 1,
+                'router' => 0,
                 'policy' => 0,
                 'icon' => null,
                 'create_time' => time(),
@@ -72,9 +44,9 @@ class N2Resource extends Seeder
             ],
             [
                 'key' => 'acl-index',
-                'parent' => 'system',
+                'parent' => 'control',
                 'name' => json_encode([
-                    'zh_cn' => '访问控制管理',
+                    'zh_cn' => '访问项',
                     'en_us' => 'Acl'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
@@ -88,7 +60,7 @@ class N2Resource extends Seeder
                 'key' => 'acl-add',
                 'parent' => 'acl-index',
                 'name' => json_encode([
-                    'zh_cn' => '访问控制新增',
+                    'zh_cn' => '访问项新增',
                     'en_us' => 'Acl Add'
                 ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
@@ -102,9 +74,93 @@ class N2Resource extends Seeder
                 'key' => 'acl-edit',
                 'parent' => 'acl-index',
                 'name' => json_encode([
-                    'zh_cn' => '访问控制修改',
+                    'zh_cn' => '访问项修改',
                     'en_us' => 'Acl Edit'
                 ], JSON_UNESCAPED_UNICODE),
+                'nav' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'resource-index',
+                'parent' => 'control',
+                'name' => json_encode([
+                    'zh_cn' => '资源项',
+                    'en_us' => 'Resource'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 1,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'resource-add',
+                'parent' => 'resource-index',
+                'name' => json_encode([
+                    'zh_cn' => '资源项新增',
+                    'en_us' => 'Resource Add'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'resource-edit',
+                'parent' => 'resource-index',
+                'name' => json_encode([
+                    'zh_cn' => '资源项修改',
+                    'en_us' => 'Resource Edit'
+                ], JSON_UNESCAPED_UNICODE),
+                'nav' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'permission-index',
+                'parent' => 'system',
+                'name' => json_encode([
+                    'zh_cn' => '特殊授权',
+                    'en_us' => 'Permission'
+                ]),
+                'nav' => 1,
+                'router' => 1,
+                'policy' => 1,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'permission-add',
+                'parent' => 'permission-index',
+                'name' => json_encode([
+                    'zh_cn' => '特殊授权新增',
+                    'en_us' => 'Permission Add'
+                ]),
+                'nav' => 0,
+                'router' => 1,
+                'policy' => 0,
+                'icon' => null,
+                'create_time' => time(),
+                'update_time' => time()
+            ],
+            [
+                'key' => 'permission-edit',
+                'parent' => 'permission-index',
+                'name' => json_encode([
+                    'zh_cn' => '特殊授权修改',
+                    'en_us' => 'Permission Edit'
+                ]),
                 'nav' => 0,
                 'router' => 1,
                 'policy' => 0,
