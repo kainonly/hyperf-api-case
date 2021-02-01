@@ -6,7 +6,7 @@ use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Hash\HashInterface;
 use Hyperf\Utils\ApplicationContext;
 
-class N5Admin extends Seeder
+class N6Admin extends Seeder
 {
     private HashInterface $hash;
 

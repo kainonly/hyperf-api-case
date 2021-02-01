@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Hyperf\Database\Seeders\Seeder;
 use Hyperf\DbConnection\Db;
 
-class N4Role extends Seeder
+class N5Role extends Seeder
 {
     /**
      * Run the database seeds.
