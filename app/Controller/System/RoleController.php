@@ -55,6 +55,9 @@ class RoleController extends BaseController
         $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
         $ctx->resource = $ctx->body['resource'];
         unset($ctx->body['resource']);
+        if (!empty($ctx->body['permission'])) {
+            $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
+        }
         return true;
     }
 
@@ -86,6 +89,9 @@ class RoleController extends BaseController
             $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
             $ctx->resource = $ctx->body['resource'];
             unset($ctx->body['resource']);
+            if (!empty($ctx->body['permission'])) {
+                $ctx->body['permission'] = implode(',', (array)$ctx->body['permission']);
+            }
         }
         return true;
     }
