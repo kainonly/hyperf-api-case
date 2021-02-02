@@ -34,7 +34,7 @@ class N2Resource extends Seeder
                 'name' => json_encode([
                     'zh_cn' => '控制授权',
                     'en_us' => 'Control'
-                ]),
+                ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
                 'router' => 0,
                 'policy' => 0,
@@ -132,7 +132,7 @@ class N2Resource extends Seeder
                 'name' => json_encode([
                     'zh_cn' => '特殊授权',
                     'en_us' => 'Permission'
-                ]),
+                ], JSON_UNESCAPED_UNICODE),
                 'nav' => 1,
                 'router' => 1,
                 'policy' => 1,
@@ -146,7 +146,7 @@ class N2Resource extends Seeder
                 'name' => json_encode([
                     'zh_cn' => '特殊授权新增',
                     'en_us' => 'Permission Add'
-                ]),
+                ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
                 'router' => 1,
                 'policy' => 0,
@@ -160,7 +160,7 @@ class N2Resource extends Seeder
                 'name' => json_encode([
                     'zh_cn' => '特殊授权修改',
                     'en_us' => 'Permission Edit'
-                ]),
+                ], JSON_UNESCAPED_UNICODE),
                 'nav' => 0,
                 'router' => 1,
                 'policy' => 0,
