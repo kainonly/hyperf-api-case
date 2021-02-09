@@ -6,7 +6,7 @@
 
 在线案例，https://console.kainonly.com
 
-- 用户 `kain`
+- 用户 `super`
 - 密码 `pass@VAN1234`
 
 #### 安装
@@ -28,3 +28,5 @@ composer require kain/hyperf-curd
 ```shell script
 composer require kain/hyperf-extra
 ```
+
+数据迁移参考，https://github.com/kain-lab/lab-migrations
