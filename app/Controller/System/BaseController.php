@@ -13,10 +13,6 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Hyperf\Validation\Contract\ValidatorFactoryInterface;
 
-/**
- * Class BaseController
- * @package App\Controller\System
- */
 abstract class BaseController extends CurdController
 {
     /**
