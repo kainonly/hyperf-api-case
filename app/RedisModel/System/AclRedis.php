@@ -32,15 +32,15 @@ class AclRedis extends RedisModel implements AclLibrary
         }
 
         $raws = $this->redis->hGet($this->getKey(), $key);
-        $data = !empty($raws) ? json_decode($raws, true) : [];
+        $data = json_decode($raws, true);
 
         switch ($policy) {
             case 0:
-                return explode(',', $data['read']);
+                return $data['read'];
             case 1:
                 return [
-                    ...explode(',', $data['read']),
-                    ...explode(',', $data['write'])
+                    ...$data['read'],
+                    ...$data['write']
                 ];
             default:
                 return [];
@@ -63,8 +63,8 @@ class AclRedis extends RedisModel implements AclLibrary
         $lists = [];
         foreach ($query->toArray() as $value) {
             $lists[$value->key] = json_encode([
-                'write' => $value->write,
-                'read' => $value->read
+                'write' => !empty($value->write) ? explode(',', $value->write) : [],
+                'read' => !empty($value->read) ? explode(',', $value->read) : []
             ]);
         }
         $this->redis->hMSet($this->getKey(), $lists);
