@@ -4,9 +4,10 @@ declare (strict_types=1);
 namespace App\RedisModel\System;
 
 use Hyperf\DbConnection\Db;
+use Hyperf\Extra\Redis\Library\ResourceLibrary;
 use Hyperf\Extra\Redis\RedisModel;
 
-class ResourceRedis extends RedisModel
+class ResourceRedis extends RedisModel implements ResourceLibrary
 {
     protected string $key = 'system:resource';
 

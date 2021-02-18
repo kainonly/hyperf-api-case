@@ -31,13 +31,13 @@ class RoleRedis extends RedisModel implements RoleLibrary
             $this->update();
         }
         $raws = $this->redis->hMGet($this->getKey(), $keys);
-        if (!$raws) {
+        if (empty($raws)) {
             return [];
         }
         $lists = [];
         foreach ($raws as $value) {
             $data = json_decode($value, true);
-            array_push($lists, ...explode(',', $data[$type]));
+            array_push($lists, ...$data[$type]);
         }
         return $lists;
     }
@@ -57,9 +57,9 @@ class RoleRedis extends RedisModel implements RoleLibrary
         $lists = [];
         foreach ($query->toArray() as $value) {
             $lists[$value->key] = json_encode([
-                'acl' => $value->acl,
-                'resource' => $value->resource,
-                'permission' => $value->permission
+                'acl' => !empty($value->acl) ? explode(',', $value->acl) : [],
+                'resource' => !empty($value->resource) ? explode(',', $value->resource) : [],
+                'permission' => !empty($value->permission) ? explode(',', $value->permission) : []
             ]);
         }
 

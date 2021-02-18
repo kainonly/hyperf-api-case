@@ -11,15 +11,15 @@ use App\RedisModel\System\ResourceRedis;
 use App\RedisModel\System\RoleRedis;
 use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Auth\Auth;
+use Hyperf\Extra\Rbac\Rbac;
 use Hyperf\Extra\Redis\RefreshToken;
 use Hyperf\Extra\Redis\UserLock;
-use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 
 class MainController extends BaseController
 {
-    use Auth;
+    use Auth, Rbac;
 
     /**
      * @Inject()
@@ -130,21 +130,13 @@ class MainController extends BaseController
      */
     public function resource(): array
     {
-        $router = $this->resourceRedis->get();
-        $user = $this->adminRedis->get(Context::get('auth')['user']);
-        $roleKey = explode(',', $user['role']);
-        $resource = [
-            ...$this->roleRedis->get($roleKey, 'resource'),
-            ...!empty($user['resource']) ? explode(',', $user['resource']) : []
-        ];
-        $routerRole = array_unique($resource);
-        $lists = Arr::where(
-            $router,
-            fn($v) => in_array($v['key'], $routerRole, true)
-        );
         return [
             'error' => 0,
-            'data' => array_values($lists)
+            'data' => $this->fetchResource(
+                $this->resourceRedis,
+                $this->adminRedis,
+                $this->roleRedis
+            )
         ];
     }
 
