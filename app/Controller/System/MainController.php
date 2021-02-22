@@ -99,14 +99,7 @@ class MainController extends BaseController
      */
     public function verify(): ResponseInterface
     {
-        try {
-            return $this->authVerify('system');
-        } catch (Exception $e) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $e->getMessage()
-            ]);
-        }
+        return $this->authVerify('system');
     }
 
     /**
@@ -114,14 +107,7 @@ class MainController extends BaseController
      */
     public function logout(): ResponseInterface
     {
-        try {
-            return $this->destory('system');
-        } catch (Exception $e) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => $e->getMessage()
-            ]);
-        }
+        return $this->destory('system');
     }
 
     /**
