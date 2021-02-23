@@ -65,7 +65,9 @@ class PermissionController extends BaseController
 
         return [
             'error' => 0,
-            'data' => $exists
+            'data' => [
+                'exists' => $exists
+            ]
         ];
     }
 }
