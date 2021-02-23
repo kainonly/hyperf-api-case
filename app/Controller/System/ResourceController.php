@@ -57,20 +57,22 @@ class ResourceController extends BaseController
 
     public function editBeforeHook(stdClass $ctx): bool
     {
-        $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
-        $data = Db::table('resource')
-            ->where('id', '=', $ctx->body['id'])
-            ->first();
+        if (!$ctx->switch) {
+            $ctx->body['name'] = json_encode($ctx->body['name'], JSON_UNESCAPED_UNICODE);
+            $data = Db::table('resource')
+                ->where('id', '=', $ctx->body['id'])
+                ->first();
 
-        if (!empty($data)) {
-            $ctx->key = $data->key;
+            if (!empty($data)) {
+                $ctx->key = $data->key;
+            }
         }
         return true;
     }
 
     public function editAfterHook(stdClass $ctx): bool
     {
-        if (!empty($ctx->key)) {
+        if (!$ctx->switch && !empty($ctx->key)) {
             Db::table('resource')
                 ->where('parent', '=', $ctx->key)
                 ->update([
@@ -166,7 +168,9 @@ class ResourceController extends BaseController
 
         return [
             'error' => 0,
-            'data' => $exists
+            'data' => [
+                'exists' => $exists
+            ]
         ];
     }
 }
