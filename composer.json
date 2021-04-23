@@ -1,4 +1,6 @@
 {
+  "name": "kain/hyperf-skeleton",
+  "description": "辅助 Hyperf 框架的工具集合使用案例，构建简洁统一的中后台接口方案",
   "type": "project",
   "require": {
     "php": ">=7.4.0",
@@ -28,7 +30,7 @@
     "hyperf/testing": "2.1.*",
     "mockery/mockery": "^1.0",
     "phpstan/phpstan": "^0.12.18",
-    "roave/security-advisories": "dev-master",
+    "roave/security-advisories": "dev-latest",
     "swoole/ide-helper": "dev-master"
   },
   "autoload": {

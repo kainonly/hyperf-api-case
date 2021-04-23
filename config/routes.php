@@ -29,6 +29,8 @@ Router::addGroup('/system', function () {
     AutoController(App\Controller\System\PictureTypeController::class, $options);
     AutoController(App\Controller\System\VideoController::class, $options);
     AutoController(App\Controller\System\VideoTypeController::class, $options);
+    AutoController(App\Controller\System\AudioController::class, $options);
+    AutoController(App\Controller\System\AudioTypeController::class, $options);
 }, [
     'middleware' => [
         Hyperf\Extra\Cors\CorsMiddleware::class
