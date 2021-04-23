@@ -25,6 +25,18 @@ Router::addGroup('/system', function () {
     AutoController(App\Controller\System\PermissionController::class, $options);
     AutoController(App\Controller\System\RoleController::class, $options);
     AutoController(App\Controller\System\AdminController::class, $options);
+    AutoController(App\Controller\System\LoginLogController::class, [
+        'middleware' => [
+            App\Middleware\System\AuthVerify::class,
+            App\Middleware\System\RbacVerify::class
+        ]
+    ]);
+    AutoController(App\Controller\System\RequestLogController::class, [
+        'middleware' => [
+            App\Middleware\System\AuthVerify::class,
+            App\Middleware\System\RbacVerify::class
+        ]
+    ]);
     AutoController(App\Controller\System\PictureController::class, $options);
     AutoController(App\Controller\System\PictureTypeController::class, $options);
     AutoController(App\Controller\System\VideoController::class, $options);
