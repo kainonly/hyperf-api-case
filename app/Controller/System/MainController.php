@@ -12,8 +12,8 @@ use App\RedisModel\System\RoleRedis;
 use Hyperf\DbConnection\Db;
 use Hyperf\Extra\Auth\Auth;
 use Hyperf\Extra\Rbac\Rbac;
+use Hyperf\Extra\Redis\Lock;
 use Hyperf\Extra\Redis\RefreshToken;
-use Hyperf\Extra\Redis\UserLock;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 
@@ -28,9 +28,9 @@ class MainController extends BaseController
     private RefreshToken $refreshToken;
     /**
      * @Inject()
-     * @var UserLock
+     * @var Lock
      */
-    private UserLock $userLock;
+    private Lock $lock;
     /**
      * @Inject()
      * @var AdminRedis
@@ -58,48 +58,48 @@ class MainController extends BaseController
     public function login(): ResponseInterface
     {
         $body = $this->curd->should([
-            'username' => [
-                'required',
-                'between:4,20'
-            ],
-            'password' => [
-                'required',
-                'between:12,20'
-            ],
+            'username' => ['required', 'between:4,20'],
+            'password' => ['required', 'between:12,20'],
         ]);
-        $data = $this->adminRedis->get($body['username']);
-        if (empty($data)) {
-            return $this->response->json([
-                'error' => 1,
-                'msg' => 'User does not exist or has been frozen'
-            ]);
-        }
-        if (!$this->userLock->check('admin:' . $body['username'])) {
-            $this->userLock->lock('admin:' . $body['username']);
+        $locker = $this->lock;
+        $ip = get_client_ip();
+        if (!$locker->check('ip:' . $ip)) {
+            $locker->lock('ip:' . $ip);
             return $this->response->json([
                 'error' => 2,
-                'msg' => 'You have failed to log in too many times, please try again later'
+                'msg' => '当前尝试登录失败次数上限，请稍后再试'
+            ]);
+        }
+        $user = $body['username'];
+        $data = $this->adminRedis->get($user);
+        if (empty($data)) {
+            $locker->inc('ip:' . $ip);
+            return $this->response->json([
+                'error' => 1,
+                'msg' => '当前用户不存在或已被冻结'
+            ]);
+        }
+        $userKey = 'admin:';
+        if (!$locker->check($userKey . $user)) {
+            $locker->lock($userKey . $user);
+            return $this->response->json([
+                'error' => 2,
+                'msg' => '当前用户登录失败次数以上限，请稍后再试'
             ]);
         }
         if (!$this->hash->check($body['password'], $data['password'])) {
-            $this->userLock->inc('admin:' . $body['username']);
+            $locker->inc($userKey . $user);
             return $this->response->json([
                 'error' => 1,
-                'msg' => 'User password verification is inconsistent'
+                'msg' => '当前用户认证不成功'
             ]);
         }
-        $this->userLock->remove('admin:' . $body['username']);
+        $locker->remove('ip:' . $ip);
+        $locker->remove($userKey . $user);
+
         return $this->create('system', [
             'user' => $data['username'],
         ]);
-    }
-
-    /**
-     * 用户验证
-     */
-    public function verify(): ResponseInterface
-    {
-        return $this->authVerify('system');
     }
 
     /**
@@ -108,6 +108,14 @@ class MainController extends BaseController
     public function logout(): ResponseInterface
     {
         return $this->destory('system');
+    }
+
+    /**
+     * 用户验证
+     */
+    public function verify(): ResponseInterface
+    {
+        return $this->authVerify('system');
     }
 
     /**
@@ -132,13 +140,27 @@ class MainController extends BaseController
      */
     public function information(): array
     {
+        $user = Context::get('auth')['user'];
         $data = Db::table('admin')
-            ->where('username', '=', Context::get('auth')['user'])
-            ->first(['email', 'phone', 'call', 'avatar']);
+            ->where('username', '=', $user)
+            ->first();
+
+        if (empty($data)) {
+            return [
+                'error' => 1,
+                'msg' => '当前用户不存在'
+            ];
+        }
 
         return [
             'error' => 0,
-            'data' => $data
+            'data' => [
+                'username' => $data->username,
+                'email' => $data->email,
+                'phone' => $data->phone,
+                'call' => $data->call,
+                'avatar' => $data->avatar
+            ]
         ];
     }
 
@@ -160,15 +182,15 @@ class MainController extends BaseController
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-+])(?=.*[0-9])[\w|@$!%*?&-+]+$/'
             ],
         ]);
-        $username = Context::get('auth')['user'];
+        $user = Context::get('auth')['user'];
         $data = Db::table('admin')
-            ->where('username', '=', $username)
+            ->where('username', '=', $user)
             ->first();
 
         if (empty($data)) {
             return [
                 'error' => 1,
-                'msg' => 'not exists'
+                'msg' => '当前用户不存在'
             ];
         }
 
@@ -176,7 +198,7 @@ class MainController extends BaseController
             if (!$this->hash->check($body['old_password'], $data->password)) {
                 return [
                     'error' => 2,
-                    'msg' => 'password verification failed'
+                    'msg' => '用户密码验证失败'
                 ];
             }
             $body['password'] = $this->hash->create($body['new_password']);
@@ -184,7 +206,7 @@ class MainController extends BaseController
 
         unset($body['old_password'], $body['new_password']);
         Db::table('admin')
-            ->where('username', '=', $username)
+            ->where('username', '=', $user)
             ->update($body);
 
         $this->adminRedis->clear();
@@ -195,37 +217,31 @@ class MainController extends BaseController
     }
 
     /**
-     * 上传
-     * @return array
-     * @throws Exception
-     */
-    public function uploads(): array
-    {
-        if (!$this->request->hasFile('image')) {
-            return [
-                'error' => 1,
-                'msg' => 'upload file does not exist'
-            ];
-        }
-        $file = $this->request->file('image');
-        $fileName = $this->cosClient->put($file);
-        return [
-            'error' => 0,
-            'data' => [
-                'savename' => $fileName
-            ]
-        ];
-    }
-
-    /**
      * 对象存储签名
      * @return array
      * @throws Exception
      */
-    public function cosPresigned(): array
+    public function presigned(): array
     {
         return $this->cosClient->generatePostPresigned([
             ['content-length-range', 0, 104857600]
         ]);
+    }
+
+    /**
+     * 指定删除对象
+     * @return array
+     * @throws Exception
+     */
+    public function objectDelete(): array
+    {
+        $body = $this->curd->should([
+            'keys' => 'required|array'
+        ]);
+        $this->cosClient->delete($body['keys']);
+        return [
+            'error' => 0,
+            'msg' => 'ok'
+        ];
     }
 }

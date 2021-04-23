@@ -5,11 +5,11 @@ namespace App\Controller\System;
 
 use App\Controller\Common\TypeLib;
 
-class VideoTypeController extends BaseController
+class AudioTypeController extends BaseController
 {
     use TypeLib;
 
-    protected static string $model = 'video_type';
+    protected static string $model = 'audio_type';
     protected static array $originListsOrders = [
         'sort' => 'asc'
     ];

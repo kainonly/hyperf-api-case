@@ -5,9 +5,9 @@ namespace App\Controller\System;
 
 use App\Controller\Common\MediaLib;
 
-class PictureController extends BaseController
+class AudioController extends BaseController
 {
     use MediaLib;
 
-    protected static string $model = 'picture';
+    protected static string $model = 'audio';
 }
