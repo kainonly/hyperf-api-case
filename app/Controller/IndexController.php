@@ -8,7 +8,7 @@ class IndexController
     public function index(): array
     {
         return [
-            'version' => 1.5,
+            'version' => 1.6,
         ];
     }
 }
