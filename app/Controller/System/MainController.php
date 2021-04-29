@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
-use App\Client\CosClient;
+use App\Service\CosService;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -48,9 +48,9 @@ class MainController extends BaseController
     private RoleRedis $roleRedis;
     /**
      * @Inject()
-     * @var CosClient
+     * @var CosService
      */
-    private CosClient $cosClient;
+    private CosService $cos;
 
     /**
      * 用户登录
@@ -223,7 +223,7 @@ class MainController extends BaseController
      */
     public function presigned(): array
     {
-        return $this->cosClient->generatePostPresigned([
+        return $this->cos->generatePostPresigned([
             ['content-length-range', 0, 104857600]
         ]);
     }
@@ -238,7 +238,7 @@ class MainController extends BaseController
         $body = $this->curd->should([
             'keys' => 'required|array'
         ]);
-        $this->cosClient->delete($body['keys']);
+        $this->cos->delete($body['keys']);
         return [
             'error' => 0,
             'msg' => 'ok'

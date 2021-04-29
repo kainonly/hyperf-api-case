@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Client;
+namespace App\Service;
 
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Psr7\Response;
 use Overtrue\CosClient\ObjectClient;
 
-class CosClient
+class CosService
 {
     private array $option;
 

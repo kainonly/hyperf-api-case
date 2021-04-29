@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
-use App\Client\Schema;
+use App\Service\SchemaService;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use Exception;
@@ -34,9 +34,9 @@ class SchemaController extends BaseController
     ];
     /**
      * @Inject()
-     * @var Schema
+     * @var SchemaService
      */
-    private Schema $schema;
+    private SchemaService $schema;
 
     public function addBeforeHook(stdClass $ctx): bool
     {

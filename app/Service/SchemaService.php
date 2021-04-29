@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Client;
+namespace App\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -9,7 +9,7 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Exception;
 use Hyperf\Contract\ConfigInterface;
 
-class Schema
+class SchemaService
 {
     private Connection $conn;
     private string $prefix;
