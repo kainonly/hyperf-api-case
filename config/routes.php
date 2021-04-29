@@ -10,13 +10,17 @@ Router::addGroup('/system', function () {
         'middleware' => [
             App\Middleware\System\AuthVerify::class => [
                 'resource', 'information', 'update', 'uploads', 'cosPresigned'
+            ],
+            App\Middleware\System\Spy::class => [
+                'information', 'update'
             ]
         ]
     ]);
     $options = [
         'middleware' => [
             App\Middleware\System\AuthVerify::class,
-            App\Middleware\System\RbacVerify::class
+            App\Middleware\System\RbacVerify::class,
+            App\Middleware\System\Spy::class
         ]
     ];
     AutoController(App\Controller\System\AclController::class, $options);

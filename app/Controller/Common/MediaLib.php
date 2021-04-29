@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Common;
 
-use App\Client\CosClient;
+use App\Service\CosService;
 use Hyperf\Curd\Common\DeleteModel;
 use Hyperf\Curd\Common\EditModel;
 use Hyperf\Curd\Common\ListsModel;
@@ -18,9 +18,9 @@ trait MediaLib
 
     /**
      * @Inject()
-     * @var CosClient
+     * @var CosService
      */
-    private CosClient $cosClient;
+    private CosService $cos;
 
     public function bulkAdd(): array
     {
@@ -81,7 +81,7 @@ trait MediaLib
 
     public function deleteAfterHook(stdClass $ctx): bool
     {
-        $response = $this->cosClient->delete($ctx->objects);
+        $response = $this->cos->delete($ctx->objects);
         return $response->getStatusCode() === 200;
     }
 
