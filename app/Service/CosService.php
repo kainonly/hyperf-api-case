@@ -6,15 +6,16 @@ namespace App\Service;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Psr7\Response;
+use Hyperf\Contract\ConfigInterface;
 use Overtrue\CosClient\ObjectClient;
 
 class CosService
 {
     private array $option;
 
-    public function __construct()
+    public function __construct(ConfigInterface $config)
     {
-        $this->option = config('qcloud');
+        $this->option = $config->get('qcloud');
     }
 
     /**
