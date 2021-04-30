@@ -4,6 +4,8 @@ declare(strict_types=1);
 use Hyperf\HttpServer\Router\Router;
 
 Router::get('/', [App\Controller\IndexController::class, 'index']);
+Router::get('/ip', [App\Controller\IndexController::class, 'ip']);
+
 Router::post('/', [App\Controller\IndexController::class, 'index']);
 Router::addGroup('/system', function () {
     AutoController(App\Controller\System\MainController::class, [

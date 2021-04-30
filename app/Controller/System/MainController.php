@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\System;
 
 use App\Service\CosService;
+use App\Service\OpenApiService;
+use App\Service\QueueService;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -51,6 +53,16 @@ class MainController extends BaseController
      * @var CosService
      */
     private CosService $cos;
+    /**
+     * @Inject()
+     * @var QueueService
+     */
+    private QueueService $queue;
+    /**
+     * @Inject()
+     * @var OpenApiService
+     */
+    private OpenApiService $openapi;
 
     /**
      * 用户登录
@@ -63,8 +75,11 @@ class MainController extends BaseController
         ]);
         $locker = $this->lock;
         $ip = get_client_ip();
+        $ipData = $this->openapi->ip2region($ip);
+        $ipData['ip'] = $ip;
         if (!$locker->check('ip:' . $ip)) {
             $locker->lock('ip:' . $ip);
+            $this->loginRecord($body, $ipData, false, 'IP登录锁定');
             return $this->response->json([
                 'error' => 2,
                 'msg' => '当前尝试登录失败次数上限，请稍后再试'
@@ -74,6 +89,7 @@ class MainController extends BaseController
         $data = $this->adminRedis->get($user);
         if (empty($data)) {
             $locker->inc('ip:' . $ip);
+            $this->loginRecord($body, $ipData, false, '用户登录失败上限');
             return $this->response->json([
                 'error' => 1,
                 'msg' => '当前用户不存在或已被冻结'
@@ -82,6 +98,7 @@ class MainController extends BaseController
         $userKey = 'admin:';
         if (!$locker->check($userKey . $user)) {
             $locker->lock($userKey . $user);
+            $this->loginRecord($body, $ipData, false, '用户登录失败上限');
             return $this->response->json([
                 'error' => 2,
                 'msg' => '当前用户登录失败次数以上限，请稍后再试'
@@ -89,6 +106,7 @@ class MainController extends BaseController
         }
         if (!$this->hash->check($body['password'], $data['password'])) {
             $locker->inc($userKey . $user);
+            $this->loginRecord($body, $ipData, false, '用户登录密码不正确');
             return $this->response->json([
                 'error' => 1,
                 'msg' => '当前用户认证不成功'
@@ -96,9 +114,36 @@ class MainController extends BaseController
         }
         $locker->remove('ip:' . $ip);
         $locker->remove($userKey . $user);
-
+        $this->loginRecord($body, $ipData, true);
         return $this->create('system', [
             'user' => $data['username'],
+        ]);
+    }
+
+    /**
+     * 登录日志
+     * @param bool $logged 登录成功
+     * @param string|null $note 备注
+     */
+    private function loginRecord(array $body, array $data, bool $logged, ?string $note = null): void
+    {
+        $this->queue->logger([
+            'channel' => 'login',
+            'values' => [
+                'platform' => 'console',
+                'username' => $body['username'],
+                'password' => !$logged ? $body['password'] : null,
+                'ip' => $data['ip'],
+                'country' => $data['country'],
+                'region' => $data['region'],
+                'province' => $data['province'],
+                'city_id' => $data['cityId'],
+                'city' => $data['city'],
+                'isp' => $data['isp'],
+                'logged' => $logged,
+                'note' => $note,
+                'time' => time(),
+            ]
         ]);
     }
 

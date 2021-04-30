@@ -12,7 +12,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Spy implements MiddlewareInterface
 {
-    public QueueService $queue;
+    private QueueService $queue;
 
     public function __construct(QueueService $queueService)
     {
