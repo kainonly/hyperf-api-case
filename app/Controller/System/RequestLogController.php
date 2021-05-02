@@ -9,6 +9,6 @@ class RequestLogController extends BaseController
 {
     use ListsModel;
 
-    protected static string $model = 'login_log';
+    protected static string $model = 'request_log';
     protected static array $listsOrders = ['time' => 'desc'];
 }
