@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\System;
 
+use App\Service\CommonService;
 use App\Service\CosService;
 use App\Service\OpenApiService;
 use App\Service\QueueService;
@@ -55,6 +56,11 @@ class MainController extends BaseController
     private CosService $cos;
     /**
      * @Inject()
+     * @var CommonService
+     */
+    private CommonService $common;
+    /**
+     * @Inject()
      * @var QueueService
      */
     private QueueService $queue;
@@ -74,7 +80,7 @@ class MainController extends BaseController
             'password' => ['required', 'between:12,20'],
         ]);
         $locker = $this->lock;
-        $ip = get_client_ip();
+        $ip = $this->common->getClinetIp();
         $ipData = $this->openapi->ip2region($ip);
         $ipData['ip'] = $ip;
         if (!$locker->check('ip:' . $ip)) {
