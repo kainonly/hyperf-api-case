@@ -67,24 +67,6 @@ trait MediaLib
         ];
     }
 
-    public function deleteBeforeHook(stdClass $ctx): bool
-    {
-        $ctx->objects = Db::table(static::$model)
-            ->whereIn('id', $ctx->body['id'])
-            ->get()
-            ->map(fn($v) => [
-                'Key' => $v->url
-            ])
-            ->toArray();
-        return true;
-    }
-
-    public function deleteAfterHook(stdClass $ctx): bool
-    {
-        $response = $this->cos->delete($ctx->objects);
-        return $response->getStatusCode() === 200;
-    }
-
     public function count(): array
     {
         $total = Db::table(static::$model)->count();

@@ -6,7 +6,8 @@ return [
     'secret_key' => env('QCLOUD_SECRET_KEY'),
     'cos' => [
         'region' => env('COS_REGION'),
-        'bucket' => env('COS_BUCKET')
+        'bucket' => env('COS_BUCKET'),
+        'prefix' => env('COS_PREFIX', '')
     ],
     'api' => [
         'url' => env('QCLOUD_API'),

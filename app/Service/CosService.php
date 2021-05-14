@@ -25,7 +25,8 @@ class CosService
      */
     public function put($file): string
     {
-        $fileName = date('Ymd') . '/' .
+        $fileName = $this->option['cos']['prefix'] .
+            date('Ymd') . '/' .
             uuid()->toString() . '.' .
             $file->getOriginalExtension();
         $object = new ObjectClient([
@@ -88,7 +89,7 @@ class CosService
         $stringToSign = sha1($policy);
         $signature = hash_hmac('sha1', $stringToSign, $signKey);
         return [
-            'filename' => date('Ymd') . '/' . uuid()->toString(),
+            'filename' => $this->option['cos']['prefix'] . date('Ymd') . '/' . uuid()->toString(),
             'type' => 'cos',
             'option' => [
                 'ak' => $this->option['secret_id'],
