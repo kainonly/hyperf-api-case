@@ -19,10 +19,10 @@ class LoggerJob extends Job
     {
         switch ($this->params['channel']) {
             case 'request':
-                Db::table('request_log')->insert($this->params['values']);
+                Db::table('logs')->insert($this->params['values']);
                 break;
             case 'login':
-                Db::table('login_log')->insert($this->params['values']);
+                Db::table('activities')->insert($this->params['values']);
                 break;
         }
     }

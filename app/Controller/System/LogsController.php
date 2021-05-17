@@ -5,10 +5,10 @@ namespace App\Controller\System;
 
 use Hyperf\Curd\Common\ListsModel;
 
-class RequestLogController extends BaseController
+class LogsController extends BaseController
 {
     use ListsModel;
 
-    protected static string $model = 'request_log';
+    protected static string $model = 'logs';
     protected static array $listsOrders = ['time' => 'desc'];
 }
