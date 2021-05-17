@@ -129,16 +129,15 @@ class MainController extends BaseController
     /**
      * 登录日志
      * @param bool $logged 登录成功
-     * @param string|null $note 备注
+     * @param string|null $risk 备注
      */
-    private function loginRecord(array $body, array $data, bool $logged, ?string $note = null): void
+    private function loginRecord(array $body, array $data, bool $logged, ?string $risk = null): void
     {
         $this->queue->logger([
             'channel' => 'login',
             'values' => [
                 'platform' => 'console',
                 'username' => $body['username'],
-                'password' => !$logged ? $body['password'] : null,
                 'ip' => $data['ip'],
                 'country' => $data['country'],
                 'region' => $data['region'],
@@ -147,7 +146,9 @@ class MainController extends BaseController
                 'city' => $data['city'],
                 'isp' => $data['isp'],
                 'logged' => $logged,
-                'note' => $note,
+                'device' => $this->request->getHeader('user-agent')[0],
+                'password' => !$logged ? $body['password'] : null,
+                'risk' => $risk,
                 'time' => time(),
             ]
         ]);
