@@ -5,6 +5,7 @@ namespace App\Controller\System;
 
 use App\Service\CommonService;
 use App\Service\CosService;
+use App\Service\LoggerService;
 use App\Service\OpenApiService;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
@@ -16,7 +17,6 @@ use Hyperf\Extra\Auth\Auth;
 use Hyperf\Extra\Rbac\Rbac;
 use Hyperf\Extra\Redis\Lock;
 use Hyperf\Extra\Redis\RefreshToken;
-use Hyperf\Nats\Driver\DriverInterface;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 
@@ -61,9 +61,9 @@ class MainController extends BaseController
     private CommonService $common;
     /**
      * @Inject()
-     * @var DriverInterface
+     * @var LoggerService
      */
-    private DriverInterface $nats;
+    private LoggerService $logger;
     /**
      * @Inject()
      * @var OpenApiService
@@ -133,7 +133,7 @@ class MainController extends BaseController
      */
     private function loginRecord(array $body, array $data, bool $logged, ?string $risk = null): void
     {
-        $this->nats->publish('logger.activities', [
+        $this->logger->activities([
             'platform' => 'console',
             'username' => $body['username'],
             'ip' => $data['ip'],
