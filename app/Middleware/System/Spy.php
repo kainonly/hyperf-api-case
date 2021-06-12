@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware\System;
 
-use App\Service\QueueService;
+use Hyperf\Nats\Driver\DriverInterface;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,23 +12,20 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Spy implements MiddlewareInterface
 {
-    private QueueService $queue;
+    private DriverInterface $nats;
 
-    public function __construct(QueueService $queueService)
+    public function __construct(DriverInterface $nats)
     {
-        $this->queue = $queueService;
+        $this->nats = $nats;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->queue->logger([
-            'channel' => 'request',
-            'values' => [
-                'path' => $request->getUri()->getPath(),
-                'username' => Context::get('auth')['user'] ?? 'none',
-                'body' => $request->getBody()->getContents(),
-                'time' => time(),
-            ]
+        $this->nats->publish('logger.logs', [
+            'path' => $request->getUri()->getPath(),
+            'username' => Context::get('auth')['user'] ?? 'none',
+            'body' => $request->getBody()->getContents(),
+            'time' => time(),
         ]);
         return $handler->handle($request);
     }

@@ -6,7 +6,6 @@ namespace App\Controller\System;
 use App\Service\CommonService;
 use App\Service\CosService;
 use App\Service\OpenApiService;
-use App\Service\QueueService;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -17,6 +16,7 @@ use Hyperf\Extra\Auth\Auth;
 use Hyperf\Extra\Rbac\Rbac;
 use Hyperf\Extra\Redis\Lock;
 use Hyperf\Extra\Redis\RefreshToken;
+use Hyperf\Nats\Driver\DriverInterface;
 use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 
@@ -61,9 +61,9 @@ class MainController extends BaseController
     private CommonService $common;
     /**
      * @Inject()
-     * @var QueueService
+     * @var DriverInterface
      */
-    private QueueService $queue;
+    private DriverInterface $nats;
     /**
      * @Inject()
      * @var OpenApiService
@@ -80,12 +80,12 @@ class MainController extends BaseController
             'password' => ['required', 'between:12,20'],
         ]);
         $locker = $this->lock;
-        $ip = $this->common->getClinetIp();
-        $ipData = $this->openapi->ip2region($ip);
-        $ipData['ip'] = $ip;
-        if (!$locker->check('ip:' . $ip)) {
-            $locker->lock('ip:' . $ip);
-            $this->loginRecord($body, $ipData, false, 'IP登录锁定');
+        $address = $this->common->getClinetIp();
+        $ipData = $this->openapi->ip($address);
+        $ipData['ip'] = $address;
+        if (!$locker->check('ip:' . $address)) {
+            $locker->lock('ip:' . $address);
+            $this->loginRecord($body, $ipData, false, 'IP 登录锁定');
             return $this->response->json([
                 'error' => 2,
                 'msg' => '当前尝试登录失败次数上限，请稍后再试'
@@ -94,7 +94,7 @@ class MainController extends BaseController
         $user = $body['username'];
         $data = $this->adminRedis->get($user);
         if (empty($data)) {
-            $locker->inc('ip:' . $ip);
+            $locker->inc('ip:' . $address);
             $this->loginRecord($body, $ipData, false, '用户登录失败上限');
             return $this->response->json([
                 'error' => 1,
@@ -118,7 +118,7 @@ class MainController extends BaseController
                 'msg' => '当前用户认证不成功'
             ]);
         }
-        $locker->remove('ip:' . $ip);
+        $locker->remove('ip:' . $address);
         $locker->remove($userKey . $user);
         $this->loginRecord($body, $ipData, true);
         return $this->create('system', [
@@ -133,24 +133,21 @@ class MainController extends BaseController
      */
     private function loginRecord(array $body, array $data, bool $logged, ?string $risk = null): void
     {
-        $this->queue->logger([
-            'channel' => 'login',
-            'values' => [
-                'platform' => 'console',
-                'username' => $body['username'],
-                'ip' => $data['ip'],
-                'country' => $data['country'],
-                'region' => $data['region'],
-                'province' => $data['province'],
-                'city_id' => $data['cityId'],
-                'city' => $data['city'],
-                'isp' => $data['isp'],
-                'logged' => $logged,
-                'device' => $this->request->getHeader('user-agent')[0],
-                'password' => !$logged ? $body['password'] : null,
-                'risk' => $risk,
-                'time' => time(),
-            ]
+        $this->nats->publish('logger.activities', [
+            'platform' => 'console',
+            'username' => $body['username'],
+            'ip' => $data['ip'],
+            'country' => $data['country'],
+            'region' => $data['region'],
+            'province' => $data['province'],
+            'city_id' => $data['cityId'],
+            'city' => $data['city'],
+            'isp' => $data['isp'],
+            'logged' => $logged,
+            'device' => $this->request->getHeader('user-agent')[0],
+            'password' => !$logged ? $body['password'] : null,
+            'risk' => $risk,
+            'time' => time(),
         ]);
     }
 
