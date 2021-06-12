@@ -11,7 +11,6 @@ return [
     ],
     'api' => [
         'url' => env('QCLOUD_API'),
-        'appkey' => env('QCLOUD_API_APPKEY'),
-        'appsecret' => env('QCLOUD_API_APP_SECRET')
+        'token' => env('QCLOUD_TOKEN'),
     ]
 ];
