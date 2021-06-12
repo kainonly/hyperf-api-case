@@ -7,6 +7,7 @@
     "ext-json": "*",
     "ext-redis": "*",
     "ext-swoole": ">=4.5",
+    "hyperf/async-queue": "2.1.*",
     "hyperf/command": "2.1.*",
     "hyperf/config": "2.1.*",
     "hyperf/db-connection": "2.1.*",
