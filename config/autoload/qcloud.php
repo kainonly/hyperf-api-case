@@ -7,7 +7,8 @@ return [
     'cos' => [
         'region' => env('COS_REGION'),
         'bucket' => env('COS_BUCKET'),
-        'prefix' => env('COS_PREFIX', '')
+        'prefix' => env('COS_PREFIX', ''),
+        'upload_size' => (int)env('COS_UPLOAD_SIZE', 5242880)
     ],
     'api' => [
         'url' => env('QCLOUD_API'),
