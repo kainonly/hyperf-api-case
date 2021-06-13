@@ -7,6 +7,7 @@ use App\Service\CommonService;
 use App\Service\CosService;
 use App\Service\LoggerService;
 use App\Service\OpenApiService;
+use Hyperf\Contract\ConfigInterface;
 use Hyperf\Di\Annotation\Inject;
 use Exception;
 use App\RedisModel\System\AdminRedis;
@@ -267,13 +268,14 @@ class MainController extends BaseController
 
     /**
      * 对象存储签名
+     * @param ConfigInterface $config
      * @return array
      * @throws Exception
      */
-    public function presigned(): array
+    public function presigned(ConfigInterface $config): array
     {
         return $this->cos->generatePostPresigned([
-            ['content-length-range', 0, 104857600]
+            ['content-length-range', 0, $config->get('qcloud.cos.upload_size')]
         ]);
     }
 
